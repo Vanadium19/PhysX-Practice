@@ -64,9 +64,6 @@ private:
 	void ApplyCuePose(const physx::PxTransform& pose, bool teleport);
 	physx::PxVec3 GetAimDirection() const;
 	physx::PxVec3 HiddenCuePosition() const;
-	void RenderTable() const;
-	void RenderBalls() const;
-	void RenderCue() const;
 	void RenderAimGuide() const;
 	void RenderHud() const;
 
