@@ -1,117 +1,74 @@
 ﻿#include <iostream>
-#include "PxPhysicsAPI.h"
-
+#include "PhysicsEngine.h"
 #include "snippetrender/SnippetRender.h"
 #include "snippetrender/SnippetCamera.h"
 
+PhysicsEngine* physicsEngine;
 Snippets::Camera* camera;
 
-physx::PxDefaultAllocator allocator;
-physx::PxDefaultErrorCallback errorCallback;
-
-physx::PxFoundation* foundation;
-physx::PxPhysics* physics;
-physx::PxScene* scene;
-physx::PxArray<physx::PxRigidActor*> actors;
-
-void initPhysics() {
-	foundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocator, errorCallback);
-
-	physx::PxPvd* pvd = physx::PxCreatePvd(*foundation);
-	physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10000);
-
-	if (pvd != nullptr && transport != nullptr) {
-		bool succes = pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
-
-		if (!succes) {
-			std::cerr << "PVD was not create\n";
-		}
+void keyPressedCallback(unsigned char key, const physx::PxTransform& cameraTransform) {
+	std::cout << "\"" << key << "\", " << toupper(key) << '\n';
+	switch (toupper(key)) {
+	case ' ':
+	{
+		const static physx::PxVec3 boxSize = physx::PxVec3(1.0f, 1.0f, 1.0f);
+		const static physx::PxVec3 startPosition = physx::PxVec3(0.0f, 5.0f, 0.0f);
+		const static float boxMass = 10.0f;
+		const static float boxDensity = boxMass / PhysicsEngine::GetBoxVolume(boxSize);
+		physx::PxShape* boxShape = physicsEngine->CreateBoxShape(boxSize, physicsEngine->GetMaterial(0.5f, 0.5f, 0.1f), CustomFilterData::eDYNAMIC);
+		physicsEngine->AddDynamicActor(boxShape, startPosition, physx::PxQuat(1.0f), boxDensity);
 	}
-
-	physics = PxCreatePhysics(PX_PHYSICS_VERSION, *foundation, physx::PxTolerancesScale(), true, pvd);
-
-	physx::PxSceneDesc sceneDesc = physx::PxSceneDesc(physics->getTolerancesScale());
-	sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
-	sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
-	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
-	scene = physics->createScene(sceneDesc);
-
-	if (pvd && pvd->isConnected()) {
-		physx::PxPvdSceneClient* pvdClient = scene->getScenePvdClient();
-
-		if (pvdClient) {
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
-		}
+	break;
+	case 'N':
+	{
+		physicsEngine->SetFilterShaderConstantBlock(!physicsEngine->GetFilterShaderConstantBlock());
 	}
-
-	physx::PxMaterial* rockMaterial = physics->createMaterial(0.5f, 0.5f, 0.1f);
-	physx::PxMaterial* metalMaterial = physics->createMaterial(0.15f, 0.15f, 0.1f);
-	physx::PxMaterial* iceMaterial = physics->createMaterial(0.028f, 0.028f, 0.1f);
-
-	const physx::PxVec3 planeNormal = physx::PxVec3(0.3f, 1.0f, 0.0f).getNormalized();
-
-	physx::PxPlane plane = physx::PxPlane(planeNormal, 0.0f);
-	physx::PxRigidStatic* groundActor = physx::PxCreatePlane(*physics, plane, *rockMaterial);
-	scene->addActor(*groundActor);
-	actors.pushBack(groundActor);
-
-	physx::PxBoxGeometry boxGeometry = physx::PxBoxGeometry(physx::PxVec3(0.5f, 0.5f, 0.5f));
-
-	physx::PxShape* rockBoxShape = physics->createShape(boxGeometry, *rockMaterial, true);
-	physx::PxRigidDynamic* rockBoxActor = physics->createRigidDynamic(physx::PxTransform(physx::PxVec3(-2.0f, 2.0f, -2.0f)));
-	rockBoxActor->attachShape(*rockBoxShape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*rockBoxActor, 10.0f);
-	scene->addActor(*rockBoxActor);
-	actors.pushBack(rockBoxActor);
-
-	physx::PxShape* metalBoxShape = physics->createShape(boxGeometry, *metalMaterial, true);
-	physx::PxRigidDynamic* metalBoxActor = physics->createRigidDynamic(physx::PxTransform(physx::PxVec3(0.0f, 2.0f, 0.0f)));
-	metalBoxActor->attachShape(*metalBoxShape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*metalBoxActor, 10.0f);
-	scene->addActor(*metalBoxActor);
-	actors.pushBack(metalBoxActor);
-
-	physx::PxShape* iceBoxShape = physics->createShape(boxGeometry, *iceMaterial, true);
-	physx::PxRigidDynamic* iceBoxActor = physics->createRigidDynamic(physx::PxTransform(physx::PxVec3(0.0f, 2.0f, 2.0f)));
-	iceBoxActor->attachShape(*iceBoxShape);
-	physx::PxRigidBodyExt::updateMassAndInertia(*iceBoxActor, 10.0f);
-	scene->addActor(*iceBoxActor);
-	actors.pushBack(iceBoxActor);
-}
-
-void keyPress(unsigned char key, const physx::PxTransform& camera) {
-	std::cout << toupper(key) << "\n";
-}
-
-void exitCallback() {
-	delete camera;
-
-	scene->release();
-	physics->release();
-	foundation->release();
+	break;
+	default:
+		break;
+	}
 }
 
 void renderCallback() {
-	scene->simulate(1.0f / 60.0f);
-	scene->fetchResults(true);
+	physicsEngine->Simulate(1.0f / 60.0f);
 
 	Snippets::startRender(camera);
 
+	std::vector<physx::PxRigidActor*> actors = physicsEngine->GetActors();
 	if (actors.size() > 0) {
-		Snippets::renderActors(&actors[0], actors.size(), false);
+		Snippets::renderActors(actors.data(), actors.size());
 	}
 
 	Snippets::finishRender();
 }
 
+void exitCallback() {
+	delete camera;
+	delete physicsEngine;
+}
+
 int main() {
-	camera = new Snippets::Camera(physx::PxVec3(0.0f, 20.0f, 20.0f), physx::PxVec3(0.0f, -1.0f, -1.0f));
+	camera = new Snippets::Camera(physx::PxVec3(0.0f, 10.0f, 30.0f), physx::PxVec3(0.0f, -0.1f, -0.3f));
+	Snippets::setupDefault("PhysX Example", camera, keyPressedCallback, renderCallback, exitCallback);
 
-	Snippets::setupDefault("PhysX test", camera, keyPress, renderCallback, exitCallback);
+	physicsEngine = new PhysicsEngine();
 
-	initPhysics();
+	physx::PxMaterial* defaultMaterial = physicsEngine->CreateMaterial(0.5f, 0.5f, 0.1f);
+
+	const physx::PxVec3 groundNormal = physx::PxVec3(0.3f, 1.0f, 0.0f).getNormalized();
+	const float groundDistance = 0.0f;
+	physicsEngine->AddGround(groundNormal, groundDistance, defaultMaterial);
+
+	const physx::PxVec3 obstacleSize = physx::PxVec3(1.0f, 1.0f, 40.0f);
+	const physx::PxVec3 obstaclePosition = physx::PxVec3(-0.1f, 0.0f, 0.0f);
+	const physx::PxQuat obstacleRotation = physx::PxQuat(physx::PxPiDivFour, physx::PxVec3(0.0f, 0.0f, 1.0f));
+	physx::PxShape* obstacleShape = physicsEngine->CreateBoxShape(obstacleSize, defaultMaterial, CustomFilterData::eOBSTACLE, true);
+	physicsEngine->AddStaticActor(obstacleShape, obstaclePosition, obstacleRotation);
+
+	const physx::PxVec3 triggerSize = physx::PxVec3(1.0f, 40.0f, 40.0f);
+	const physx::PxVec3 triggerPosition = physx::PxVec3(5.0f, 0.0f, 0.0f);
+	physx::PxShape* triggerShape = physicsEngine->CreateBoxShape(triggerSize, defaultMaterial, CustomFilterData::eTRIGGER, true, physx::PxShapeFlag::eTRIGGER_SHAPE);
+	physicsEngine->AddStaticActor(triggerShape, triggerPosition, physx::PxQuat(1.0f));
 
 	glutMainLoop();
 

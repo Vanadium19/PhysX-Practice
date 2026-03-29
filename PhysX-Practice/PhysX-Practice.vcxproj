@@ -130,7 +130,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="PhysX-Practice.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PhysicsEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
