@@ -6,45 +6,7 @@
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
 
-constexpr float kSimulationStep = 1.0f / 60.0f;
-
-constexpr float kTableLength = 2.54f;
-constexpr float kTableWidth = 1.27f;
-constexpr float kTableSurfaceThickness = 0.04f;
-constexpr float kRailThickness = 0.08f;
-constexpr float kRailHeight = 0.10f;
-constexpr float kPitDepth = 0.25f;
-constexpr float kPitThickness = 0.02f;
-
-constexpr float kCornerPocketCut = 0.12f;
-constexpr float kSidePocketWidth = 0.18f;
-constexpr float kSidePocketDepth = 0.12f;
-
-constexpr float kBallRadius = 0.0285f;
-constexpr float kBallMass = 0.17f;
-constexpr float kBallLinearDamping = 0.75f;
-constexpr float kBallStopThreshold = 0.06f;
-constexpr float kPocketDestroyY = -0.10f;
-
-constexpr float kCueLength = 0.42f;
-constexpr float kCueHeight = 0.016f;
-constexpr float kCueThickness = 0.014f;
-constexpr float kCueTipGap = 0.01f;
-constexpr float kCuePullbackMin = 0.03f;
-constexpr float kCuePullbackMax = 0.12f;
-constexpr float kCuePullbackDefault = 0.06f;
-constexpr float kCuePullbackStep = 0.01f;
-constexpr float kCueStrikeDuration = 0.18f;
-constexpr float kAimStep = physx::PxPi / 90.0f;
-constexpr float kAimGuideLength = 0.50f;
-
-const physx::PxVec3 kTableColor(0.08f, 0.44f, 0.18f);
-const physx::PxVec3 kRailColor(0.42f, 0.23f, 0.10f);
-const physx::PxVec3 kPocketColor(0.08f, 0.08f, 0.08f);
-const physx::PxVec3 kObjectBallColor(0.86f, 0.58f, 0.12f);
-const physx::PxVec3 kCueBallColor(0.95f, 0.95f, 0.95f);
-const physx::PxVec3 kCueColor(0.74f, 0.58f, 0.34f);
-const physx::PxVec3 kAimColor(0.90f, 0.95f, 1.00f);
+#include "BilliardsConfig.h"
 
 PhysicsEngine* physicsEngine = nullptr;
 Snippets::Camera* camera = nullptr;
@@ -69,10 +31,10 @@ public:
 		ballMaterial_ = physicsEngine->GetMaterial(0.05f, 0.05f, 0.78f);
 		cueMaterial_ = physicsEngine->GetMaterial(0.25f, 0.25f, 0.20f);
 
-		ballShape_ = physicsEngine->CreateSphereShape(kBallRadius, ballMaterial_, CustomFilterData::eDYNAMIC);
+		ballShape_ = physicsEngine->CreateSphereShape(ballRadius, ballMaterial_, CustomFilterData::eDYNAMIC);
 		cueShape_ = physicsEngine->CreateBoxShape(
-			physx::PxVec3(kCueLength, kCueHeight, kCueThickness),
-			physx::PxVec3(-kCueLength * 0.5f, 0.0f, 0.0f),
+			physx::PxVec3(cueLength, cueHeight, cueThickness),
+			physx::PxVec3(-cueLength * 0.5f, 0.0f, 0.0f),
 			physx::PxQuat(physx::PxIdentity),
 			cueMaterial_,
 			CustomFilterData::eOBSTACLE
@@ -119,7 +81,7 @@ public:
 		case 'J':
 		case '4':
 			if (result_ == GameResult::ePLAYING && cueState_ != CueState::eSTRIKING) {
-				aimAngle_ += kAimStep;
+				aimAngle_ += aimStep;
 				WrapAimAngle();
 			}
 			break;
@@ -127,20 +89,20 @@ public:
 		case 'L':
 		case '6':
 			if (result_ == GameResult::ePLAYING && cueState_ != CueState::eSTRIKING) {
-				aimAngle_ -= kAimStep;
+				aimAngle_ -= aimStep;
 				WrapAimAngle();
 			}
 			break;
 		case 'Z':
 		case '2':
 			if (result_ == GameResult::ePLAYING && cueState_ != CueState::eSTRIKING) {
-				AdjustCuePullback(-kCuePullbackStep);
+				AdjustCuePullback(-cuePullbackStep);
 			}
 			break;
 		case 'X':
 		case '8':
 			if (result_ == GameResult::ePLAYING && cueState_ != CueState::eSTRIKING) {
-				AdjustCuePullback(kCuePullbackStep);
+				AdjustCuePullback(cuePullbackStep);
 			}
 			break;
 		case 'R':
@@ -155,8 +117,8 @@ public:
 	}
 
 	void RenderFrame() {
-		UpdateCue(kSimulationStep);
-		physicsEngine->Simulate(kSimulationStep);
+		UpdateCue(simulationStep);
+		physicsEngine->Simulate(simulationStep);
 		UpdatePocketedBalls();
 
 		Snippets::startRender(camera, 0.1f, 60.0f, 45.0f);
@@ -187,101 +149,101 @@ private:
 	};
 
 	void CreateTable() {
-		const float halfLength = kTableLength * 0.5f;
-		const float halfWidth = kTableWidth * 0.5f;
-		const float surfaceY = -kTableSurfaceThickness * 0.5f;
-		const float railY = kRailHeight * 0.5f;
-		const float sidePocketHalfWidth = kSidePocketWidth * 0.5f;
+		const float halfLength = tableLength * 0.5f;
+		const float halfWidth = tableWidth * 0.5f;
+		const float surfaceY = -tableSurfaceThickness * 0.5f;
+		const float railY = railHeight * 0.5f;
+		const float sidePocketHalfWidth = sidePocketWidth * 0.5f;
 
-		const float sideFloorWidth = halfLength - kCornerPocketCut - sidePocketHalfWidth;
+		const float sideFloorWidth = halfLength - cornerPocketCut - sidePocketHalfWidth;
 		const float sideFloorCenterX = sidePocketHalfWidth + sideFloorWidth * 0.5f;
-		const float endFloorDepth = kTableWidth - 2.0f * kCornerPocketCut;
-		const float centerFloorDepth = kTableWidth - 2.0f * kSidePocketDepth;
+		const float endFloorDepth = tableWidth - 2.0f * cornerPocketCut;
+		const float centerFloorDepth = tableWidth - 2.0f * sidePocketDepth;
 
 		AddStaticBox(
 			fieldActors_,
-			physx::PxVec3(sideFloorWidth, kTableSurfaceThickness, kTableWidth),
+			physx::PxVec3(sideFloorWidth, tableSurfaceThickness, tableWidth),
 			physx::PxVec3(-sideFloorCenterX, surfaceY, 0.0f),
 			clothMaterial_
 		);
 		AddStaticBox(
 			fieldActors_,
-			physx::PxVec3(sideFloorWidth, kTableSurfaceThickness, kTableWidth),
+			physx::PxVec3(sideFloorWidth, tableSurfaceThickness, tableWidth),
 			physx::PxVec3(sideFloorCenterX, surfaceY, 0.0f),
 			clothMaterial_
 		);
 		AddStaticBox(
 			fieldActors_,
-			physx::PxVec3(kSidePocketWidth, kTableSurfaceThickness, centerFloorDepth),
+			physx::PxVec3(sidePocketWidth, tableSurfaceThickness, centerFloorDepth),
 			physx::PxVec3(0.0f, surfaceY, 0.0f),
 			clothMaterial_
 		);
 		AddStaticBox(
 			fieldActors_,
-			physx::PxVec3(kCornerPocketCut, kTableSurfaceThickness, endFloorDepth),
-			physx::PxVec3(-(halfLength - kCornerPocketCut * 0.5f), surfaceY, 0.0f),
+			physx::PxVec3(cornerPocketCut, tableSurfaceThickness, endFloorDepth),
+			physx::PxVec3(-(halfLength - cornerPocketCut * 0.5f), surfaceY, 0.0f),
 			clothMaterial_
 		);
 		AddStaticBox(
 			fieldActors_,
-			physx::PxVec3(kCornerPocketCut, kTableSurfaceThickness, endFloorDepth),
-			physx::PxVec3(halfLength - kCornerPocketCut * 0.5f, surfaceY, 0.0f),
+			physx::PxVec3(cornerPocketCut, tableSurfaceThickness, endFloorDepth),
+			physx::PxVec3(halfLength - cornerPocketCut * 0.5f, surfaceY, 0.0f),
 			clothMaterial_
 		);
 
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(sideFloorWidth, kRailHeight, kRailThickness),
-			physx::PxVec3(-sideFloorCenterX, railY, halfWidth + kRailThickness * 0.5f),
+			physx::PxVec3(sideFloorWidth, railHeight, railThickness),
+			physx::PxVec3(-sideFloorCenterX, railY, halfWidth + railThickness * 0.5f),
 			railMaterial_
 		);
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(sideFloorWidth, kRailHeight, kRailThickness),
-			physx::PxVec3(sideFloorCenterX, railY, halfWidth + kRailThickness * 0.5f),
+			physx::PxVec3(sideFloorWidth, railHeight, railThickness),
+			physx::PxVec3(sideFloorCenterX, railY, halfWidth + railThickness * 0.5f),
 			railMaterial_
 		);
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(sideFloorWidth, kRailHeight, kRailThickness),
-			physx::PxVec3(-sideFloorCenterX, railY, -(halfWidth + kRailThickness * 0.5f)),
+			physx::PxVec3(sideFloorWidth, railHeight, railThickness),
+			physx::PxVec3(-sideFloorCenterX, railY, -(halfWidth + railThickness * 0.5f)),
 			railMaterial_
 		);
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(sideFloorWidth, kRailHeight, kRailThickness),
-			physx::PxVec3(sideFloorCenterX, railY, -(halfWidth + kRailThickness * 0.5f)),
+			physx::PxVec3(sideFloorWidth, railHeight, railThickness),
+			physx::PxVec3(sideFloorCenterX, railY, -(halfWidth + railThickness * 0.5f)),
 			railMaterial_
 		);
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(kRailThickness, kRailHeight, endFloorDepth),
-			physx::PxVec3(-(halfLength + kRailThickness * 0.5f), railY, 0.0f),
+			physx::PxVec3(railThickness, railHeight, endFloorDepth),
+			physx::PxVec3(-(halfLength + railThickness * 0.5f), railY, 0.0f),
 			railMaterial_
 		);
 		AddStaticBox(
 			railActors_,
-			physx::PxVec3(kRailThickness, kRailHeight, endFloorDepth),
-			physx::PxVec3(halfLength + kRailThickness * 0.5f, railY, 0.0f),
+			physx::PxVec3(railThickness, railHeight, endFloorDepth),
+			physx::PxVec3(halfLength + railThickness * 0.5f, railY, 0.0f),
 			railMaterial_
 		);
 
 		physx::PxShape* pitShape = physicsEngine->CreateBoxShape(
-			physx::PxVec3(kTableLength, kPitThickness, kTableWidth),
+			physx::PxVec3(tableLength, pitThickness, tableWidth),
 			clothMaterial_,
 			CustomFilterData::eOBSTACLE
 		);
 		staticShapes_.push_back(pitShape);
 		pitActor_ = physicsEngine->AddStaticActor(
 			pitShape,
-			physx::PxVec3(0.0f, -kPitDepth, 0.0f),
+			physx::PxVec3(0.0f, -pitDepth, 0.0f),
 			physx::PxQuat(physx::PxIdentity)
 		);
 	}
 
 	void CreateCue() {
 		const float cueMass = 0.60f;
-		const float cueDensity = cueMass / PhysicsEngine::GetBoxVolume(physx::PxVec3(kCueLength, kCueHeight, kCueThickness));
+		const float cueDensity = cueMass / PhysicsEngine::GetBoxVolume(physx::PxVec3(cueLength, cueHeight, cueThickness));
 
 		cueActor_ = physicsEngine->AddDynamicActor(
 			cueShape_,
@@ -305,17 +267,17 @@ private:
 		ClearBalls();
 		balls_.reserve(16);
 
-		const float diameter = 2.0f * kBallRadius;
-		const float rowStep = physx::PxSqrt(3.0f) * kBallRadius;
-		const float rackApexX = kTableLength * 0.5f - 0.55f;
-		const float cueBallX = -(kTableLength * 0.5f - 0.45f);
-		const float ballY = kBallRadius + 0.001f;
+		const float diameter = 2.0f * ballRadius;
+		const float rowStep = physx::PxSqrt(3.0f) * ballRadius;
+		const float rackApexX = tableLength * 0.5f - 0.55f;
+		const float cueBallX = -(tableLength * 0.5f - 0.45f);
+		const float ballY = ballRadius + 0.001f;
 
 		CreateBall(physx::PxVec3(cueBallX, ballY, 0.0f), true);
 
 		for (int row = 0; row < 5; ++row) {
 			const float rowX = rackApexX + row * rowStep;
-			const float startZ = -row * kBallRadius;
+			const float startZ = -row * ballRadius;
 			for (int column = 0; column <= row; ++column) {
 				const float z = startZ + column * diameter;
 				CreateBall(physx::PxVec3(rowX, ballY, z), false);
@@ -325,7 +287,7 @@ private:
 		remainingObjectBalls_ = 15;
 		result_ = GameResult::ePLAYING;
 		aimAngle_ = 0.0f;
-		cuePullback_ = kCuePullbackDefault;
+		cuePullback_ = cuePullbackDefault;
 		cueStrikeTimer_ = 0.0f;
 		cueState_ = CueState::eAIMING;
 
@@ -350,7 +312,7 @@ private:
 	}
 
 	void CreateBall(const physx::PxVec3& position, bool isCueBall) {
-		const float density = kBallMass / PhysicsEngine::GetSphereVolume(kBallRadius);
+		const float density = ballMass / PhysicsEngine::GetSphereVolume(ballRadius);
 		physx::PxRigidDynamic* actor = physicsEngine->AddDynamicActor(
 			ballShape_,
 			position,
@@ -358,7 +320,7 @@ private:
 			density
 		);
 
-		actor->setLinearDamping(kBallLinearDamping);
+		actor->setLinearDamping(ballLinearDamping);
 		actor->setAngularDamping(20.0f);
 		actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 		actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
@@ -392,7 +354,7 @@ private:
 
 		if (cueState_ == CueState::eSTRIKING) {
 			cueStrikeTimer_ += dt;
-			if (cueStrikeTimer_ >= kCueStrikeDuration) {
+			if (cueStrikeTimer_ >= cueStrikeDuration) {
 				cueState_ = CueState::eHIDDEN;
 				ParkCue(true);
 			}
@@ -419,7 +381,7 @@ private:
 				continue;
 			}
 
-			if (ball.actor->getGlobalPose().p.y < kPocketDestroyY) {
+			if (ball.actor->getGlobalPose().p.y < pocketDestroyY) {
 				pocketedBalls.push_back(&ball);
 			}
 		}
@@ -482,7 +444,7 @@ private:
 				continue;
 			}
 
-			if (ball.actor->getLinearVelocity().magnitude() > kBallStopThreshold) {
+			if (ball.actor->getLinearVelocity().magnitude() > ballStopThreshold) {
 				return false;
 			}
 		}
@@ -490,7 +452,7 @@ private:
 	}
 
 	void AdjustCuePullback(float delta) {
-		cuePullback_ = clampRange(cuePullback_ + delta, kCuePullbackMin, kCuePullbackMax);
+		cuePullback_ = clampRange(cuePullback_ + delta, cuePullbackMin, cuePullbackMax);
 	}
 
 	void WrapAimAngle() {
@@ -527,7 +489,7 @@ private:
 
 	void SetCuePose(const physx::PxVec3& cueBallPosition, float pullbackOffset, bool teleport) {
 		const physx::PxVec3 direction = GetAimDirection();
-		const physx::PxVec3 tipAnchor = cueBallPosition - direction * (kBallRadius + kCueTipGap + pullbackOffset);
+		const physx::PxVec3 tipAnchor = cueBallPosition - direction * (ballRadius + cueTipGap + pullbackOffset);
 		const physx::PxQuat rotation(-aimAngle_, physx::PxVec3(0.0f, 1.0f, 0.0f));
 		ApplyCuePose(physx::PxTransform(tipAnchor, rotation), teleport);
 	}
@@ -560,7 +522,7 @@ private:
 	void RenderTable() const {
 		if (pitActor_) {
 			physx::PxRigidActor* actor = pitActor_;
-			Snippets::renderActors(&actor, 1, false, kPocketColor, nullptr, false);
+			Snippets::renderActors(&actor, 1, false, pocketColor, nullptr, false);
 		}
 
 		if (!fieldActors_.empty()) {
@@ -569,7 +531,7 @@ private:
 			for (physx::PxRigidStatic* actor : fieldActors_) {
 				actors.push_back(actor);
 			}
-			Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, kTableColor, nullptr, false);
+			Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, tableColor, nullptr, false);
 		}
 
 		if (!railActors_.empty()) {
@@ -578,7 +540,7 @@ private:
 			for (physx::PxRigidStatic* actor : railActors_) {
 				actors.push_back(actor);
 			}
-			Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, kRailColor, nullptr, false);
+			Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, railColor, nullptr, false);
 		}
 	}
 
@@ -600,11 +562,11 @@ private:
 		}
 
 		if (!objectBalls.empty()) {
-			Snippets::renderActors(objectBalls.data(), static_cast<physx::PxU32>(objectBalls.size()), false, kObjectBallColor, nullptr, false);
+			Snippets::renderActors(objectBalls.data(), static_cast<physx::PxU32>(objectBalls.size()), false, objectBallColor, nullptr, false);
 		}
 
 		if (!cueBall.empty()) {
-			Snippets::renderActors(cueBall.data(), static_cast<physx::PxU32>(cueBall.size()), false, kCueBallColor, nullptr, false);
+			Snippets::renderActors(cueBall.data(), static_cast<physx::PxU32>(cueBall.size()), false, cueBallColor, nullptr, false);
 		}
 	}
 
@@ -614,7 +576,7 @@ private:
 		}
 
 		physx::PxRigidActor* actor = cueActor_;
-		Snippets::renderActors(&actor, 1, false, kCueColor, nullptr, false);
+		Snippets::renderActors(&actor, 1, false, cueColor, nullptr, false);
 	}
 
 	void RenderAimGuide() const {
@@ -629,7 +591,7 @@ private:
 
 		const physx::PxVec3 start = cueBall->actor->getGlobalPose().p;
 		const physx::PxVec3 direction(physx::PxCos(aimAngle_), 0.0f, physx::PxSin(aimAngle_));
-		Snippets::DrawLine(start, start + direction * kAimGuideLength, kAimColor);
+		Snippets::DrawLine(start, start + direction * aimGuideLength, aimColor);
 	}
 
 	void RenderHud() const {
@@ -683,7 +645,7 @@ private:
 	CueState cueState_ = CueState::eHIDDEN;
 	int remainingObjectBalls_ = 15;
 	float aimAngle_ = 0.0f;
-	float cuePullback_ = kCuePullbackDefault;
+	float cuePullback_ = cuePullbackDefault;
 	float cueStrikeTimer_ = 0.0f;
 };
 
