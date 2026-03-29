@@ -122,10 +122,9 @@ void BilliardsGame::RenderFrame() {
 	UpdatePocketedBalls();
 
 	Snippets::startRender(camera_, 0.1f, 60.0f, 45.0f);
-	std::vector<physx::PxRigidActor*> actors = physicsEngine_->GetActors();
-	if (!actors.empty()) {
-		Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()));
-	}
+	RenderTable();
+	RenderBalls();
+	RenderCue();
 	RenderAimGuide();
 	RenderHud();
 	Snippets::finishRender();
@@ -500,6 +499,66 @@ physx::PxVec3 BilliardsGame::GetAimDirection() const {
 
 physx::PxVec3 BilliardsGame::HiddenCuePosition() const {
 	return physx::PxVec3(0.0f, 1.5f, -4.0f);
+}
+
+void BilliardsGame::RenderTable() const {
+	if (pitActor_) {
+		physx::PxRigidActor* actor = pitActor_;
+		Snippets::renderActors(&actor, 1, false, pocketColor, nullptr, false);
+	}
+
+	if (!fieldActors_.empty()) {
+		std::vector<physx::PxRigidActor*> actors;
+		actors.reserve(fieldActors_.size());
+		for (physx::PxRigidStatic* actor : fieldActors_) {
+			actors.push_back(actor);
+		}
+		Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, tableColor, nullptr, false);
+	}
+
+	if (!railActors_.empty()) {
+		std::vector<physx::PxRigidActor*> actors;
+		actors.reserve(railActors_.size());
+		for (physx::PxRigidStatic* actor : railActors_) {
+			actors.push_back(actor);
+		}
+		Snippets::renderActors(actors.data(), static_cast<physx::PxU32>(actors.size()), false, railColor, nullptr, false);
+	}
+}
+
+void BilliardsGame::RenderBalls() const {
+	std::vector<physx::PxRigidActor*> objectBalls;
+	std::vector<physx::PxRigidActor*> cueBall;
+
+	for (const Ball& ball : balls_) {
+		if (!ball.actor) {
+			continue;
+		}
+
+		if (ball.isCueBall) {
+			cueBall.push_back(ball.actor);
+		}
+		else {
+			objectBalls.push_back(ball.actor);
+		}
+	}
+
+	if (!objectBalls.empty()) {
+		Snippets::renderActors(objectBalls.data(), static_cast<physx::PxU32>(objectBalls.size()), false, objectBallColor, nullptr, false);
+	}
+
+	if (!cueBall.empty()) {
+		Snippets::renderActors(cueBall.data(), static_cast<physx::PxU32>(cueBall.size()), false, cueBallColor, nullptr, false);
+	}
+}
+
+void BilliardsGame::RenderCue() const {
+	if (!cueActor_ || cueState_ == CueState::eHIDDEN) {
+		return;
+	}
+
+	physx::PxRigidActor* actor = cueActor_;
+	Snippets::renderActors(&actor, 1, false, cueColor, nullptr, false);
 }
 
 void BilliardsGame::RenderAimGuide() const {
