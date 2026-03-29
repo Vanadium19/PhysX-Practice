@@ -30,9 +30,9 @@ constexpr float kCueLength = 0.42f;
 constexpr float kCueHeight = 0.016f;
 constexpr float kCueThickness = 0.014f;
 constexpr float kCueTipGap = 0.01f;
-constexpr float kCuePullbackMin = 0.08f;
-constexpr float kCuePullbackMax = 0.18f;
-constexpr float kCuePullbackDefault = 0.12f;
+constexpr float kCuePullbackMin = 0.03f;
+constexpr float kCuePullbackMax = 0.12f;
+constexpr float kCuePullbackDefault = 0.06f;
 constexpr float kCuePullbackStep = 0.01f;
 constexpr float kCueStrikeDuration = 0.18f;
 constexpr float kAimStep = physx::PxPi / 90.0f;
@@ -290,11 +290,12 @@ private:
 		cueActor_->setLinearDamping(0.0f);
 		cueActor_->setAngularDamping(100.0f);
 		cueActor_->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
 		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, true);
 		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
 		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
 		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
-		PrepareCueForAiming();
 		ParkCue(true);
 	}
 
@@ -460,7 +461,6 @@ private:
 		}
 
 		SetCuePose(cueBall->actor->getGlobalPose().p, cuePullback_, true);
-		PrepareCueForStrike();
 
 		const physx::PxVec3 direction = GetAimDirection();
 		cueActor_->setLinearVelocity(direction * GetCueStrikeSpeed());
@@ -520,11 +520,10 @@ private:
 	}
 
 	float GetCueStrikeSpeed() const {
-		return 1.8f + 6.0f * cuePullback_;
+		return 2.8f + 8.0f * cuePullback_;
 	}
 
 	void SetCuePose(const physx::PxVec3& cueBallPosition, float pullbackOffset, bool teleport) {
-		PrepareCueForAiming();
 		const physx::PxVec3 direction = GetAimDirection();
 		const physx::PxVec3 tipAnchor = cueBallPosition - direction * (kBallRadius + kCueTipGap + pullbackOffset);
 		const physx::PxVec3 center = tipAnchor - direction * (kCueLength * 0.5f);
@@ -533,7 +532,6 @@ private:
 	}
 
 	void ParkCue(bool teleport) {
-		PrepareCueForAiming();
 		ApplyCuePose(physx::PxTransform(HiddenCuePosition(), physx::PxQuat(physx::PxIdentity)), teleport);
 	}
 
@@ -542,32 +540,12 @@ private:
 			return;
 		}
 
+		cueActor_->setLinearVelocity(physx::PxVec3(0.0f));
+		cueActor_->setAngularVelocity(physx::PxVec3(0.0f));
+		cueActor_->setGlobalPose(pose);
 		if (teleport) {
-			cueActor_->setGlobalPose(pose);
+			cueActor_->putToSleep();
 		}
-		cueActor_->setKinematicTarget(pose);
-	}
-
-	void PrepareCueForAiming() {
-		if (!cueActor_) {
-			return;
-		}
-
-		cueActor_->setLinearVelocity(physx::PxVec3(0.0f));
-		cueActor_->setAngularVelocity(physx::PxVec3(0.0f));
-		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
-	}
-
-	void PrepareCueForStrike() {
-		if (!cueActor_) {
-			return;
-		}
-
-		cueActor_->setLinearVelocity(physx::PxVec3(0.0f));
-		cueActor_->setAngularVelocity(physx::PxVec3(0.0f));
-		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
-		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
-		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
 	}
 
 	physx::PxVec3 GetAimDirection() const {
