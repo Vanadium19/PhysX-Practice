@@ -26,15 +26,15 @@ constexpr float kBallLinearDamping = 0.75f;
 constexpr float kBallStopThreshold = 0.06f;
 constexpr float kPocketDestroyY = -0.10f;
 
-constexpr float kCueLength = 0.70f;
-constexpr float kCueHeight = 0.018f;
-constexpr float kCueThickness = 0.018f;
+constexpr float kCueLength = 0.42f;
+constexpr float kCueHeight = 0.016f;
+constexpr float kCueThickness = 0.014f;
 constexpr float kCueTipGap = 0.01f;
-constexpr float kCuePullbackMin = 0.14f;
-constexpr float kCuePullbackMax = 0.34f;
-constexpr float kCuePullbackDefault = 0.20f;
-constexpr float kCuePullbackStep = 0.02f;
-constexpr float kCueFollowThrough = 0.05f;
+constexpr float kCuePullbackMin = 0.08f;
+constexpr float kCuePullbackMax = 0.18f;
+constexpr float kCuePullbackDefault = 0.12f;
+constexpr float kCuePullbackStep = 0.01f;
+constexpr float kCueStrikeDuration = 0.18f;
 constexpr float kAimStep = physx::PxPi / 90.0f;
 constexpr float kAimGuideLength = 0.50f;
 
@@ -287,8 +287,14 @@ private:
 			physx::PxQuat(physx::PxIdentity),
 			cueDensity
 		);
-		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+		cueActor_->setLinearDamping(0.0f);
+		cueActor_->setAngularDamping(100.0f);
 		cueActor_->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
+		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, true);
+		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
+		cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
+		PrepareCueForAiming();
 		ParkCue(true);
 	}
 
@@ -317,9 +323,8 @@ private:
 		result_ = GameResult::ePLAYING;
 		aimAngle_ = 0.0f;
 		cuePullback_ = kCuePullbackDefault;
-		cueStrikeTravel_ = 0.0f;
+		cueStrikeTimer_ = 0.0f;
 		cueState_ = CueState::eAIMING;
-		cueStrikeAnchor_ = physx::PxVec3(0.0f);
 
 		Ball* cueBall = GetCueBall();
 		if (cueBall && cueBall->actor) {
@@ -352,6 +357,8 @@ private:
 
 		actor->setLinearDamping(kBallLinearDamping);
 		actor->setAngularDamping(20.0f);
+		actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+		actor->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
 		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
 		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
 		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
@@ -381,14 +388,11 @@ private:
 		}
 
 		if (cueState_ == CueState::eSTRIKING) {
-			cueStrikeTravel_ += GetCueStrikeSpeed() * dt;
-			if (cueStrikeTravel_ >= cuePullback_ + kCueFollowThrough) {
+			cueStrikeTimer_ += dt;
+			if (cueStrikeTimer_ >= kCueStrikeDuration) {
 				cueState_ = CueState::eHIDDEN;
 				ParkCue(true);
-				return;
 			}
-
-			SetCuePose(cueStrikeAnchor_, cuePullback_ - cueStrikeTravel_, false);
 			return;
 		}
 
@@ -455,10 +459,15 @@ private:
 			return;
 		}
 
-		cueStrikeAnchor_ = cueBall->actor->getGlobalPose().p;
-		cueStrikeTravel_ = 0.0f;
+		SetCuePose(cueBall->actor->getGlobalPose().p, cuePullback_, true);
+		PrepareCueForStrike();
+
+		const physx::PxVec3 direction = GetAimDirection();
+		cueActor_->setLinearVelocity(direction * GetCueStrikeSpeed());
+		cueActor_->wakeUp();
+
+		cueStrikeTimer_ = 0.0f;
 		cueState_ = CueState::eSTRIKING;
-		SetCuePose(cueStrikeAnchor_, cuePullback_, true);
 	}
 
 	bool CanManipulateCue() const {
@@ -511,18 +520,20 @@ private:
 	}
 
 	float GetCueStrikeSpeed() const {
-		return 2.0f + 5.0f * cuePullback_;
+		return 1.8f + 6.0f * cuePullback_;
 	}
 
 	void SetCuePose(const physx::PxVec3& cueBallPosition, float pullbackOffset, bool teleport) {
-		const physx::PxVec3 direction(physx::PxCos(aimAngle_), 0.0f, physx::PxSin(aimAngle_));
-		const float totalOffset = kBallRadius + kCueTipGap + kCueLength * 0.5f + pullbackOffset;
-		const physx::PxVec3 center = cueBallPosition - direction * totalOffset;
+		PrepareCueForAiming();
+		const physx::PxVec3 direction = GetAimDirection();
+		const physx::PxVec3 tipAnchor = cueBallPosition - direction * (kBallRadius + kCueTipGap + pullbackOffset);
+		const physx::PxVec3 center = tipAnchor - direction * (kCueLength * 0.5f);
 		const physx::PxQuat rotation(aimAngle_, physx::PxVec3(0.0f, 1.0f, 0.0f));
 		ApplyCuePose(physx::PxTransform(center, rotation), teleport);
 	}
 
 	void ParkCue(bool teleport) {
+		PrepareCueForAiming();
 		ApplyCuePose(physx::PxTransform(HiddenCuePosition(), physx::PxQuat(physx::PxIdentity)), teleport);
 	}
 
@@ -535,6 +546,32 @@ private:
 			cueActor_->setGlobalPose(pose);
 		}
 		cueActor_->setKinematicTarget(pose);
+	}
+
+	void PrepareCueForAiming() {
+		if (!cueActor_) {
+			return;
+		}
+
+		cueActor_->setLinearVelocity(physx::PxVec3(0.0f));
+		cueActor_->setAngularVelocity(physx::PxVec3(0.0f));
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, true);
+	}
+
+	void PrepareCueForStrike() {
+		if (!cueActor_) {
+			return;
+		}
+
+		cueActor_->setLinearVelocity(physx::PxVec3(0.0f));
+		cueActor_->setAngularVelocity(physx::PxVec3(0.0f));
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC, false);
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+		cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
+	}
+
+	physx::PxVec3 GetAimDirection() const {
+		return physx::PxVec3(physx::PxCos(aimAngle_), 0.0f, physx::PxSin(aimAngle_));
 	}
 
 	physx::PxVec3 HiddenCuePosition() const {
@@ -668,8 +705,7 @@ private:
 	int remainingObjectBalls_ = 15;
 	float aimAngle_ = 0.0f;
 	float cuePullback_ = kCuePullbackDefault;
-	float cueStrikeTravel_ = 0.0f;
-	physx::PxVec3 cueStrikeAnchor_ = physx::PxVec3(0.0f);
+	float cueStrikeTimer_ = 0.0f;
 };
 
 BilliardsGame* game = nullptr;
