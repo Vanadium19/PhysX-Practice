@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BilliardsGame.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="PhysX-Practice.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -23,6 +26,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BilliardsConfig.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="BilliardsGame.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
     <ClInclude Include="PhysicsEngine.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

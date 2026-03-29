@@ -1,3 +1,5 @@
+#pragma once
+
 #include "PxPhysicsAPI.h"
 
 constexpr float simulationStep = 1.0f / 60.0f;
