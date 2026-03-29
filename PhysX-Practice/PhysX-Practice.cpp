@@ -7,7 +7,6 @@
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
 
-namespace {
 
 constexpr float kSimulationStep = 1.0f / 60.0f;
 
@@ -552,8 +551,6 @@ void exitCallback() {
 	delete physicsEngine;
 	physicsEngine = nullptr;
 }
-
-} // namespace
 
 int main() {
 	camera = new Snippets::Camera(
