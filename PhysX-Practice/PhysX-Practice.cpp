@@ -72,6 +72,8 @@ public:
 		ballShape_ = physicsEngine->CreateSphereShape(kBallRadius, ballMaterial_, CustomFilterData::eDYNAMIC);
 		cueShape_ = physicsEngine->CreateBoxShape(
 			physx::PxVec3(kCueLength, kCueHeight, kCueThickness),
+			physx::PxVec3(-kCueLength * 0.5f, 0.0f, 0.0f),
+			physx::PxQuat(physx::PxIdentity),
 			cueMaterial_,
 			CustomFilterData::eOBSTACLE
 		);
@@ -526,9 +528,8 @@ private:
 	void SetCuePose(const physx::PxVec3& cueBallPosition, float pullbackOffset, bool teleport) {
 		const physx::PxVec3 direction = GetAimDirection();
 		const physx::PxVec3 tipAnchor = cueBallPosition - direction * (kBallRadius + kCueTipGap + pullbackOffset);
-		const physx::PxVec3 center = tipAnchor - direction * (kCueLength * 0.5f);
-		const physx::PxQuat rotation(aimAngle_, physx::PxVec3(0.0f, 1.0f, 0.0f));
-		ApplyCuePose(physx::PxTransform(center, rotation), teleport);
+		const physx::PxQuat rotation(-aimAngle_, physx::PxVec3(0.0f, 1.0f, 0.0f));
+		ApplyCuePose(physx::PxTransform(tipAnchor, rotation), teleport);
 	}
 
 	void ParkCue(bool teleport) {
