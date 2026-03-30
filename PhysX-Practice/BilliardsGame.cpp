@@ -31,7 +31,7 @@ void BilliardsGame::Initialize() {
 	ballMaterial_ = physicsEngine_->GetMaterial(0.05f, 0.05f, 0.78f);
 	cueMaterial_ = physicsEngine_->GetMaterial(0.25f, 0.25f, 0.20f);
 
-	ballShape_ = physicsEngine_->CreateSphereShape(ballRadius, ballMaterial_, CustomFilterData::eDYNAMIC);
+	ballShape_ = physicsEngine_->CreateSphereShape(ballRadius, ballMaterial_, CustomFilterData::eBall);
 	cueShape_ = physicsEngine_->CreateBoxShape(
 		physx::PxVec3(cueLength, cueHeight, cueThickness),
 		physx::PxVec3(-cueLength * 0.5f, 0.0f, 0.0f),
@@ -40,8 +40,7 @@ void BilliardsGame::Initialize() {
 		CustomFilterData::eOBSTACLE
 	);
 
-	CreateTable();
-	CreateCue();
+	//CreateCue();
 	Reset();
 }
 
@@ -130,120 +129,27 @@ void BilliardsGame::RenderFrame() {
 	Snippets::finishRender();
 }
 
-void BilliardsGame::CreateTable() {
-	const float halfLength = tableLength * 0.5f;
-	const float halfWidth = tableWidth * 0.5f;
-	const float surfaceY = -tableSurfaceThickness * 0.5f;
-	const float railY = railHeight * 0.5f;
-	const float sidePocketHalfWidth = sidePocketWidth * 0.5f;
-
-	const float sideFloorWidth = halfLength - cornerPocketCut - sidePocketHalfWidth;
-	const float sideFloorCenterX = sidePocketHalfWidth + sideFloorWidth * 0.5f;
-	const float endFloorDepth = tableWidth - 2.0f * cornerPocketCut;
-	const float centerFloorDepth = tableWidth - 2.0f * sidePocketDepth;
-
-	AddStaticBox(
-		fieldActors_,
-		physx::PxVec3(sideFloorWidth, tableSurfaceThickness, tableWidth),
-		physx::PxVec3(-sideFloorCenterX, surfaceY, 0.0f),
-		clothMaterial_
-	);
-	AddStaticBox(
-		fieldActors_,
-		physx::PxVec3(sideFloorWidth, tableSurfaceThickness, tableWidth),
-		physx::PxVec3(sideFloorCenterX, surfaceY, 0.0f),
-		clothMaterial_
-	);
-	AddStaticBox(
-		fieldActors_,
-		physx::PxVec3(sidePocketWidth, tableSurfaceThickness, centerFloorDepth),
-		physx::PxVec3(0.0f, surfaceY, 0.0f),
-		clothMaterial_
-	);
-	AddStaticBox(
-		fieldActors_,
-		physx::PxVec3(cornerPocketCut, tableSurfaceThickness, endFloorDepth),
-		physx::PxVec3(-(halfLength - cornerPocketCut * 0.5f), surfaceY, 0.0f),
-		clothMaterial_
-	);
-	AddStaticBox(
-		fieldActors_,
-		physx::PxVec3(cornerPocketCut, tableSurfaceThickness, endFloorDepth),
-		physx::PxVec3(halfLength - cornerPocketCut * 0.5f, surfaceY, 0.0f),
-		clothMaterial_
-	);
-
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(sideFloorWidth, railHeight, railThickness),
-		physx::PxVec3(-sideFloorCenterX, railY, halfWidth + railThickness * 0.5f),
-		railMaterial_
-	);
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(sideFloorWidth, railHeight, railThickness),
-		physx::PxVec3(sideFloorCenterX, railY, halfWidth + railThickness * 0.5f),
-		railMaterial_
-	);
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(sideFloorWidth, railHeight, railThickness),
-		physx::PxVec3(-sideFloorCenterX, railY, -(halfWidth + railThickness * 0.5f)),
-		railMaterial_
-	);
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(sideFloorWidth, railHeight, railThickness),
-		physx::PxVec3(sideFloorCenterX, railY, -(halfWidth + railThickness * 0.5f)),
-		railMaterial_
-	);
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(railThickness, railHeight, endFloorDepth),
-		physx::PxVec3(-(halfLength + railThickness * 0.5f), railY, 0.0f),
-		railMaterial_
-	);
-	AddStaticBox(
-		railActors_,
-		physx::PxVec3(railThickness, railHeight, endFloorDepth),
-		physx::PxVec3(halfLength + railThickness * 0.5f, railY, 0.0f),
-		railMaterial_
-	);
-
-	physx::PxShape* pitShape = physicsEngine_->CreateBoxShape(
-		physx::PxVec3(tableLength, pitThickness, tableWidth),
-		clothMaterial_,
-		CustomFilterData::eOBSTACLE
-	);
-	staticShapes_.push_back(pitShape);
-	pitActor_ = physicsEngine_->AddStaticActor(
-		pitShape,
-		physx::PxVec3(0.0f, -pitDepth, 0.0f),
-		physx::PxQuat(physx::PxIdentity)
-	);
-}
-
-void BilliardsGame::CreateCue() {
-	const float cueMass = 0.60f;
-	const float cueDensity = cueMass / PhysicsEngine::GetBoxVolume(physx::PxVec3(cueLength, cueHeight, cueThickness));
-
-	cueActor_ = physicsEngine_->AddDynamicActor(
-		cueShape_,
-		HiddenCuePosition(),
-		physx::PxQuat(physx::PxIdentity),
-		cueDensity
-	);
-	cueActor_->setLinearDamping(0.0f);
-	cueActor_->setAngularDamping(100.0f);
-	cueActor_->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
-	cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
-	cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
-	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, true);
-	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
-	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
-	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
-	ParkCue(true);
-}
+//void BilliardsGame::CreateCue() {
+//	const float cueMass = 0.60f;
+//	const float cueDensity = cueMass / PhysicsEngine::GetBoxVolume(physx::PxVec3(cueLength, cueHeight, cueThickness));
+//
+//	cueActor_ = physicsEngine_->AddDynamicActor(
+//		cueShape_,
+//		HiddenCuePosition(),
+//		physx::PxQuat(physx::PxIdentity),
+//		cueDensity
+//	);
+//	cueActor_->setLinearDamping(0.0f);
+//	cueActor_->setAngularDamping(100.0f);
+//	cueActor_->setActorFlag(physx::PxActorFlag::eDISABLE_GRAVITY, true);
+//	cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
+//	cueActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_SPECULATIVE_CCD, true);
+//	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_LINEAR_Y, true);
+//	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+//	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
+//	cueActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
+//	ParkCue(true);
+//}
 
 void BilliardsGame::Reset() {
 	ClearBalls();
@@ -544,11 +450,11 @@ void BilliardsGame::RenderBalls() const {
 	}
 
 	if (!objectBalls.empty()) {
-		Snippets::renderActors(objectBalls.data(), static_cast<physx::PxU32>(objectBalls.size()), false, objectBallColor, nullptr, false);
+		Snippets::renderActors(objectBalls.data(), static_cast<physx::PxU32>(objectBalls.size()), false, gaimBallColor, nullptr, false);
 	}
 
 	if (!cueBall.empty()) {
-		Snippets::renderActors(cueBall.data(), static_cast<physx::PxU32>(cueBall.size()), false, cueBallColor, nullptr, false);
+		Snippets::renderActors(cueBall.data(), static_cast<physx::PxU32>(cueBall.size()), false, mainBallColor, nullptr, false);
 	}
 }
 

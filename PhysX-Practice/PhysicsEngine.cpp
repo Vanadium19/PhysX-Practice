@@ -9,20 +9,6 @@
 
 #define IS_FLOATS_EQUAL(f1, f2) (fabsf((f1) - (f2)) < 1e-5)
 
-void CustomEventCallback::onTrigger(physx::PxTriggerPair* pairs, uint32_t count) {
-	extern PhysicsEngine* physicsEngine;
-	for (uint32_t i = 0; i < count; i++) {
-		const physx::PxTriggerPair& pair = pairs[i];
-		switch (pair.status) {
-		case physx::PxPairFlag::eNOTIFY_TOUCH_FOUND:
-			physicsEngine->MarkActor(pair.otherActor);
-			break;
-		default:
-			break;
-		}
-	}
-}
-
 PhysicsEngine::PhysicsEngine() {
 	foundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocatorCallback, errorCallback);
 
@@ -45,7 +31,7 @@ PhysicsEngine::PhysicsEngine() {
 	sceneDesc.filterShader = CustomFilterShader;
 	sceneDesc.filterShaderData = &filterShaderData;
 	sceneDesc.filterShaderDataSize = sizeof(filterShaderData);
-	sceneDesc.simulationEventCallback = &eventCallback;
+	sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
 
@@ -96,6 +82,10 @@ PhysicsEngine::~PhysicsEngine() {
 	SAFE_RELEASE(transport);
 #endif
 	SAFE_RELEASE(foundation);
+}
+
+void PhysicsEngine::SetCallback(physx::PxSimulationEventCallback* eventCallback) {
+	scene->setSimulationEventCallback(eventCallback);
 }
 
 void PhysicsEngine::SetGravity(physx::PxVec3 gravity) {
@@ -331,7 +321,7 @@ physx::PxFilterFlags PhysicsEngine::CustomFilterShader(
 
 	const CustomFilterShaderData* shaderData = static_cast<const CustomFilterShaderData*>(constantBlock);
 	if (sizeof(*shaderData) == constantBlockSize && shaderData->status == CustomFilterShaderData::Status::eSKIP) {
-		if (filterData0.word0 == CustomFilterData::eDYNAMIC && filterData1.word0 == CustomFilterData::eDYNAMIC) {
+		if (filterData0.word0 == CustomFilterData::eBall && filterData1.word0 == CustomFilterData::eBall) {
 			pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
 			return physx::PxFilterFlag::eKILL;
 		}

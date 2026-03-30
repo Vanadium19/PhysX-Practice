@@ -1,51 +1,53 @@
-#include "BilliardsGame.h"
+#include "Game.h"
+
 #include "PhysicsEngine.h"
+
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
 
-PhysicsEngine* physicsEngine = nullptr;
-Snippets::Camera* camera = nullptr;
+PhysicsEngine* physicsEngine_ = nullptr;
+Snippets::Camera* camera_ = nullptr;
 
-BilliardsGame* game = nullptr;
+Game* game_ = nullptr;
 
 void keyPressedCallback(unsigned char key, const physx::PxTransform&) {
-	if (game) {
-		game->HandleKey(key);
+	if (game_) {
+		game_->HandleKey(key);
 	}
 }
 
 void renderCallback() {
-	if (game) {
-		game->RenderFrame();
+	if (game_) {
+		game_->RenderFrame();
 	}
 }
 
 void exitCallback() {
-	delete camera;
-	camera = nullptr;
+	delete camera_;
+	camera_ = nullptr;
 
-	if (game) {
-		game->Shutdown();
-		delete game;
-		game = nullptr;
+	if (game_) {
+		game_->Shutdown();
+		delete game_;
+		game_ = nullptr;
 	}
 
-	delete physicsEngine;
-	physicsEngine = nullptr;
+	delete physicsEngine_;
+	physicsEngine_ = nullptr;
 }
 
 int main() {
-	camera = new Snippets::Camera(
-		physx::PxVec3(0.0f, 2.4f, 3.4f),
-		physx::PxVec3(0.0f, -0.46f, -0.89f)
+	camera_ = new Snippets::Camera(
+		physx::PxVec3(0.0f, 2.0f, 0.0f),
+		physx::PxVec3(0.0f, -0.99f, -0.89f)
 	);
-	camera->setSpeed(0.25f);
+	camera_->setSpeed(0.25f);
 
-	Snippets::setupDefault("PhysX Billiards", camera, keyPressedCallback, renderCallback, exitCallback);
+	Snippets::setupDefault("PhysX Billiards", camera_, keyPressedCallback, renderCallback, exitCallback);
 
-	physicsEngine = new PhysicsEngine();
-	game = new BilliardsGame(physicsEngine, camera);
-	game->Initialize();
+	physicsEngine_ = new PhysicsEngine();
+	game_ = new Game(physicsEngine_, camera_);
+	game_->Initialize();
 
 	glutMainLoop();
 
