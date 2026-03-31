@@ -1,27 +1,14 @@
 #include "BilliardsGame.h"
 #include "BilliardsConfig.h"
+#include "BilliardsEventCallback.h"
 
 #include <snippetrender/SnippetRender.h>
-
-void CustomEventCallback::onTrigger(physx::PxTriggerPair* pairs, uint32_t count) {
-	extern BilliardsGame* game_;
-	for (uint32_t i = 0; i < count; i++) {
-		const physx::PxTriggerPair& pair = pairs[i];
-		switch (pair.status) {
-		case physx::PxPairFlag::eNOTIFY_TOUCH_FOUND:
-			game_->RemoveBall(pair.otherActor);
-			break;
-		default:
-			break;
-		}
-	}
-}
 
 BilliardsGame::BilliardsGame(PhysicsEngine* physicsEngine, Snippets::Camera* camera) {
 	physicsEngine_ = physicsEngine;
 	camera_ = camera;
 
-	CustomEventCallback* callback = new CustomEventCallback();
+	BilliardsEventCallback* callback = new BilliardsEventCallback();
 	physicsEngine_->SetCallback(callback);
 
 	physx::PxMaterial* ballMaterial = ballMaterial = physicsEngine_->CreateMaterial(0.05f, 0.05f, 0.78f);
