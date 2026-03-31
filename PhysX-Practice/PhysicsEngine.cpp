@@ -321,7 +321,7 @@ physx::PxFilterFlags PhysicsEngine::CustomFilterShader(
 
 	const CustomFilterShaderData* shaderData = static_cast<const CustomFilterShaderData*>(constantBlock);
 	if (sizeof(*shaderData) == constantBlockSize && shaderData->status == CustomFilterShaderData::Status::eSKIP) {
-		if (filterData0.word0 == CustomFilterData::eBall && filterData1.word0 == CustomFilterData::eBall) {
+		if (filterData0.word0 == CustomFilterData::eDYNAMIC && filterData1.word0 == CustomFilterData::eDYNAMIC) {
 			pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
 			return physx::PxFilterFlag::eKILL;
 		}

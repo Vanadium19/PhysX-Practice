@@ -23,6 +23,9 @@ BilliardsGame::BilliardsGame(PhysicsEngine* physicsEngine, Snippets::Camera* cam
 
 	CustomEventCallback* callback = new CustomEventCallback();
 	physicsEngine_->SetCallback(callback);
+
+	physx::PxMaterial* ballMaterial = ballMaterial = physicsEngine_->CreateMaterial(0.05f, 0.05f, 0.78f);
+	ballShape_ = physicsEngine_->CreateSphereShape(ballRadius, ballMaterial, CustomFilterData::eDYNAMIC);
 }
 
 void BilliardsGame::Initialize() {
@@ -30,30 +33,27 @@ void BilliardsGame::Initialize() {
 
 	CreateTrigger();
 
-	InitBallsParams();
 	CreateBalls();
 }
 
 void BilliardsGame::HandleKey(unsigned char key) {
 	switch (std::toupper(key)) {
 	case 'Q':
-		if (result_ == GameResult::ePLAYING) {
-			aimAngle_ += aimStep;
-			WrapAimAngle();
-		}
+		IncreaseAim();
 		break;
+
 	case 'E':
-		if (result_ == GameResult::ePLAYING) {
-			aimAngle_ -= aimStep;
-			WrapAimAngle();
-		}
+		DecreaseAim();
 		break;
+
 	case 'R':
 		Reset();
 		break;
+
 	case ' ':
 		Shoot();
 		break;
+
 	default:
 		break;
 	}
@@ -90,8 +90,47 @@ void BilliardsGame::RenderFrame() {
 }
 
 void BilliardsGame::Shutdown() {
-	delete camera_;
-	delete physicsEngine_;
+	if (mainBall_)
+	{
+		mainBall_->release();
+		mainBall_ = nullptr;
+	}
+
+	for (auto* actor : balls_) {
+		if (!actor) {
+			continue;
+		}
+
+		actor->release();
+	}
+
+	balls_.clear();
+
+	if (trigger_)
+	{
+		trigger_->release();
+		trigger_ = nullptr;
+	}
+
+	for (auto* actor : rails_) {
+		if (!actor) {
+			continue;
+		}
+
+		actor->release();
+	}
+
+	rails_.clear();
+
+	for (auto* actor : fields_) {
+		if (!actor) {
+			continue;
+		}
+
+		actor->release();
+	}
+
+	fields_.clear();
 }
 
 void BilliardsGame::RemoveBall(physx::PxActor* actor) {
@@ -134,15 +173,8 @@ void BilliardsGame::Reset() {
 	CreateBalls();
 }
 
-void BilliardsGame::InitBallsParams()
-{
-	ballMaterial_ = physicsEngine_->CreateMaterial(0.05f, 0.05f, 0.78f);
-	ballShape_ = physicsEngine_->CreateSphereShape(ballRadius, ballMaterial_, CustomFilterData::eBall);
-	mainBallShape_ = physicsEngine_->CreateSphereShape(ballRadius, ballMaterial_, CustomFilterData::eMAINBALL);
-}
-
-
-void BilliardsGame::CreateGameBall(physx::PxVec3 position, float density) {
+void BilliardsGame::CreateGameBall(const physx::PxVec3 position, float density) {
+	density /= 2.0f;
 	physx::PxRigidDynamic* ball = physicsEngine_->AddDynamicActor(ballShape_, position, physx::PxQuat(physx::PxIdentity), density);
 	ball->setLinearDamping(ballLinearDamping);
 	ball->putToSleep();
@@ -236,12 +268,34 @@ void BilliardsGame::CreateTrigger()
 
 void BilliardsGame::WrapAimAngle() {
 	const float fullTurn = 2.0f * physx::PxPi;
+
 	while (aimAngle_ >= fullTurn) {
 		aimAngle_ -= fullTurn;
 	}
+
 	while (aimAngle_ < 0.0f) {
 		aimAngle_ += fullTurn;
 	}
+}
+
+void BilliardsGame::DecreaseAim()
+{
+	if (result_ != GameResult::ePLAYING) {
+		return;
+	}
+
+	aimAngle_ -= aimStep;
+	WrapAimAngle();
+}
+
+void BilliardsGame::IncreaseAim()
+{
+	if (result_ != GameResult::ePLAYING) {
+		return;
+	}
+
+	aimAngle_ += aimStep;
+	WrapAimAngle();
 }
 
 void BilliardsGame::Shoot() {
@@ -311,9 +365,11 @@ void BilliardsGame::RenderHud() {
 			Snippets::print("Balls are moving. Wait until the table settles.");
 		}
 		break;
+
 	case GameResult::eWON:
 		Snippets::print("Victory: every object ball is pocketed. Press R to play again.");
 		break;
+
 	case GameResult::eLOST:
 		Snippets::print("Defeat: the cue ball was pocketed. Press R to restart.");
 		break;

@@ -11,10 +11,8 @@
 #endif
 
 enum CustomFilterData {
-	eBall = 1,
-	eMAINBALL,
+	eDYNAMIC = 1,
 	eOBSTACLE,
-	eCUE,
 	eTRIGGER,
 };
 

@@ -1,5 +1,4 @@
 #include "BilliardsGame.h"
-
 #include "PhysicsEngine.h"
 
 #include "snippetrender/SnippetCamera.h"
@@ -23,14 +22,14 @@ void renderCallback() {
 }
 
 void exitCallback() {
-	delete camera_;
-	camera_ = nullptr;
-
 	if (game_) {
 		game_->Shutdown();
 		delete game_;
 		game_ = nullptr;
 	}
+
+	delete camera_;
+	camera_ = nullptr;
 
 	delete physicsEngine_;
 	physicsEngine_ = nullptr;
@@ -38,8 +37,8 @@ void exitCallback() {
 
 int main() {
 	camera_ = new Snippets::Camera(
-		physx::PxVec3(0.0f, 2.0f, 0.0f),
-		physx::PxVec3(0.0f, -0.99f, -0.89f)
+		physx::PxVec3(0.0f, 2.0f, 2.0f),
+		physx::PxVec3(0.0f, -0.45f, -0.89f)
 	);
 	camera_->setSpeed(0.25f);
 

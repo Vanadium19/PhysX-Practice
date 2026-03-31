@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PhysicsEngine.h"
+
 #include "snippetrender/SnippetCamera.h"
 
 enum class GameResult {
@@ -26,6 +27,8 @@ public:
 
 	void Initialize();
 	void HandleKey(unsigned char key);
+	void DecreaseAim();
+	void IncreaseAim();
 	void RenderFrame();
 	void Shutdown();
 
@@ -34,7 +37,6 @@ public:
 private:
 	void Reset();
 
-	void InitBallsParams();
 	void CreateMainBall(const float cueBallX, const float ballY, const float density);
 	void CreateGameBall(physx::PxVec3 position, float density);
 	void CreateBalls();
@@ -63,8 +65,6 @@ private:
 	std::vector<physx::PxRigidActor*> balls_;
 	physx::PxRigidDynamic* mainBall_;
 
-	physx::PxMaterial* ballMaterial_;
-	physx::PxShape* mainBallShape_;
 	physx::PxShape* ballShape_;
 
 	float aimAngle_ = 0.0f;

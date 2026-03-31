@@ -2,8 +2,8 @@
 C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(68,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
 C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(72,54): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
 C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(76,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
-C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(298,36): warning C4477: "snprintf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "unsigned __int64"
-      C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(298,36):
+C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(352,36): warning C4477: "snprintf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "unsigned __int64"
+      C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(352,36):
       рекомендуется использовать "%zd" в строке форматирования
   
   PhysX-Practice.vcxproj -> C:\Repos\PhysX-Practice\x64\Debug\PhysX-Practice.exe
