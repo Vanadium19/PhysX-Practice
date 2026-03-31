@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "BilliardsGame.h"
 
 #include "PhysicsEngine.h"
 
@@ -8,7 +8,7 @@
 PhysicsEngine* physicsEngine_ = nullptr;
 Snippets::Camera* camera_ = nullptr;
 
-Game* game_ = nullptr;
+BilliardsGame* game_ = nullptr;
 
 void keyPressedCallback(unsigned char key, const physx::PxTransform&) {
 	if (game_) {
@@ -46,7 +46,7 @@ int main() {
 	Snippets::setupDefault("PhysX Billiards", camera_, keyPressedCallback, renderCallback, exitCallback);
 
 	physicsEngine_ = new PhysicsEngine();
-	game_ = new Game(physicsEngine_, camera_);
+	game_ = new BilliardsGame(physicsEngine_, camera_);
 	game_->Initialize();
 
 	glutMainLoop();

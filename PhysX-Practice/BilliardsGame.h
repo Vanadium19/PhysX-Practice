@@ -20,9 +20,9 @@ public:
 
 };
 
-class Game {
+class BilliardsGame {
 public:
-	Game(PhysicsEngine* physicsEngine, Snippets::Camera* camera);
+	BilliardsGame(PhysicsEngine* physicsEngine, Snippets::Camera* camera);
 
 	void Initialize();
 	void HandleKey(unsigned char key);
