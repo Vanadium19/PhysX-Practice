@@ -1,6 +1,13 @@
-﻿  PhysicsEngine.cpp
+﻿  BilliardsEventCallback.cpp
+  BilliardsGame.cpp
+C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(55,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
+C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(59,54): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
+C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(63,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
+C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36): warning C4477: "snprintf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "unsigned __int64"
+      C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36):
+      рекомендуется использовать "%zd" в строке форматирования
+  
   PhysX-Practice.cpp
-C:\Repos\PhysX-Practice\PhysX-Practice\PhysX-Practice.cpp(39,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
   Создание кода...
   PhysX-Practice.vcxproj -> C:\Repos\PhysX-Practice\x64\Debug\PhysX-Practice.exe
   C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\freeglut.dll

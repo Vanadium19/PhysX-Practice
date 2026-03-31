@@ -1,74 +1,52 @@
-﻿#include <iostream>
+#include "BilliardsGame.h"
 #include "PhysicsEngine.h"
-#include "snippetrender/SnippetRender.h"
+
 #include "snippetrender/SnippetCamera.h"
+#include "snippetrender/SnippetRender.h"
 
-PhysicsEngine* physicsEngine;
-Snippets::Camera* camera;
+PhysicsEngine* physicsEngine_ = nullptr;
+Snippets::Camera* camera_ = nullptr;
 
-void keyPressedCallback(unsigned char key, const physx::PxTransform& cameraTransform) {
-	std::cout << "\"" << key << "\", " << toupper(key) << '\n';
-	switch (toupper(key)) {
-	case ' ':
-	{
-		const static physx::PxVec3 boxSize = physx::PxVec3(1.0f, 1.0f, 1.0f);
-		const static physx::PxVec3 startPosition = physx::PxVec3(0.0f, 5.0f, 0.0f);
-		const static float boxMass = 10.0f;
-		const static float boxDensity = boxMass / PhysicsEngine::GetBoxVolume(boxSize);
-		physx::PxShape* boxShape = physicsEngine->CreateBoxShape(boxSize, physicsEngine->GetMaterial(0.5f, 0.5f, 0.1f), CustomFilterData::eDYNAMIC);
-		physicsEngine->AddDynamicActor(boxShape, startPosition, physx::PxQuat(1.0f), boxDensity);
-	}
-	break;
-	case 'N':
-	{
-		physicsEngine->SetFilterShaderConstantBlock(!physicsEngine->GetFilterShaderConstantBlock());
-	}
-	break;
-	default:
-		break;
+BilliardsGame* game_ = nullptr;
+
+void keyPressedCallback(unsigned char key, const physx::PxTransform&) {
+	if (game_) {
+		game_->HandleKey(key);
 	}
 }
 
 void renderCallback() {
-	physicsEngine->Simulate(1.0f / 60.0f);
-
-	Snippets::startRender(camera);
-
-	std::vector<physx::PxRigidActor*> actors = physicsEngine->GetActors();
-	if (actors.size() > 0) {
-		Snippets::renderActors(actors.data(), actors.size());
+	if (game_) {
+		game_->RenderFrame();
 	}
-
-	Snippets::finishRender();
 }
 
 void exitCallback() {
-	delete camera;
-	delete physicsEngine;
+	if (game_) {
+		game_->Shutdown();
+		delete game_;
+		game_ = nullptr;
+	}
+
+	delete camera_;
+	camera_ = nullptr;
+
+	delete physicsEngine_;
+	physicsEngine_ = nullptr;
 }
 
 int main() {
-	camera = new Snippets::Camera(physx::PxVec3(0.0f, 10.0f, 30.0f), physx::PxVec3(0.0f, -0.1f, -0.3f));
-	Snippets::setupDefault("PhysX Example", camera, keyPressedCallback, renderCallback, exitCallback);
+	camera_ = new Snippets::Camera(
+		physx::PxVec3(0.0f, 2.0f, 2.0f),
+		physx::PxVec3(0.0f, -0.45f, -0.89f)
+	);
+	camera_->setSpeed(0.25f);
 
-	physicsEngine = new PhysicsEngine();
+	Snippets::setupDefault("PhysX Billiards", camera_, keyPressedCallback, renderCallback, exitCallback);
 
-	physx::PxMaterial* defaultMaterial = physicsEngine->CreateMaterial(0.5f, 0.5f, 0.1f);
-
-	const physx::PxVec3 groundNormal = physx::PxVec3(0.3f, 1.0f, 0.0f).getNormalized();
-	const float groundDistance = 0.0f;
-	physicsEngine->AddGround(groundNormal, groundDistance, defaultMaterial);
-
-	const physx::PxVec3 obstacleSize = physx::PxVec3(1.0f, 1.0f, 40.0f);
-	const physx::PxVec3 obstaclePosition = physx::PxVec3(-0.1f, 0.0f, 0.0f);
-	const physx::PxQuat obstacleRotation = physx::PxQuat(physx::PxPiDivFour, physx::PxVec3(0.0f, 0.0f, 1.0f));
-	physx::PxShape* obstacleShape = physicsEngine->CreateBoxShape(obstacleSize, defaultMaterial, CustomFilterData::eOBSTACLE, true);
-	physicsEngine->AddStaticActor(obstacleShape, obstaclePosition, obstacleRotation);
-
-	const physx::PxVec3 triggerSize = physx::PxVec3(1.0f, 40.0f, 40.0f);
-	const physx::PxVec3 triggerPosition = physx::PxVec3(5.0f, 0.0f, 0.0f);
-	physx::PxShape* triggerShape = physicsEngine->CreateBoxShape(triggerSize, defaultMaterial, CustomFilterData::eTRIGGER, true, physx::PxShapeFlag::eTRIGGER_SHAPE);
-	physicsEngine->AddStaticActor(triggerShape, triggerPosition, physx::PxQuat(1.0f));
+	physicsEngine_ = new PhysicsEngine();
+	game_ = new BilliardsGame(physicsEngine_, camera_);
+	game_->Initialize();
 
 	glutMainLoop();
 
