@@ -283,6 +283,7 @@ void Enemy::CreateLiveCapsule(const physx::PxVec3& position) {
 	}
 
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
 	capsuleActor_->setLinearDamping(kLiveLinearDamping);
 	capsuleActor_->setAngularDamping(kLiveAngularDamping);
