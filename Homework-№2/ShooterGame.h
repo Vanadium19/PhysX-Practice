@@ -6,6 +6,7 @@
 
 #include "PxPhysicsAPI.h"
 
+#include "EnemyAIController.h"
 #include "Enemy.h"
 
 class Grenade;
@@ -44,12 +45,18 @@ private:
 	void Reset();
 	void CreateArena();
 	void CreateEnemy();
-	void CreateStaticBox(
+	physx::PxRigidStatic* CreateStaticBox(
 		std::vector<physx::PxRigidActor*>& actors,
 		physx::PxVec3 size,
 		physx::PxVec3 position,
 		physx::PxMaterial* material,
 		physx::PxQuat rotation = physx::PxQuat(physx::PxIdentity)
+	);
+	void AddCoverPointsForBox(
+		physx::PxVec3 size,
+		physx::PxVec3 position,
+		physx::PxQuat rotation,
+		physx::PxRigidActor* obstacle
 	);
 	void ReleaseActors(std::vector<physx::PxRigidActor*>& actors);
 
@@ -67,6 +74,7 @@ private:
 	void AddExplosionEffect(const physx::PxVec3& position, float maxRadius);
 
 	void RenderHud() const;
+	void RenderEnemyAIDebug() const;
 	void RenderBulletTraces() const;
 	void RenderExplosionEffects() const;
 
@@ -75,10 +83,12 @@ private:
 
 	std::vector<physx::PxRigidActor*> floorActors_;
 	std::vector<physx::PxRigidActor*> obstacleActors_;
+	std::vector<CoverPoint> coverPoints_;
 	std::vector<std::unique_ptr<Grenade>> grenades_;
 	std::vector<BulletTrace> bulletTraces_;
 	std::vector<ExplosionEffect> explosionEffects_;
 
 	Enemy enemy_;
+	EnemyAIController enemyAI_;
 	std::mt19937 randomEngine_;
 };

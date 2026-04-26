@@ -115,6 +115,29 @@ bool Enemy::IsRagdollActive() const {
 	return state_ == EnemyState::Ragdoll;
 }
 
+bool Enemy::CanUseAI() const {
+	return capsuleActor_ != nullptr && health_ > 0.0f && state_ == EnemyState::Alive;
+}
+
+void Enemy::SetPlanarVelocity(const physx::PxVec3& velocity) {
+	if (!capsuleActor_) {
+		return;
+	}
+
+	const physx::PxVec3 currentVelocity = capsuleActor_->getLinearVelocity();
+	capsuleActor_->wakeUp();
+	capsuleActor_->setLinearVelocity(physx::PxVec3(velocity.x, currentVelocity.y, velocity.z), true);
+}
+
+void Enemy::StopPlanarMovement() {
+	if (!capsuleActor_) {
+		return;
+	}
+
+	const physx::PxVec3 currentVelocity = capsuleActor_->getLinearVelocity();
+	capsuleActor_->setLinearVelocity(physx::PxVec3(0.0f, currentVelocity.y, 0.0f), true);
+}
+
 float Enemy::ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength, float damage) {
 	const physx::PxVec3 impulseDirection =
 		direction.magnitudeSquared() > kDirectionEpsilon ? direction.getNormalized() : physx::PxVec3(0.0f, 0.0f, 1.0f);
@@ -260,7 +283,6 @@ void Enemy::CreateLiveCapsule(const physx::PxVec3& position) {
 	}
 
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
-	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
 	capsuleActor_->setLinearDamping(kLiveLinearDamping);
 	capsuleActor_->setAngularDamping(kLiveAngularDamping);

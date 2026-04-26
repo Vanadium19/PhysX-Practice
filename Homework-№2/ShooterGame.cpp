@@ -25,6 +25,8 @@ const float kGrenadeMaxDamage = 100.0f;
 const float kGrenadeMaxImpulse = 240.0f;
 const float kExplosionEffectLifetime = 0.45f;
 const float kImpactMarkerHalfSize = 0.18f;
+const float kEnemyStandingHeight = 1.15f;
+const float kCoverPointOffset = 0.80f;
 
 const physx::PxVec3 kFloorColor(0.25f, 0.25f, 0.28f);
 const physx::PxVec3 kObstacleColor(0.25f, 0.50f, 0.75f);
@@ -48,6 +50,7 @@ ShooterGame::~ShooterGame() {
 void ShooterGame::Initialize() {
 	CreateArena();
 	CreateEnemy();
+	enemyAI_.Initialize(physicsEngine_, &enemy_, &coverPoints_);
 }
 
 void ShooterGame::Shutdown() {
@@ -59,7 +62,9 @@ void ShooterGame::Shutdown() {
 	}
 	grenades_.clear();
 
+	enemyAI_.Shutdown();
 	enemy_.Shutdown();
+	coverPoints_.clear();
 
 	ReleaseActors(obstacleActors_);
 	ReleaseActors(floorActors_);
@@ -85,6 +90,7 @@ void ShooterGame::HandleKey(unsigned char key, const physx::PxTransform& cameraT
 }
 
 void ShooterGame::RenderFrame() {
+	enemyAI_.Update(kSimulationStep, camera_->getEye());
 	physicsEngine_->Simulate(kSimulationStep);
 	UpdateGrenades(kSimulationStep);
 	UpdateBulletTraces(kSimulationStep);
@@ -121,6 +127,7 @@ void ShooterGame::RenderFrame() {
 		}
 	}
 
+	RenderEnemyAIDebug();
 	RenderBulletTraces();
 	RenderExplosionEffects();
 	RenderHud();
@@ -135,6 +142,8 @@ void ShooterGame::Reset() {
 }
 
 void ShooterGame::CreateArena() {
+	coverPoints_.clear();
+
 	physx::PxMaterial* floorMaterial = physicsEngine_->GetMaterial(0.90f, 0.80f, 0.02f);
 	physx::PxMaterial* obstacleMaterial = physicsEngine_->GetMaterial(0.65f, 0.55f, 0.08f);
 
@@ -145,18 +154,27 @@ void ShooterGame::CreateArena() {
 	CreateStaticBox(obstacleActors_, physx::PxVec3(1.0f, 3.0f, 36.0f), physx::PxVec3(18.5f, 1.5f, 0.0f), obstacleMaterial);
 	CreateStaticBox(obstacleActors_, physx::PxVec3(1.0f, 3.0f, 36.0f), physx::PxVec3(-18.5f, 1.5f, 0.0f), obstacleMaterial);
 
-	CreateStaticBox(obstacleActors_, physx::PxVec3(2.5f, 3.0f, 2.5f), physx::PxVec3(-8.0f, 1.5f, -5.0f), obstacleMaterial);
-	CreateStaticBox(obstacleActors_, physx::PxVec3(3.0f, 2.5f, 1.5f), physx::PxVec3(-3.0f, 1.25f, 3.5f), obstacleMaterial);
-	CreateStaticBox(obstacleActors_, physx::PxVec3(1.5f, 4.0f, 4.5f), physx::PxVec3(3.0f, 2.0f, -4.0f), obstacleMaterial);
-	CreateStaticBox(obstacleActors_, physx::PxVec3(4.0f, 3.0f, 1.5f), physx::PxVec3(7.0f, 1.5f, 5.5f), obstacleMaterial);
-	CreateStaticBox(obstacleActors_, physx::PxVec3(1.2f, 4.5f, 3.0f), physx::PxVec3(8.5f, 2.25f, -2.0f), obstacleMaterial);
+	physx::PxRigidStatic* coverObstacle = CreateStaticBox(obstacleActors_, physx::PxVec3(2.5f, 3.0f, 2.5f), physx::PxVec3(-8.0f, 1.5f, -5.0f), obstacleMaterial);
+	AddCoverPointsForBox(physx::PxVec3(2.5f, 3.0f, 2.5f), physx::PxVec3(-8.0f, 1.5f, -5.0f), physx::PxQuat(physx::PxIdentity), coverObstacle);
+
+	coverObstacle = CreateStaticBox(obstacleActors_, physx::PxVec3(3.0f, 2.5f, 1.5f), physx::PxVec3(-3.0f, 1.25f, 3.5f), obstacleMaterial);
+	AddCoverPointsForBox(physx::PxVec3(3.0f, 2.5f, 1.5f), physx::PxVec3(-3.0f, 1.25f, 3.5f), physx::PxQuat(physx::PxIdentity), coverObstacle);
+
+	coverObstacle = CreateStaticBox(obstacleActors_, physx::PxVec3(1.5f, 4.0f, 4.5f), physx::PxVec3(3.0f, 2.0f, -4.0f), obstacleMaterial);
+	AddCoverPointsForBox(physx::PxVec3(1.5f, 4.0f, 4.5f), physx::PxVec3(3.0f, 2.0f, -4.0f), physx::PxQuat(physx::PxIdentity), coverObstacle);
+
+	coverObstacle = CreateStaticBox(obstacleActors_, physx::PxVec3(4.0f, 3.0f, 1.5f), physx::PxVec3(7.0f, 1.5f, 5.5f), obstacleMaterial);
+	AddCoverPointsForBox(physx::PxVec3(4.0f, 3.0f, 1.5f), physx::PxVec3(7.0f, 1.5f, 5.5f), physx::PxQuat(physx::PxIdentity), coverObstacle);
+
+	coverObstacle = CreateStaticBox(obstacleActors_, physx::PxVec3(1.2f, 4.5f, 3.0f), physx::PxVec3(8.5f, 2.25f, -2.0f), obstacleMaterial);
+	AddCoverPointsForBox(physx::PxVec3(1.2f, 4.5f, 3.0f), physx::PxVec3(8.5f, 2.25f, -2.0f), physx::PxQuat(physx::PxIdentity), coverObstacle);
 }
 
 void ShooterGame::CreateEnemy() {
-	enemy_.Initialize(physicsEngine_, physx::PxVec3(12.0f, 1.15f, 1.0f));
+	enemy_.Initialize(physicsEngine_, physx::PxVec3(12.0f, kEnemyStandingHeight, 1.0f));
 }
 
-void ShooterGame::CreateStaticBox(
+physx::PxRigidStatic* ShooterGame::CreateStaticBox(
 	std::vector<physx::PxRigidActor*>& actors,
 	physx::PxVec3 size,
 	physx::PxVec3 position,
@@ -167,6 +185,30 @@ void ShooterGame::CreateStaticBox(
 	physx::PxRigidStatic* actor = physicsEngine_->AddStaticActor(shape, position, rotation);
 	shape->release();
 	actors.push_back(actor);
+	return actor;
+}
+
+void ShooterGame::AddCoverPointsForBox(
+	physx::PxVec3 size,
+	physx::PxVec3 position,
+	physx::PxQuat rotation,
+	physx::PxRigidActor* obstacle
+) {
+	const physx::PxVec3 axisX = rotation.rotate(physx::PxVec3(1.0f, 0.0f, 0.0f));
+	const physx::PxVec3 axisZ = rotation.rotate(physx::PxVec3(0.0f, 0.0f, 1.0f));
+	const float halfX = size.x * 0.5f;
+	const float halfZ = size.z * 0.5f;
+
+	const auto addPoint = [&](const physx::PxVec3& faceNormal, float halfExtent) {
+		physx::PxVec3 point = position + faceNormal * (halfExtent + kCoverPointOffset);
+		point.y = kEnemyStandingHeight;
+		coverPoints_.push_back(CoverPoint{ point, faceNormal.getNormalized(), obstacle });
+	};
+
+	addPoint(axisX, halfX);
+	addPoint(-axisX, halfX);
+	addPoint(axisZ, halfZ);
+	addPoint(-axisZ, halfZ);
 }
 
 void ShooterGame::ReleaseActors(std::vector<physx::PxRigidActor*>& actors) {
@@ -209,6 +251,8 @@ void ShooterGame::Shoot(const physx::PxVec3& origin, const physx::PxVec3& direct
 				if (!enemy_.IsAlive()) {
 					std::cout << "Enemy eliminated by bullet damage. Ragdoll activated.\n";
 				}
+
+				enemyAI_.Update(0.0f, camera_->getEye());
 			}
 			else {
 				std::cout
@@ -296,6 +340,8 @@ void ShooterGame::ExplodeGrenade(const physx::PxVec3& explosionPosition) {
 	if (!enemy_.IsAlive()) {
 		std::cout << "Enemy eliminated by explosion damage. Ragdoll activated.\n";
 	}
+
+	enemyAI_.Update(0.0f, camera_->getEye());
 }
 
 void ShooterGame::UpdateGrenades(float elapsedTime) {
@@ -401,8 +447,21 @@ void ShooterGame::RenderHud() const {
 	std::snprintf(line, sizeof(line), "Enemy health: %.1f", enemy_.GetHealth());
 	Snippets::print(line);
 
+	std::snprintf(line, sizeof(line), "Enemy AI: %s", enemyAI_.GetStateName());
+	Snippets::print(line);
+
 	std::snprintf(line, sizeof(line), "Active grenades: %zu", grenades_.size());
 	Snippets::print(line);
+}
+
+void ShooterGame::RenderEnemyAIDebug() const {
+	std::vector<EnemyAIController::DebugLine> debugLines;
+	debugLines.reserve(96);
+	enemyAI_.AppendDebugLines(debugLines);
+
+	for (const EnemyAIController::DebugLine& line : debugLines) {
+		Snippets::DrawLine(line.start, line.end, line.color);
+	}
 }
 
 void ShooterGame::RenderBulletTraces() const {

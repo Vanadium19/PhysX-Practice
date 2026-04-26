@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyAIController.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Homework-№2.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
@@ -191,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyAIController.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="ShooterGame.h" />

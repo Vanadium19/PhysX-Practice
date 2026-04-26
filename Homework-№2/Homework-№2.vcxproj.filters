@@ -18,6 +18,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyAIController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Grenade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,6 +36,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAIController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Grenade.h">

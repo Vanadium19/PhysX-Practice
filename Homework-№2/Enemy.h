@@ -26,6 +26,9 @@ public:
 	float GetHealth() const;
 	bool IsAlive() const;
 	bool IsRagdollActive() const;
+	bool CanUseAI() const;
+	void SetPlanarVelocity(const physx::PxVec3& velocity);
+	void StopPlanarMovement();
 
 	float ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength, float damage);
 	float ApplyExplosionDamage(const physx::PxVec3& explosionPosition, float radius, float maxDamage, float maxImpulse);
