@@ -16,6 +16,7 @@ const float kBulletRange = 120.0f;
 const float kBulletTraceLifetime = 0.35f;
 const float kBulletSpreadRadians = 2.5f * physx::PxPi / 180.0f;
 const float kBulletImpulse = 180.0f;
+const float kBulletDamage = 20.0f;
 const float kGrenadeFuseTime = 2.5f;
 const float kGrenadeThrowSpeed = 18.0f;
 const float kGrenadeUpwardVelocity = 6.0f;
@@ -188,14 +189,22 @@ void ShooterGame::Shoot(const physx::PxVec3& origin, const physx::PxVec3& direct
 		impactPoint = hit.block.position;
 
 		if (enemy_.OwnsActor(hit.block.actor)) {
-			enemy_.ApplyBulletImpact(hit.block.position, normalizedDirection, kBulletImpulse);
+			const float damage = enemy_.ApplyBulletImpact(hit.block.position, normalizedDirection, kBulletImpulse, kBulletDamage);
 			traceColor = kHitBulletColor;
 
 			std::cout
 				<< "Bullet hit the enemy at ("
 				<< hit.block.position.x << ", "
 				<< hit.block.position.y << ", "
-				<< hit.block.position.z << ").\n";
+				<< hit.block.position.z << "). Damage: "
+				<< damage
+				<< ". Health left: "
+				<< enemy_.GetHealth()
+				<< ".\n";
+
+			if (!enemy_.IsAlive()) {
+				std::cout << "Enemy eliminated by bullet damage.\n";
+			}
 		}
 		else {
 			std::cout

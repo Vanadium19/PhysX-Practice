@@ -15,8 +15,9 @@ public:
 	physx::PxVec3 GetPosition() const;
 	bool OwnsActor(const physx::PxActor* actor) const;
 	float GetHealth() const;
+	bool IsAlive() const;
 
-	void ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength);
+	float ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength, float damage);
 	float ApplyExplosionDamage(const physx::PxVec3& explosionPosition, float radius, float maxDamage, float maxImpulse);
 
 private:

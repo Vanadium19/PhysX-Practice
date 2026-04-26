@@ -62,9 +62,18 @@ float Enemy::GetHealth() const {
 	return health_;
 }
 
-void Enemy::ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength) {
+bool Enemy::IsAlive() const {
+	return health_ > 0.0f;
+}
+
+float Enemy::ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength, float damage) {
 	if (!actor_) {
-		return;
+		return 0.0f;
+	}
+
+	health_ -= damage;
+	if (health_ < 0.0f) {
+		health_ = 0.0f;
 	}
 
 	const physx::PxVec3 impulseDirection = direction.getNormalized();
@@ -76,6 +85,8 @@ void Enemy::ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxV
 		physx::PxForceMode::eIMPULSE,
 		true
 	);
+
+	return damage;
 }
 
 float Enemy::ApplyExplosionDamage(const physx::PxVec3& explosionPosition, float radius, float maxDamage, float maxImpulse) {
