@@ -100,9 +100,11 @@ void ShooterGame::RenderFrame() {
 		Snippets::renderActors(obstacleActors_.data(), static_cast<physx::PxU32>(obstacleActors_.size()), false, kObstacleColor);
 	}
 
-	if (enemy_.GetActor()) {
-		physx::PxRigidActor* enemyActor = enemy_.GetActor();
-		Snippets::renderActors(&enemyActor, 1, false, kEnemyColor);
+	std::vector<physx::PxRigidActor*> enemyActors;
+	enemyActors.reserve(6);
+	enemy_.AppendRenderActors(enemyActors);
+	if (!enemyActors.empty()) {
+		Snippets::renderActors(enemyActors.data(), static_cast<physx::PxU32>(enemyActors.size()), false, kEnemyColor);
 	}
 
 	if (!grenades_.empty()) {
@@ -189,21 +191,31 @@ void ShooterGame::Shoot(const physx::PxVec3& origin, const physx::PxVec3& direct
 		impactPoint = hit.block.position;
 
 		if (enemy_.OwnsActor(hit.block.actor)) {
+			const bool enemyWasAlive = enemy_.IsAlive();
 			const float damage = enemy_.ApplyBulletImpact(hit.block.position, normalizedDirection, kBulletImpulse, kBulletDamage);
 			traceColor = kHitBulletColor;
 
-			std::cout
-				<< "Bullet hit the enemy at ("
-				<< hit.block.position.x << ", "
-				<< hit.block.position.y << ", "
-				<< hit.block.position.z << "). Damage: "
-				<< damage
-				<< ". Health left: "
-				<< enemy_.GetHealth()
-				<< ".\n";
+			if (enemyWasAlive) {
+				std::cout
+					<< "Bullet hit the enemy at ("
+					<< hit.block.position.x << ", "
+					<< hit.block.position.y << ", "
+					<< hit.block.position.z << "). Damage: "
+					<< damage
+					<< ". Health left: "
+					<< enemy_.GetHealth()
+					<< ".\n";
 
-			if (!enemy_.IsAlive()) {
-				std::cout << "Enemy eliminated by bullet damage.\n";
+				if (!enemy_.IsAlive()) {
+					std::cout << "Enemy eliminated by bullet damage. Ragdoll activated.\n";
+				}
+			}
+			else {
+				std::cout
+					<< "Bullet hit the ragdoll at ("
+					<< hit.block.position.x << ", "
+					<< hit.block.position.y << ", "
+					<< hit.block.position.z << ").\n";
 			}
 		}
 		else {
@@ -246,6 +258,16 @@ void ShooterGame::ExplodeGrenade(const physx::PxVec3& explosionPosition) {
 		return;
 	}
 
+	if (!enemy_.IsAlive()) {
+		enemy_.ApplyExplosionDamage(
+			explosionPosition,
+			kGrenadeExplosionRadius,
+			kGrenadeMaxDamage,
+			kGrenadeMaxImpulse
+		);
+		return;
+	}
+
 	const physx::PxVec3 enemyPosition = enemy_.GetPosition();
 	const float distanceToEnemy = (enemyPosition - explosionPosition).magnitude();
 
@@ -270,6 +292,10 @@ void ShooterGame::ExplodeGrenade(const physx::PxVec3& explosionPosition) {
 		<< "Enemy took " << damage
 		<< " explosion damage. Health left: "
 		<< enemy_.GetHealth() << ".\n";
+
+	if (!enemy_.IsAlive()) {
+		std::cout << "Enemy eliminated by explosion damage. Ragdoll activated.\n";
+	}
 }
 
 void ShooterGame::UpdateGrenades(float elapsedTime) {

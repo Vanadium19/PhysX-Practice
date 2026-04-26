@@ -103,6 +103,10 @@ bool PhysicsEngine::Raycast(physx::PxVec3 start, physx::PxVec3 direction, float 
 	return scene->raycast(start, direction.getNormalized(), maxDistance, hit);
 }
 
+physx::PxPhysics& PhysicsEngine::GetPhysics() const {
+	return *physics;
+}
+
 physx::PxMaterial* PhysicsEngine::CreateMaterial(float staticFriction, float dynamicFriction, float restitution) {
 	physx::PxMaterial* material = physics->createMaterial(staticFriction, dynamicFriction, restitution);
 	return material;

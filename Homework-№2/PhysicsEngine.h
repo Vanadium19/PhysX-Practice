@@ -27,6 +27,7 @@ public:
 	void Simulate(float elapsedTime);
 
 	bool Raycast(physx::PxVec3 start, physx::PxVec3 direction, float maxDistance, physx::PxRaycastBuffer& hit);
+	physx::PxPhysics& GetPhysics() const;
 
 	physx::PxMaterial* CreateMaterial(float staticFriction, float dynamicFriction, float restitution);
 	physx::PxMaterial* GetMaterial(float staticFriction, float dynamicFriction, float restitution);
