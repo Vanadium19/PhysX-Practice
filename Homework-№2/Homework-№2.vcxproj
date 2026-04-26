@@ -183,11 +183,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Homework-№2.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="ShooterGame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Grenade.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="ShooterGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

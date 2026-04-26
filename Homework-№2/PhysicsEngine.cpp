@@ -9,21 +9,6 @@
 
 #define IS_FLOATS_EQUAL(f1, f2) (fabsf((f1) - (f2)) < 1e-5)
 
-void CustomEventCallback::onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, uint32_t nbPairs) {
-	extern PhysicsEngine* physicsEngine;
-	for (uint32_t i = 0; i < nbPairs; i++) {
-		const physx::PxContactPair& pair = pairs[i];
-		physx::PxContactPairPoint contacts[8];
-		uint32_t contactsCount = pair.extractContacts(contacts, 8);
-		for (int j = 0; j < contactsCount; j++) {
-			physx::PxContactPairPoint& contact = contacts[j];
-			std::cout << "Projectile hit at position (" << contact.position.x << ", " << contact.position.y << ", " << contact.position.z << ")\n";
-		}
-	}
-	physicsEngine->MarkActor(pairHeader.actors[0]);
-	physicsEngine->MarkActor(pairHeader.actors[1]);
-}
-
 PhysicsEngine::PhysicsEngine() {
 	foundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocatorCallback, errorCallback);
 
@@ -44,7 +29,7 @@ PhysicsEngine::PhysicsEngine() {
 	sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
 	sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.filterShader = CustomFilterShader;
-	sceneDesc.simulationEventCallback = &eventCallback;
+	sceneDesc.flags |= physx::PxSceneFlag::eENABLE_CCD;
 
 	scene = physics->createScene(sceneDesc);
 
@@ -58,6 +43,10 @@ PhysicsEngine::PhysicsEngine() {
 		}
 	}
 #endif
+}
+
+void PhysicsEngine::SetCallback(physx::PxSimulationEventCallback* eventCallback) {
+	scene->setSimulationEventCallback(eventCallback);
 }
 
 PhysicsEngine::~PhysicsEngine() {
@@ -147,6 +136,7 @@ physx::PxShape* PhysicsEngine::CreateBoxShape(
 
 	physx::PxFilterData data(filterData, 0, 0, 0);
 	shape->setSimulationFilterData(data);
+	shape->setQueryFilterData(data);
 
 	return shape;
 }
@@ -177,6 +167,7 @@ physx::PxShape* PhysicsEngine::CreateSphereShape(
 
 	physx::PxFilterData data(filterData, 0, 0, 0);
 	shape->setSimulationFilterData(data);
+	shape->setQueryFilterData(data);
 
 	return shape;
 }
@@ -207,6 +198,7 @@ physx::PxShape* PhysicsEngine::CreateCapsuleShape(
 
 	physx::PxFilterData data(filterData, 0, 0, 0);
 	shape->setSimulationFilterData(data);
+	shape->setQueryFilterData(data);
 
 	return shape;
 }
@@ -310,13 +302,6 @@ physx::PxFilterFlags PhysicsEngine::CustomFilterShader(
 		return physx::PxFilterFlag::eDEFAULT;
 	}
 
-	bool dynamicAndObstacle = filterData0.word0 == CustomFilterData::eDYNAMIC && filterData1.word0 == CustomFilterData::eOBSTACLE;
-	bool obstacleAndDynamic = filterData0.word0 == CustomFilterData::eOBSTACLE && filterData1.word0 == CustomFilterData::eDYNAMIC;
-	if (dynamicAndObstacle || obstacleAndDynamic) {
-		pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT | physx::PxPairFlag::eNOTIFY_TOUCH_FOUND | physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
-		return physx::PxFilterFlag::eDEFAULT;
-	}
-
-	pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
+	pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT | physx::PxPairFlag::eDETECT_CCD_CONTACT;
 	return physx::PxFilterFlag::eDEFAULT;
 }

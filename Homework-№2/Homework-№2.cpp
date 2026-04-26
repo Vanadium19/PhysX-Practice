@@ -1,40 +1,48 @@
 ﻿#include "PhysicsEngine.h"
+#include "ShooterGame.h"
+
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
 
-PhysicsEngine* physicsEngine = nullptr;
-Snippets::Camera* camera = nullptr;
+PhysicsEngine* physicsEngine_ = nullptr;
+Snippets::Camera* camera_ = nullptr;
+ShooterGame* game_ = nullptr;
 
 void keyPressedCallback(unsigned char key, const physx::PxTransform& cameraTransform) {
-	(void)key;
-	(void)cameraTransform;
+	if (game_) {
+		game_->HandleKey(key, cameraTransform);
+	}
 }
 
 void renderCallback() {
-	physicsEngine->Simulate(1.0f / 60.0f);
-
-	const float nearClip = 0.1f;
-	const float farClip = 10000.0f;
-	Snippets::startRender(camera, nearClip, farClip);
-
-	std::vector<physx::PxRigidActor*> actors = physicsEngine->GetActors();
-	if (!actors.empty()) {
-		Snippets::renderActors(actors.data(), actors.size());
+	if (game_) {
+		game_->RenderFrame();
 	}
-
-	Snippets::finishRender();
 }
 
 void exitCallback() {
-	delete camera;
-	delete physicsEngine;
+	delete game_;
+	game_ = nullptr;
+
+	delete camera_;
+	camera_ = nullptr;
+
+	delete physicsEngine_;
+	physicsEngine_ = nullptr;
 }
 
 int main() {
-	camera = new Snippets::Camera(physx::PxVec3(0.0f, 10.0f, 30.0f), physx::PxVec3(0.0f, -0.1f, -0.3f));
-	Snippets::setupDefault("Homework 2", camera, keyPressedCallback, renderCallback, exitCallback);
+	camera_ = new Snippets::Camera(
+		physx::PxVec3(-12.0f, 8.0f, 18.0f),
+		physx::PxVec3(0.52f, -0.22f, -0.82f)
+	);
+	camera_->setSpeed(0.35f);
 
-	physicsEngine = new PhysicsEngine();
+	Snippets::setupDefault("Homework 2 Shooter", camera_, keyPressedCallback, renderCallback, exitCallback);
+
+	physicsEngine_ = new PhysicsEngine();
+	game_ = new ShooterGame(physicsEngine_, camera_);
+	game_->Initialize();
 
 	glutMainLoop();
 
