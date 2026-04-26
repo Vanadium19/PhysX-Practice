@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36915.13 d17.14
+VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysX-Practice", "PhysX-Practice\PhysX-Practice.vcxproj", "{2086085F-24F4-4EBC-A5E4-8E2AD3816064}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Homework-#1", "PhysX-Practice\PhysX-Practice.vcxproj", "{2086085F-24F4-4EBC-A5E4-8E2AD3816064}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Homework-№2", "Homework-№2\Homework-№2.vcxproj", "{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,14 @@ Global
 		{2086085F-24F4-4EBC-A5E4-8E2AD3816064}.Release|x64.Build.0 = Release|x64
 		{2086085F-24F4-4EBC-A5E4-8E2AD3816064}.Release|x86.ActiveCfg = Release|Win32
 		{2086085F-24F4-4EBC-A5E4-8E2AD3816064}.Release|x86.Build.0 = Release|Win32
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Debug|x64.ActiveCfg = Debug|x64
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Debug|x64.Build.0 = Debug|x64
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Debug|x86.ActiveCfg = Debug|Win32
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Debug|x86.Build.0 = Debug|Win32
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Release|x64.ActiveCfg = Release|x64
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Release|x64.Build.0 = Release|x64
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Release|x86.ActiveCfg = Release|Win32
+		{C454AE6E-65BA-42CF-8F6F-0BC95AAFCB1D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
