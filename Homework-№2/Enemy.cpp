@@ -31,6 +31,8 @@ void Enemy::Initialize(PhysicsEngine* physicsEngine, const physx::PxVec3& positi
 	const float density = kEnemyMass / PhysicsEngine::GetCapsuleVolume(kEnemyRadius, kEnemyHeight);
 	actor_ = physicsEngine_->AddDynamicActor(shape, position, physx::PxQuat(physx::PxIdentity), density);
 	shape->release();
+	actor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+	actor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
 	actor_->setLinearDamping(0.15f);
 	actor_->setAngularDamping(0.2f);
 	actor_->setSolverIterationCounts(8, 4);
