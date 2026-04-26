@@ -30,6 +30,14 @@ private:
 		physx::PxVec3 start;
 		physx::PxVec3 end;
 		physx::PxVec3 color;
+		bool hasImpactMarker;
+		float remainingLifetime;
+	};
+
+	struct ExplosionEffect {
+		physx::PxVec3 position;
+		float maxRadius;
+		float totalLifetime;
 		float remainingLifetime;
 	};
 
@@ -51,13 +59,16 @@ private:
 
 	void UpdateGrenades(float elapsedTime);
 	void UpdateBulletTraces(float elapsedTime);
+	void UpdateExplosionEffects(float elapsedTime);
 	bool IsExplosionBlocked(const physx::PxVec3& explosionPosition, const physx::PxVec3& targetPosition) const;
 
 	physx::PxVec3 ApplySpread(const physx::PxVec3& direction);
-	void AddBulletTrace(const physx::PxVec3& start, const physx::PxVec3& end, const physx::PxVec3& color);
+	void AddBulletTrace(const physx::PxVec3& start, const physx::PxVec3& end, const physx::PxVec3& color, bool hasImpactMarker);
+	void AddExplosionEffect(const physx::PxVec3& position, float maxRadius);
 
 	void RenderHud() const;
 	void RenderBulletTraces() const;
+	void RenderExplosionEffects() const;
 
 	PhysicsEngine* physicsEngine_ = nullptr;
 	Snippets::Camera* camera_ = nullptr;
@@ -66,6 +77,7 @@ private:
 	std::vector<physx::PxRigidActor*> obstacleActors_;
 	std::vector<std::unique_ptr<Grenade>> grenades_;
 	std::vector<BulletTrace> bulletTraces_;
+	std::vector<ExplosionEffect> explosionEffects_;
 
 	Enemy enemy_;
 	std::mt19937 randomEngine_;

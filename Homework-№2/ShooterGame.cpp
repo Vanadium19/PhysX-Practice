@@ -13,7 +13,7 @@
 namespace {
 const float kSimulationStep = 1.0f / 60.0f;
 const float kBulletRange = 120.0f;
-const float kBulletTraceLifetime = 0.18f;
+const float kBulletTraceLifetime = 0.35f;
 const float kBulletSpreadRadians = 2.5f * physx::PxPi / 180.0f;
 const float kBulletImpulse = 180.0f;
 const float kGrenadeFuseTime = 2.5f;
@@ -22,6 +22,8 @@ const float kGrenadeUpwardVelocity = 6.0f;
 const float kGrenadeExplosionRadius = 6.0f;
 const float kGrenadeMaxDamage = 100.0f;
 const float kGrenadeMaxImpulse = 240.0f;
+const float kExplosionEffectLifetime = 0.45f;
+const float kImpactMarkerHalfSize = 0.18f;
 
 const physx::PxVec3 kFloorColor(0.25f, 0.25f, 0.28f);
 const physx::PxVec3 kObstacleColor(0.25f, 0.50f, 0.75f);
@@ -29,6 +31,7 @@ const physx::PxVec3 kEnemyColor(0.85f, 0.25f, 0.25f);
 const physx::PxVec3 kGrenadeColor(0.95f, 0.65f, 0.15f);
 const physx::PxVec3 kBulletColor(1.0f, 0.95f, 0.30f);
 const physx::PxVec3 kHitBulletColor(1.0f, 0.35f, 0.25f);
+const physx::PxVec3 kExplosionColor(1.0f, 0.55f, 0.15f);
 }
 
 ShooterGame::ShooterGame(PhysicsEngine* physicsEngine, Snippets::Camera* camera) :
@@ -48,6 +51,7 @@ void ShooterGame::Initialize() {
 
 void ShooterGame::Shutdown() {
 	bulletTraces_.clear();
+	explosionEffects_.clear();
 
 	for (std::unique_ptr<Grenade>& grenade : grenades_) {
 		grenade->Shutdown();
@@ -83,6 +87,7 @@ void ShooterGame::RenderFrame() {
 	physicsEngine_->Simulate(kSimulationStep);
 	UpdateGrenades(kSimulationStep);
 	UpdateBulletTraces(kSimulationStep);
+	UpdateExplosionEffects(kSimulationStep);
 
 	Snippets::startRender(camera_, 0.1f, 300.0f);
 
@@ -114,6 +119,7 @@ void ShooterGame::RenderFrame() {
 	}
 
 	RenderBulletTraces();
+	RenderExplosionEffects();
 	RenderHud();
 
 	Snippets::finishRender();
@@ -203,7 +209,7 @@ void ShooterGame::Shoot(const physx::PxVec3& origin, const physx::PxVec3& direct
 		std::cout << "Shot missed.\n";
 	}
 
-	AddBulletTrace(origin, impactPoint, traceColor);
+	AddBulletTrace(origin, impactPoint, traceColor, hasHit && hit.hasBlock);
 }
 
 void ShooterGame::ThrowGrenade(const physx::PxVec3& origin, const physx::PxVec3& direction) {
@@ -219,6 +225,8 @@ void ShooterGame::ThrowGrenade(const physx::PxVec3& origin, const physx::PxVec3&
 }
 
 void ShooterGame::ExplodeGrenade(const physx::PxVec3& explosionPosition) {
+	AddExplosionEffect(explosionPosition, kGrenadeExplosionRadius);
+
 	std::cout
 		<< "Grenade exploded at ("
 		<< explosionPosition.x << ", "
@@ -286,6 +294,20 @@ void ShooterGame::UpdateBulletTraces(float elapsedTime) {
 	}
 }
 
+void ShooterGame::UpdateExplosionEffects(float elapsedTime) {
+	for (std::size_t index = 0; index < explosionEffects_.size();) {
+		ExplosionEffect& effect = explosionEffects_[index];
+		effect.remainingLifetime -= elapsedTime;
+
+		if (effect.remainingLifetime <= 0.0f) {
+			explosionEffects_.erase(explosionEffects_.begin() + index);
+			continue;
+		}
+
+		++index;
+	}
+}
+
 bool ShooterGame::IsExplosionBlocked(const physx::PxVec3& explosionPosition, const physx::PxVec3& targetPosition) const {
 	const physx::PxVec3 ray = targetPosition - explosionPosition;
 	const float distance = ray.magnitude();
@@ -327,8 +349,12 @@ physx::PxVec3 ShooterGame::ApplySpread(const physx::PxVec3& direction) {
 	return spreadDirection.getNormalized();
 }
 
-void ShooterGame::AddBulletTrace(const physx::PxVec3& start, const physx::PxVec3& end, const physx::PxVec3& color) {
-	bulletTraces_.push_back(BulletTrace{ start, end, color, kBulletTraceLifetime });
+void ShooterGame::AddBulletTrace(const physx::PxVec3& start, const physx::PxVec3& end, const physx::PxVec3& color, bool hasImpactMarker) {
+	bulletTraces_.push_back(BulletTrace{ start, end, color, hasImpactMarker, kBulletTraceLifetime });
+}
+
+void ShooterGame::AddExplosionEffect(const physx::PxVec3& position, float maxRadius) {
+	explosionEffects_.push_back(ExplosionEffect{ position, maxRadius, kExplosionEffectLifetime, kExplosionEffectLifetime });
 }
 
 void ShooterGame::RenderHud() const {
@@ -347,5 +373,51 @@ void ShooterGame::RenderHud() const {
 void ShooterGame::RenderBulletTraces() const {
 	for (const BulletTrace& trace : bulletTraces_) {
 		Snippets::DrawLine(trace.start, trace.end, trace.color);
+
+		if (trace.hasImpactMarker) {
+			Snippets::DrawLine(
+				trace.end + physx::PxVec3(-kImpactMarkerHalfSize, 0.0f, 0.0f),
+				trace.end + physx::PxVec3(kImpactMarkerHalfSize, 0.0f, 0.0f),
+				trace.color
+			);
+			Snippets::DrawLine(
+				trace.end + physx::PxVec3(0.0f, -kImpactMarkerHalfSize, 0.0f),
+				trace.end + physx::PxVec3(0.0f, kImpactMarkerHalfSize, 0.0f),
+				trace.color
+			);
+			Snippets::DrawLine(
+				trace.end + physx::PxVec3(0.0f, 0.0f, -kImpactMarkerHalfSize),
+				trace.end + physx::PxVec3(0.0f, 0.0f, kImpactMarkerHalfSize),
+				trace.color
+			);
+		}
+	}
+}
+
+void ShooterGame::RenderExplosionEffects() const {
+	for (const ExplosionEffect& effect : explosionEffects_) {
+		const float lifeProgress = 1.0f - effect.remainingLifetime / effect.totalLifetime;
+		const float currentRadius = effect.maxRadius * lifeProgress;
+		const float burstRadius = currentRadius * 0.75f;
+
+		physx::PxSphereGeometry sphere(currentRadius);
+		physx::PxGeometryHolder geometry(sphere);
+		physx::PxTransform pose(effect.position);
+
+		Snippets::renderGeoms(1, &geometry, &pose, false, kExplosionColor);
+
+		Snippets::DrawLine(effect.position + physx::PxVec3(-burstRadius, 0.0f, 0.0f), effect.position + physx::PxVec3(burstRadius, 0.0f, 0.0f), kExplosionColor);
+		Snippets::DrawLine(effect.position + physx::PxVec3(0.0f, -burstRadius, 0.0f), effect.position + physx::PxVec3(0.0f, burstRadius, 0.0f), kExplosionColor);
+		Snippets::DrawLine(effect.position + physx::PxVec3(0.0f, 0.0f, -burstRadius), effect.position + physx::PxVec3(0.0f, 0.0f, burstRadius), kExplosionColor);
+		Snippets::DrawLine(
+			effect.position + physx::PxVec3(-burstRadius * 0.7f, 0.0f, -burstRadius * 0.7f),
+			effect.position + physx::PxVec3(burstRadius * 0.7f, 0.0f, burstRadius * 0.7f),
+			kExplosionColor
+		);
+		Snippets::DrawLine(
+			effect.position + physx::PxVec3(-burstRadius * 0.7f, 0.0f, burstRadius * 0.7f),
+			effect.position + physx::PxVec3(burstRadius * 0.7f, 0.0f, -burstRadius * 0.7f),
+			kExplosionColor
+		);
 	}
 }
