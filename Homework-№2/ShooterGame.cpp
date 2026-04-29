@@ -24,7 +24,9 @@ ShooterGame::~ShooterGame() {
 void ShooterGame::Initialize() {
 	CreateArena();
 	CreateEnemy();
-	enemyAI_.Initialize(physicsEngine_, &enemy_, &coverPoints_);
+	if (GameConstants::AIConfig::Enabled) {
+		enemyAI_.Initialize(physicsEngine_, &enemy_, &coverPoints_);
+	}
 }
 
 void ShooterGame::Shutdown() {
@@ -64,7 +66,9 @@ void ShooterGame::HandleKey(unsigned char key, const physx::PxTransform& cameraT
 }
 
 void ShooterGame::RenderFrame() {
-	enemyAI_.Update(GameConstants::ShooterConfig::SimulationStep, camera_->getEye());
+	if (GameConstants::AIConfig::Enabled) {
+		enemyAI_.Update(GameConstants::ShooterConfig::SimulationStep, camera_->getEye());
+	}
 	physicsEngine_->Simulate(GameConstants::ShooterConfig::SimulationStep);
 	UpdateGrenades(GameConstants::ShooterConfig::SimulationStep);
 	UpdateBulletTraces(GameConstants::ShooterConfig::SimulationStep);
@@ -284,7 +288,9 @@ void ShooterGame::Shoot(const physx::PxVec3& origin, const physx::PxVec3& direct
 					std::cout << "Enemy eliminated by bullet damage. Ragdoll activated.\n";
 				}
 
-				enemyAI_.Update(0.0f, camera_->getEye());
+				if (GameConstants::AIConfig::Enabled) {
+					enemyAI_.Update(0.0f, camera_->getEye());
+				}
 			}
 			else {
 				std::cout
@@ -377,7 +383,9 @@ void ShooterGame::ExplodeGrenade(const physx::PxVec3& explosionPosition) {
 		std::cout << "Enemy eliminated by explosion damage. Ragdoll activated.\n";
 	}
 
-	enemyAI_.Update(0.0f, camera_->getEye());
+	if (GameConstants::AIConfig::Enabled) {
+		enemyAI_.Update(0.0f, camera_->getEye());
+	}
 }
 
 void ShooterGame::UpdateGrenades(float elapsedTime) {
@@ -497,7 +505,12 @@ void ShooterGame::RenderHud() const {
 	std::snprintf(line, sizeof(line), "Enemy health: %.1f", enemy_.GetHealth());
 	Snippets::print(line);
 
-	std::snprintf(line, sizeof(line), "Enemy AI: %s", enemyAI_.GetStateName());
+	std::snprintf(
+		line,
+		sizeof(line),
+		"Enemy AI: %s",
+		GameConstants::AIConfig::Enabled ? enemyAI_.GetStateName() : "Off"
+	);
 	Snippets::print(line);
 
 	std::snprintf(line, sizeof(line), "Active grenades: %zu", grenades_.size());
@@ -505,6 +518,10 @@ void ShooterGame::RenderHud() const {
 }
 
 void ShooterGame::RenderEnemyAIDebug() const {
+	if (!GameConstants::AIConfig::Enabled) {
+		return;
+	}
+
 	std::vector<EnemyAIController::DebugLine> debugLines;
 	debugLines.reserve(GameConstants::RenderConfig::AIDebugLineReserve);
 	enemyAI_.AppendDebugLines(debugLines);
