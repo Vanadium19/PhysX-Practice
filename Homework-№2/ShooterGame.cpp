@@ -199,16 +199,20 @@ void ShooterGame::AddCoverPointsForBox(
 	const float halfX = size.x * 0.5f;
 	const float halfZ = size.z * 0.5f;
 
-	const auto addPoint = [&](const physx::PxVec3& faceNormal, float halfExtent) {
-		physx::PxVec3 point = position + faceNormal * (halfExtent + kCoverPointOffset);
+	const auto addPoint = [&](const physx::PxVec3& pointOffset, const physx::PxVec3& outwardNormal, int obstaclePointIndex) {
+		physx::PxVec3 point = position + pointOffset;
 		point.y = kEnemyStandingHeight;
-		coverPoints_.push_back(CoverPoint{ point, faceNormal.getNormalized(), obstacle });
+		coverPoints_.push_back(CoverPoint{ point, outwardNormal.getNormalized(), obstacle, obstaclePointIndex });
 	};
 
-	addPoint(axisX, halfX);
-	addPoint(-axisX, halfX);
-	addPoint(axisZ, halfZ);
-	addPoint(-axisZ, halfZ);
+	addPoint(axisX * (halfX + kCoverPointOffset), axisX, 0);
+	addPoint(axisX * (halfX + kCoverPointOffset) + axisZ * (halfZ + kCoverPointOffset), axisX + axisZ, 1);
+	addPoint(axisZ * (halfZ + kCoverPointOffset), axisZ, 2);
+	addPoint(-axisX * (halfX + kCoverPointOffset) + axisZ * (halfZ + kCoverPointOffset), -axisX + axisZ, 3);
+	addPoint(-axisX * (halfX + kCoverPointOffset), -axisX, 4);
+	addPoint(-axisX * (halfX + kCoverPointOffset) - axisZ * (halfZ + kCoverPointOffset), -axisX - axisZ, 5);
+	addPoint(-axisZ * (halfZ + kCoverPointOffset), -axisZ, 6);
+	addPoint(axisX * (halfX + kCoverPointOffset) - axisZ * (halfZ + kCoverPointOffset), axisX - axisZ, 7);
 }
 
 void ShooterGame::ReleaseActors(std::vector<physx::PxRigidActor*>& actors) {

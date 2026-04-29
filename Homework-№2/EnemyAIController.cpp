@@ -16,10 +16,12 @@ const float kArrivalThreshold = 0.6f;
 const float kFleeSampleRadius = 6.0f;
 const float kRaycastEpsilon = 0.05f;
 const float kDebugMarkerHalfSize = 0.25f;
+const float kEnemyVisibilityProbeInset = 0.45f;
 const float kArenaClampMin = -16.0f;
 const float kArenaClampMax = 16.0f;
 const int kDebugCircleSegments = 24;
 const int kMaxSelfHitPasses = 8;
+const int kObstaclePointCount = 8;
 
 const physx::PxVec3 kIdleColor(0.25f, 0.95f, 0.35f);
 const physx::PxVec3 kSeekingCoverColor(0.25f, 0.60f, 1.0f);
@@ -72,7 +74,9 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 	}
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
-	const bool isPlayerInsideView = (playerEye - enemyPosition).magnitudeSquared() <= kViewSphereRadius * kViewSphereRadius;
+	physx::PxVec3 sightPlayerEye = playerEye;
+	sightPlayerEye.y = enemyPosition.y;
+	const bool isPlayerInsideView = (sightPlayerEye - enemyPosition).magnitudeSquared() <= kViewSphereRadius * kViewSphereRadius;
 	if (!isPlayerInsideView) {
 		state_ = State::Idle;
 		playerInsideView_ = false;
@@ -87,16 +91,45 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 	}
 	playerInsideView_ = true;
 
-	if (hasTarget_ && GetPlanarDistanceSquared(enemyPosition, currentTarget_) <= kArrivalThreshold * kArrivalThreshold) {
+	AdvanceCurrentPath(enemyPosition);
+	const bool reachedTarget =
+		hasTarget_
+		&& currentPathPointIndex_ >= currentPathPoints_.size()
+		&& GetPlanarDistanceSquared(enemyPosition, currentTarget_) <= kArrivalThreshold * kArrivalThreshold;
+	if (reachedTarget) {
 		enemy_->StopPlanarMovement();
-		if (state_ == State::Fleeing) {
-			repathTimer_ = 0.0f;
-		}
 	}
 
 	repathTimer_ -= elapsedTime;
-	if (repathTimer_ <= 0.0f || state_ == State::Idle) {
-		EvaluateBehavior(playerEye);
+
+	if (state_ == State::SeekingCover && hasCoverPoint_) {
+		if (reachedTarget && IsPositionHiddenFromPlayer(enemyPosition, sightPlayerEye)) {
+			currentObstacleHasProvidedCover_ = true;
+		}
+		else if (reachedTarget && !IsPositionHiddenFromPlayer(enemyPosition, sightPlayerEye)) {
+			const physx::PxRigidActor* exhaustedObstacle = currentCoverPoint_.obstacle;
+			if (currentObstacleHasProvidedCover_) {
+				ResetCurrentObstacleTraversal();
+				EvaluateBehavior(sightPlayerEye, exhaustedObstacle);
+			}
+			else {
+				MarkCurrentCoverPointFailed();
+				if (!TrySelectAnotherPointOnCurrentObstacle(sightPlayerEye)) {
+					EvaluateBehavior(sightPlayerEye, exhaustedObstacle);
+				}
+			}
+
+			repathTimer_ = kRepathInterval;
+			UpdateMovement();
+			return;
+		}
+	}
+	else if (state_ == State::Fleeing && reachedTarget) {
+		repathTimer_ = 0.0f;
+	}
+
+	if (state_ == State::Idle || !hasTarget_ || (state_ == State::Fleeing && repathTimer_ <= 0.0f)) {
+		EvaluateBehavior(sightPlayerEye);
 		repathTimer_ = kRepathInterval;
 	}
 
@@ -119,10 +152,11 @@ void EnemyAIController::AppendDebugLines(std::vector<DebugLine>& out) const {
 		return;
 	}
 
-	out.push_back(DebugLine{ center, currentTarget_, color });
-	out.push_back(DebugLine{ currentTarget_ + physx::PxVec3(-kDebugMarkerHalfSize, 0.0f, 0.0f), currentTarget_ + physx::PxVec3(kDebugMarkerHalfSize, 0.0f, 0.0f), color });
-	out.push_back(DebugLine{ currentTarget_ + physx::PxVec3(0.0f, -kDebugMarkerHalfSize, 0.0f), currentTarget_ + physx::PxVec3(0.0f, kDebugMarkerHalfSize, 0.0f), color });
-	out.push_back(DebugLine{ currentTarget_ + physx::PxVec3(0.0f, 0.0f, -kDebugMarkerHalfSize), currentTarget_ + physx::PxVec3(0.0f, 0.0f, kDebugMarkerHalfSize), color });
+	const physx::PxVec3 activeTarget = GetActiveTarget();
+	out.push_back(DebugLine{ center, activeTarget, color });
+	out.push_back(DebugLine{ activeTarget + physx::PxVec3(-kDebugMarkerHalfSize, 0.0f, 0.0f), activeTarget + physx::PxVec3(kDebugMarkerHalfSize, 0.0f, 0.0f), color });
+	out.push_back(DebugLine{ activeTarget + physx::PxVec3(0.0f, -kDebugMarkerHalfSize, 0.0f), activeTarget + physx::PxVec3(0.0f, kDebugMarkerHalfSize, 0.0f), color });
+	out.push_back(DebugLine{ activeTarget + physx::PxVec3(0.0f, 0.0f, -kDebugMarkerHalfSize), activeTarget + physx::PxVec3(0.0f, 0.0f, kDebugMarkerHalfSize), color });
 }
 
 const char* EnemyAIController::GetStateName() const {
@@ -155,30 +189,266 @@ float EnemyAIController::GetPlanarDistanceSquared(const physx::PxVec3& a, const 
 	return MakePlanar(a - b).magnitudeSquared();
 }
 
-void EnemyAIController::ClearTarget() {
-	hasTarget_ = false;
-	currentTarget_ = physx::PxVec3(0.0f);
+bool EnemyAIController::AreCoverPointsEquivalent(const physx::PxVec3& a, const physx::PxVec3& b) {
+	return (a - b).magnitudeSquared() <= 1e-4f;
 }
 
-void EnemyAIController::EvaluateBehavior(const physx::PxVec3& playerEye) {
+void EnemyAIController::ClearTarget() {
+	hasTarget_ = false;
+	hasCoverPoint_ = false;
+	currentObstacleHasProvidedCover_ = false;
+	currentCoverPoint_ = CoverPoint{};
+	currentTarget_ = physx::PxVec3(0.0f);
+	ClearCurrentPath();
+	ResetCurrentObstacleTraversal();
+}
+
+void EnemyAIController::ResetCurrentObstacleTraversal() {
+	failedCurrentObstaclePoints_.clear();
+}
+
+void EnemyAIController::ClearCurrentPath() {
+	currentPathPoints_.clear();
+	currentPathPointIndex_ = 0;
+}
+
+bool EnemyAIController::HasFailedCurrentObstaclePoint(const CoverPoint& coverPoint) const {
+	for (const physx::PxVec3& failedPoint : failedCurrentObstaclePoints_) {
+		if (AreCoverPointsEquivalent(failedPoint, coverPoint.position)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void EnemyAIController::MarkCurrentCoverPointFailed() {
+	if (!hasCoverPoint_ || HasFailedCurrentObstaclePoint(currentCoverPoint_)) {
+		return;
+	}
+
+	failedCurrentObstaclePoints_.push_back(currentCoverPoint_.position);
+}
+
+bool EnemyAIController::BuildSequentialObstacleRoute(
+	const CoverPoint& startPoint,
+	const CoverPoint& destinationPoint,
+	std::vector<physx::PxVec3>& routePoints,
+	float& routeLength
+) const {
+	routePoints.clear();
+	routeLength = 0.0f;
+
+	if (!coverPoints_
+		|| startPoint.obstacle == nullptr
+		|| destinationPoint.obstacle == nullptr
+		|| startPoint.obstacle != destinationPoint.obstacle
+		|| startPoint.obstaclePointIndex == destinationPoint.obstaclePointIndex) {
+		return false;
+	}
+
+	std::vector<const CoverPoint*> obstaclePoints;
+	for (const CoverPoint& coverPoint : *coverPoints_) {
+		if (coverPoint.obstacle == startPoint.obstacle) {
+			obstaclePoints.push_back(&coverPoint);
+		}
+	}
+
+	if (obstaclePoints.size() < 2) {
+		return false;
+	}
+
+	std::sort(
+		obstaclePoints.begin(),
+		obstaclePoints.end(),
+		[](const CoverPoint* left, const CoverPoint* right) {
+			return left->obstaclePointIndex < right->obstaclePointIndex;
+		}
+	);
+
+	const auto findPointByIndex = [&](int obstaclePointIndex) -> const CoverPoint* {
+		for (const CoverPoint* coverPoint : obstaclePoints) {
+			if (coverPoint->obstaclePointIndex == obstaclePointIndex) {
+				return coverPoint;
+			}
+		}
+
+		return nullptr;
+	};
+
+	const auto buildRouteInDirection = [&](int directionStep, std::vector<physx::PxVec3>& candidateRoutePoints, float& candidateRouteLength) {
+		candidateRoutePoints.clear();
+		candidateRouteLength = 0.0f;
+
+		physx::PxVec3 previousPoint = startPoint.position;
+		int currentPointIndex = startPoint.obstaclePointIndex;
+		for (int stepCount = 0; stepCount < kObstaclePointCount - 1; ++stepCount) {
+			currentPointIndex = (currentPointIndex + directionStep + kObstaclePointCount) % kObstaclePointCount;
+			const CoverPoint* nextPoint = findPointByIndex(currentPointIndex);
+			if (!nextPoint || !IsPathClear(previousPoint, nextPoint->position)) {
+				return false;
+			}
+
+			candidateRouteLength += std::sqrt(GetPlanarDistanceSquared(previousPoint, nextPoint->position));
+			candidateRoutePoints.push_back(nextPoint->position);
+			if (currentPointIndex == destinationPoint.obstaclePointIndex) {
+				return true;
+			}
+
+			previousPoint = nextPoint->position;
+		}
+
+		return false;
+	};
+
+	std::vector<physx::PxVec3> clockwiseRoutePoints;
+	std::vector<physx::PxVec3> counterClockwiseRoutePoints;
+	float clockwiseRouteLength = 0.0f;
+	float counterClockwiseRouteLength = 0.0f;
+	const bool hasClockwiseRoute = buildRouteInDirection(1, clockwiseRoutePoints, clockwiseRouteLength);
+	const bool hasCounterClockwiseRoute = buildRouteInDirection(-1, counterClockwiseRoutePoints, counterClockwiseRouteLength);
+	if (!hasClockwiseRoute && !hasCounterClockwiseRoute) {
+		return false;
+	}
+
+	if (!hasCounterClockwiseRoute || (hasClockwiseRoute && clockwiseRouteLength <= counterClockwiseRouteLength)) {
+		routePoints = std::move(clockwiseRoutePoints);
+		routeLength = clockwiseRouteLength;
+		return true;
+	}
+
+	routePoints = std::move(counterClockwiseRoutePoints);
+	routeLength = counterClockwiseRouteLength;
+	return true;
+}
+
+bool EnemyAIController::TrySelectAnotherPointOnCurrentObstacle(const physx::PxVec3& playerEye) {
+	if (!enemy_ || !coverPoints_ || !hasCoverPoint_ || currentCoverPoint_.obstacle == nullptr) {
+		return false;
+	}
+
+	CoverPoint bestProtectedCover;
+	CoverPoint bestReachableCover;
+	std::vector<physx::PxVec3> bestProtectedRoutePoints;
+	std::vector<physx::PxVec3> bestReachableRoutePoints;
+	bool foundProtectedCover = false;
+	bool foundReachableCover = false;
+	float bestProtectedRouteLength = std::numeric_limits<float>::max();
+	float bestReachableRouteLength = std::numeric_limits<float>::max();
+
+	for (const CoverPoint& coverPoint : *coverPoints_) {
+		if (coverPoint.obstacle != currentCoverPoint_.obstacle) {
+			continue;
+		}
+
+		if (AreCoverPointsEquivalent(coverPoint.position, currentCoverPoint_.position) || HasFailedCurrentObstaclePoint(coverPoint)) {
+			continue;
+		}
+
+		std::vector<physx::PxVec3> routePoints;
+		float routeLength = 0.0f;
+		if (!BuildSequentialObstacleRoute(currentCoverPoint_, coverPoint, routePoints, routeLength)) {
+			continue;
+		}
+
+		if (IsCoverProtected(coverPoint, playerEye)) {
+			if (!foundProtectedCover || routeLength < bestProtectedRouteLength) {
+				bestProtectedRouteLength = routeLength;
+				bestProtectedCover = coverPoint;
+				bestProtectedRoutePoints = std::move(routePoints);
+				foundProtectedCover = true;
+			}
+		}
+		else if (!foundReachableCover || routeLength < bestReachableRouteLength) {
+			bestReachableRouteLength = routeLength;
+			bestReachableCover = coverPoint;
+			bestReachableRoutePoints = std::move(routePoints);
+			foundReachableCover = true;
+		}
+	}
+
+	if (!foundProtectedCover && !foundReachableCover) {
+		return false;
+	}
+
+	const CoverPoint& nextCoverPoint = foundProtectedCover ? bestProtectedCover : bestReachableCover;
+	std::vector<physx::PxVec3>& nextRoutePoints = foundProtectedCover ? bestProtectedRoutePoints : bestReachableRoutePoints;
+	state_ = State::SeekingCover;
+	hasTarget_ = true;
+	hasCoverPoint_ = true;
+	currentCoverPoint_ = nextCoverPoint;
+	currentTarget_ = nextCoverPoint.position;
+	currentPathPoints_ = std::move(nextRoutePoints);
+	currentPathPointIndex_ = 0;
+	return true;
+}
+
+void EnemyAIController::EvaluateBehavior(const physx::PxVec3& playerEye, const physx::PxRigidActor* obstacleToAvoid) {
 	CoverPoint bestCover;
-	if (FindBestCover(playerEye, bestCover)) {
+	if (FindBestCover(playerEye, bestCover, obstacleToAvoid)) {
+		if (!hasCoverPoint_ || currentCoverPoint_.obstacle != bestCover.obstacle) {
+			ResetCurrentObstacleTraversal();
+			currentObstacleHasProvidedCover_ = false;
+		}
+
 		state_ = State::SeekingCover;
 		hasTarget_ = true;
+		hasCoverPoint_ = true;
+		currentCoverPoint_ = bestCover;
 		currentTarget_ = bestCover.position;
+		ClearCurrentPath();
 		return;
 	}
 
 	physx::PxVec3 bestFleeTarget(0.0f);
 	state_ = State::Fleeing;
 	if (FindBestFleeTarget(playerEye, bestFleeTarget)) {
+		ResetCurrentObstacleTraversal();
 		hasTarget_ = true;
+		hasCoverPoint_ = false;
+		currentObstacleHasProvidedCover_ = false;
+		currentCoverPoint_ = CoverPoint{};
 		currentTarget_ = bestFleeTarget;
+		ClearCurrentPath();
 		return;
 	}
 
 	ClearTarget();
 	enemy_->StopPlanarMovement();
+}
+
+void EnemyAIController::AdvanceCurrentPath(const physx::PxVec3& enemyPosition) {
+	while (currentPathPointIndex_ < currentPathPoints_.size()
+		&& GetPlanarDistanceSquared(enemyPosition, currentPathPoints_[currentPathPointIndex_]) <= kArrivalThreshold * kArrivalThreshold) {
+		++currentPathPointIndex_;
+	}
+}
+
+physx::PxVec3 EnemyAIController::GetActiveTarget() const {
+	if (currentPathPointIndex_ < currentPathPoints_.size()) {
+		return currentPathPoints_[currentPathPointIndex_];
+	}
+
+	return currentTarget_;
+}
+
+physx::PxVec3 EnemyAIController::GetCoverProbePosition(const CoverPoint& coverPoint) const {
+	if (coverPoint.outwardNormal.magnitudeSquared() < 1e-4f) {
+		return coverPoint.position;
+	}
+
+	// Check LOS against the body edge that should be tucked toward the obstacle,
+	// not just against the target point at the capsule center.
+	return coverPoint.position - coverPoint.outwardNormal.getNormalized() * kEnemyVisibilityProbeInset;
+}
+
+physx::PxVec3 EnemyAIController::GetVisibilityProbePosition(const physx::PxVec3& position) const {
+	if (state_ == State::SeekingCover && hasCoverPoint_) {
+		const physx::PxVec3 probeOffset = GetCoverProbePosition(currentCoverPoint_) - currentCoverPoint_.position;
+		return position + probeOffset;
+	}
+
+	return position;
 }
 
 void EnemyAIController::UpdateMovement() {
@@ -192,7 +462,7 @@ void EnemyAIController::UpdateMovement() {
 	}
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
-	physx::PxVec3 direction = MakePlanar(currentTarget_ - enemyPosition);
+	physx::PxVec3 direction = MakePlanar(GetActiveTarget() - enemyPosition);
 	if (direction.magnitudeSquared() <= kArrivalThreshold * kArrivalThreshold) {
 		enemy_->StopPlanarMovement();
 		return;
@@ -201,7 +471,11 @@ void EnemyAIController::UpdateMovement() {
 	enemy_->SetPlanarVelocity(direction.getNormalized() * kMoveSpeed);
 }
 
-bool EnemyAIController::FindBestCover(const physx::PxVec3& playerEye, CoverPoint& bestCover) const {
+bool EnemyAIController::FindBestCover(
+	const physx::PxVec3& playerEye,
+	CoverPoint& bestCover,
+	const physx::PxRigidActor* obstacleToAvoid
+) const {
 	if (!enemy_ || !coverPoints_) {
 		return false;
 	}
@@ -213,6 +487,10 @@ bool EnemyAIController::FindBestCover(const physx::PxVec3& playerEye, CoverPoint
 	bool foundCover = false;
 
 	for (const CoverPoint& coverPoint : *coverPoints_) {
+		if (obstacleToAvoid != nullptr && coverPoint.obstacle == obstacleToAvoid) {
+			continue;
+		}
+
 		const float enemyDistanceSquared = GetPlanarDistanceSquared(enemyPosition, coverPoint.position);
 		if (enemyDistanceSquared > maxDistanceSquared) {
 			continue;
@@ -296,8 +574,21 @@ bool EnemyAIController::IsPathClear(const physx::PxVec3& start, const physx::PxV
 	return !RaycastIgnoringEnemy(start, ray.getNormalized(), distance - kRaycastEpsilon, hit);
 }
 
+bool EnemyAIController::IsPositionHiddenFromPlayer(const physx::PxVec3& position, const physx::PxVec3& playerEye) const {
+	const physx::PxVec3 probePosition = GetVisibilityProbePosition(position);
+	const physx::PxVec3 ray = probePosition - playerEye;
+	const float distance = ray.magnitude();
+	if (distance < kRaycastEpsilon) {
+		return false;
+	}
+
+	physx::PxRaycastHit hit;
+	return RaycastIgnoringEnemy(playerEye, ray.getNormalized(), distance - kRaycastEpsilon, hit);
+}
+
 bool EnemyAIController::IsCoverProtected(const CoverPoint& coverPoint, const physx::PxVec3& playerEye) const {
-	const physx::PxVec3 planarToPlayer = MakePlanar(playerEye - coverPoint.position);
+	const physx::PxVec3 probePosition = GetCoverProbePosition(coverPoint);
+	const physx::PxVec3 planarToPlayer = MakePlanar(playerEye - probePosition);
 	if (planarToPlayer.magnitudeSquared() < kRaycastEpsilon * kRaycastEpsilon) {
 		return false;
 	}
@@ -306,14 +597,14 @@ bool EnemyAIController::IsCoverProtected(const CoverPoint& coverPoint, const phy
 		return false;
 	}
 
-	const physx::PxVec3 ray = playerEye - coverPoint.position;
+	const physx::PxVec3 ray = probePosition - playerEye;
 	const float distance = ray.magnitude();
 	if (distance < kRaycastEpsilon) {
 		return false;
 	}
 
 	physx::PxRaycastHit hit;
-	if (!RaycastIgnoringEnemy(coverPoint.position, ray.getNormalized(), distance - kRaycastEpsilon, hit)) {
+	if (!RaycastIgnoringEnemy(playerEye, ray.getNormalized(), distance - kRaycastEpsilon, hit)) {
 		return false;
 	}
 
