@@ -1,11 +1,7 @@
 #include "Grenade.h"
 
+#include "GameConstants.h"
 #include "PhysicsEngine.h"
-
-namespace {
-const float kGrenadeRadius = 0.28f;
-const float kGrenadeMass = 2.2f;
-}
 
 Grenade::Grenade(float fuseTimeSeconds) :
 	fuseTimeSeconds_(fuseTimeSeconds) {
@@ -17,20 +13,26 @@ void Grenade::Initialize(PhysicsEngine* physicsEngine, const physx::PxVec3& posi
 	physicsEngine_ = physicsEngine;
 	elapsedTime_ = 0.0f;
 
-	physx::PxMaterial* material = physicsEngine_->GetMaterial(0.45f, 0.35f, 0.65f);
+	const MaterialSettings grenadeMaterial = GameConstants::MaterialConfig::Grenade;
+	physx::PxMaterial* material = physicsEngine_->GetMaterial(
+		grenadeMaterial.staticFriction,
+		grenadeMaterial.dynamicFriction,
+		grenadeMaterial.restitution
+	);
 	physx::PxShape* shape = physicsEngine_->CreateSphereShape(
-		kGrenadeRadius,
+		GameConstants::GrenadeConfig::Radius,
 		material,
 		CustomFilterData::eDYNAMIC,
 		true
 	);
 
-	const float density = kGrenadeMass / PhysicsEngine::GetSphereVolume(kGrenadeRadius);
+	const float density =
+		GameConstants::GrenadeConfig::Mass / PhysicsEngine::GetSphereVolume(GameConstants::GrenadeConfig::Radius);
 	actor_ = physicsEngine_->AddDynamicActor(shape, position, physx::PxQuat(physx::PxIdentity), density);
 	shape->release();
 	actor_->setLinearVelocity(initialVelocity);
-	actor_->setLinearDamping(0.10f);
-	actor_->setAngularDamping(0.35f);
+	actor_->setLinearDamping(GameConstants::GrenadeConfig::LinearDamping);
+	actor_->setAngularDamping(GameConstants::GrenadeConfig::AngularDamping);
 	actor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 }
 

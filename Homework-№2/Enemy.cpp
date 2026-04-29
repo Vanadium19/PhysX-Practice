@@ -3,56 +3,16 @@
 #include <algorithm>
 #include <limits>
 
+#include "GameConstants.h"
 #include "PhysicsEngine.h"
 #include "extensions/PxD6Joint.h"
 #include "foundation/PxMathUtils.h"
-
-namespace {
-const float kEnemyRadius = 0.45f;
-const float kEnemyHeight = 1.40f;
-const float kEnemyMass = 85.0f;
-const float kEnemyMaxHealth = 100.0f;
-
-const float kHeadRadius = 0.22f;
-const physx::PxVec3 kTorsoSize(0.55f, 0.80f, 0.32f);
-const float kArmRadius = 0.11f;
-const float kArmLength = 0.70f;
-const float kLegRadius = 0.14f;
-const float kLegLength = 0.90f;
-
-const float kHeadMass = 5.0f;
-const float kTorsoMass = 39.0f;
-const float kArmMass = 6.0f;
-const float kLegMass = 14.5f;
-
-const physx::PxVec3 kHeadOffset(0.0f, 0.78f, 0.0f);
-const physx::PxVec3 kLeftArmOffset(-0.62f, 0.22f, 0.0f);
-const physx::PxVec3 kRightArmOffset(0.62f, 0.22f, 0.0f);
-const physx::PxVec3 kLeftLegOffset(-0.20f, -0.95f, 0.0f);
-const physx::PxVec3 kRightLegOffset(0.20f, -0.95f, 0.0f);
-
-const physx::PxVec3 kNeckAnchorOffset(0.0f, 0.54f, 0.0f);
-const physx::PxVec3 kLeftShoulderAnchorOffset(-0.28f, 0.22f, 0.0f);
-const physx::PxVec3 kRightShoulderAnchorOffset(0.28f, 0.22f, 0.0f);
-const physx::PxVec3 kLeftHipAnchorOffset(-0.20f, -0.46f, 0.0f);
-const physx::PxVec3 kRightHipAnchorOffset(0.20f, -0.46f, 0.0f);
-
-const float kLiveLinearDamping = 0.15f;
-const float kLiveAngularDamping = 0.2f;
-const float kRagdollLinearDamping = 0.08f;
-const float kRagdollAngularDamping = 0.18f;
-const float kDirectionEpsilon = 1e-4f;
-
-float ToRadians(float degrees) {
-	return degrees * physx::PxPi / 180.0f;
-}
-}
 
 void Enemy::Initialize(PhysicsEngine* physicsEngine, const physx::PxVec3& position) {
 	Shutdown();
 
 	physicsEngine_ = physicsEngine;
-	health_ = kEnemyMaxHealth;
+	health_ = GameConstants::EnemyConfig::MaxHealth;
 	state_ = EnemyState::Alive;
 
 	CreateLiveCapsule(position);
@@ -63,7 +23,7 @@ void Enemy::Shutdown() {
 	ReleaseLiveCapsule();
 
 	physicsEngine_ = nullptr;
-	health_ = kEnemyMaxHealth;
+	health_ = GameConstants::EnemyConfig::MaxHealth;
 	state_ = EnemyState::Alive;
 }
 
@@ -140,7 +100,9 @@ void Enemy::StopPlanarMovement() {
 
 float Enemy::ApplyBulletImpact(const physx::PxVec3& hitPosition, const physx::PxVec3& direction, float impulseStrength, float damage) {
 	const physx::PxVec3 impulseDirection =
-		direction.magnitudeSquared() > kDirectionEpsilon ? direction.getNormalized() : physx::PxVec3(0.0f, 0.0f, 1.0f);
+		direction.magnitudeSquared() > GameConstants::EnemyConfig::DirectionEpsilon
+			? direction.getNormalized()
+			: physx::PxVec3(0.0f, 0.0f, 1.0f);
 
 	if (state_ == EnemyState::Ragdoll) {
 		ApplyImpulseToClosestRagdollPart(hitPosition, impulseDirection, impulseStrength);
@@ -199,7 +161,7 @@ float Enemy::ApplyExplosionDamage(const physx::PxVec3& explosionPosition, float 
 		return 0.0f;
 	}
 
-	if (distance < kDirectionEpsilon) {
+	if (distance < GameConstants::EnemyConfig::DirectionEpsilon) {
 		offset = physx::PxVec3(0.0f, 1.0f, 0.0f);
 		distance = 0.0f;
 	}
@@ -241,7 +203,7 @@ physx::PxQuat Enemy::GetVerticalCapsuleRotation() {
 }
 
 physx::PxQuat Enemy::GetJointFrameRotation(const physx::PxVec3& axisDirection) {
-	if (axisDirection.magnitudeSquared() < kDirectionEpsilon) {
+	if (axisDirection.magnitudeSquared() < GameConstants::EnemyConfig::DirectionEpsilon) {
 		return physx::PxQuat(physx::PxIdentity);
 	}
 
@@ -261,12 +223,17 @@ void Enemy::CreateLiveCapsule(const physx::PxVec3& position) {
 		return;
 	}
 
-	physx::PxMaterial* material = physicsEngine_->GetMaterial(0.65f, 0.55f, 0.05f);
+	const MaterialSettings enemyMaterial = GameConstants::MaterialConfig::Enemy;
+	physx::PxMaterial* material = physicsEngine_->GetMaterial(
+		enemyMaterial.staticFriction,
+		enemyMaterial.dynamicFriction,
+		enemyMaterial.restitution
+	);
 
 	// PhysX capsules are aligned along the X axis by default, so rotate the shape to stand it upright.
 	physx::PxShape* shape = physicsEngine_->CreateCapsuleShape(
-		kEnemyRadius,
-		kEnemyHeight,
+		GameConstants::EnemyConfig::Radius,
+		GameConstants::EnemyConfig::Height,
 		physx::PxVec3(0.0f),
 		GetVerticalCapsuleRotation(),
 		material,
@@ -274,7 +241,9 @@ void Enemy::CreateLiveCapsule(const physx::PxVec3& position) {
 		true
 	);
 
-	const float density = kEnemyMass / PhysicsEngine::GetCapsuleVolume(kEnemyRadius, kEnemyHeight);
+	const float density =
+		GameConstants::EnemyConfig::Mass
+		/ PhysicsEngine::GetCapsuleVolume(GameConstants::EnemyConfig::Radius, GameConstants::EnemyConfig::Height);
 	capsuleActor_ = physicsEngine_->AddDynamicActor(shape, position, physx::PxQuat(physx::PxIdentity), density);
 	shape->release();
 
@@ -285,9 +254,12 @@ void Enemy::CreateLiveCapsule(const physx::PxVec3& position) {
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
 	capsuleActor_->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
-	capsuleActor_->setLinearDamping(kLiveLinearDamping);
-	capsuleActor_->setAngularDamping(kLiveAngularDamping);
-	capsuleActor_->setSolverIterationCounts(8, 4);
+	capsuleActor_->setLinearDamping(GameConstants::EnemyConfig::LiveLinearDamping);
+	capsuleActor_->setAngularDamping(GameConstants::EnemyConfig::LiveAngularDamping);
+	capsuleActor_->setSolverIterationCounts(
+		GameConstants::EnemyConfig::LiveSolverPositionIterations,
+		GameConstants::EnemyConfig::LiveSolverVelocityIterations
+	);
 	capsuleActor_->setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 }
 
@@ -327,23 +299,56 @@ void Enemy::ActivateRagdoll(
 	ReleaseRagdoll();
 	state_ = EnemyState::Ragdoll;
 
-	ragdollParts_.assign(static_cast<std::size_t>(RagdollPartId::Count), nullptr);
+	ragdollParts_.assign(GameConstants::EnemyConfig::RagdollPartCount, nullptr);
 
 	const physx::PxQuat bodyRotation = capsulePose.q;
 	const physx::PxQuat legRotation = bodyRotation * GetVerticalCapsuleRotation();
 
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::Head)] =
-		CreateRagdollSphere(kHeadRadius, capsulePose.transform(kHeadOffset), kHeadMass);
+		CreateRagdollSphere(
+			GameConstants::EnemyConfig::HeadRadius,
+			capsulePose.transform(GameConstants::EnemyConfig::HeadOffset),
+			GameConstants::EnemyConfig::HeadMass
+		);
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::Torso)] =
-		CreateRagdollBox(kTorsoSize, capsulePose.p, bodyRotation, kTorsoMass);
+		CreateRagdollBox(
+			GameConstants::EnemyConfig::TorsoSize,
+			capsulePose.p,
+			bodyRotation,
+			GameConstants::EnemyConfig::TorsoMass
+		);
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::LeftArm)] =
-		CreateRagdollCapsule(kArmRadius, kArmLength, capsulePose.transform(kLeftArmOffset), bodyRotation, kArmMass);
+		CreateRagdollCapsule(
+			GameConstants::EnemyConfig::ArmRadius,
+			GameConstants::EnemyConfig::ArmLength,
+			capsulePose.transform(GameConstants::EnemyConfig::LeftArmOffset),
+			bodyRotation,
+			GameConstants::EnemyConfig::ArmMass
+		);
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::RightArm)] =
-		CreateRagdollCapsule(kArmRadius, kArmLength, capsulePose.transform(kRightArmOffset), bodyRotation, kArmMass);
+		CreateRagdollCapsule(
+			GameConstants::EnemyConfig::ArmRadius,
+			GameConstants::EnemyConfig::ArmLength,
+			capsulePose.transform(GameConstants::EnemyConfig::RightArmOffset),
+			bodyRotation,
+			GameConstants::EnemyConfig::ArmMass
+		);
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::LeftLeg)] =
-		CreateRagdollCapsule(kLegRadius, kLegLength, capsulePose.transform(kLeftLegOffset), legRotation, kLegMass);
+		CreateRagdollCapsule(
+			GameConstants::EnemyConfig::LegRadius,
+			GameConstants::EnemyConfig::LegLength,
+			capsulePose.transform(GameConstants::EnemyConfig::LeftLegOffset),
+			legRotation,
+			GameConstants::EnemyConfig::LegMass
+		);
 	ragdollParts_[static_cast<std::size_t>(RagdollPartId::RightLeg)] =
-		CreateRagdollCapsule(kLegRadius, kLegLength, capsulePose.transform(kRightLegOffset), legRotation, kLegMass);
+		CreateRagdollCapsule(
+			GameConstants::EnemyConfig::LegRadius,
+			GameConstants::EnemyConfig::LegLength,
+			capsulePose.transform(GameConstants::EnemyConfig::RightLegOffset),
+			legRotation,
+			GameConstants::EnemyConfig::LegMass
+		);
 
 	for (physx::PxRigidDynamic* part : ragdollParts_) {
 		if (part) {
@@ -359,66 +364,66 @@ void Enemy::ActivateRagdoll(
 	const physx::PxVec3 neckAxis = bodyRotation.rotate(physx::PxVec3(0.0f, 1.0f, 0.0f));
 	const physx::PxVec3 leftShoulderAxis = bodyRotation.rotate(physx::PxVec3(-1.0f, 0.0f, 0.0f));
 	const physx::PxVec3 rightShoulderAxis = bodyRotation.rotate(physx::PxVec3(1.0f, 0.0f, 0.0f));
-	const physx::PxVec3 leftHipAxis = bodyRotation.rotate(kLeftLegOffset.getNormalized());
-	const physx::PxVec3 rightHipAxis = bodyRotation.rotate(kRightLegOffset.getNormalized());
+	const physx::PxVec3 leftHipAxis = bodyRotation.rotate(GameConstants::EnemyConfig::LeftLegOffset.getNormalized());
+	const physx::PxVec3 rightHipAxis = bodyRotation.rotate(GameConstants::EnemyConfig::RightLegOffset.getNormalized());
 
 	if (physx::PxD6Joint* joint = CreateLimitedJoint(
 		torsoActor_,
 		GetRagdollPart(RagdollPartId::Head),
-		capsulePose.transform(kNeckAnchorOffset),
+		capsulePose.transform(GameConstants::EnemyConfig::NeckAnchorOffset),
 		neckAxis,
-		ToRadians(-30.0f),
-		ToRadians(30.0f),
-		ToRadians(25.0f),
-		ToRadians(20.0f))) {
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::NeckLowerTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::NeckUpperTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::NeckSwing1Degrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::NeckSwing2Degrees))) {
 		ragdollJoints_.push_back(joint);
 	}
 
 	if (physx::PxD6Joint* joint = CreateLimitedJoint(
 		torsoActor_,
 		GetRagdollPart(RagdollPartId::LeftArm),
-		capsulePose.transform(kLeftShoulderAnchorOffset),
+		capsulePose.transform(GameConstants::EnemyConfig::LeftShoulderAnchorOffset),
 		leftShoulderAxis,
-		ToRadians(-35.0f),
-		ToRadians(35.0f),
-		ToRadians(65.0f),
-		ToRadians(45.0f))) {
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderLowerTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderUpperTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderSwing1Degrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderSwing2Degrees))) {
 		ragdollJoints_.push_back(joint);
 	}
 
 	if (physx::PxD6Joint* joint = CreateLimitedJoint(
 		torsoActor_,
 		GetRagdollPart(RagdollPartId::RightArm),
-		capsulePose.transform(kRightShoulderAnchorOffset),
+		capsulePose.transform(GameConstants::EnemyConfig::RightShoulderAnchorOffset),
 		rightShoulderAxis,
-		ToRadians(-35.0f),
-		ToRadians(35.0f),
-		ToRadians(65.0f),
-		ToRadians(45.0f))) {
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderLowerTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderUpperTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderSwing1Degrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::ShoulderSwing2Degrees))) {
 		ragdollJoints_.push_back(joint);
 	}
 
 	if (physx::PxD6Joint* joint = CreateLimitedJoint(
 		torsoActor_,
 		GetRagdollPart(RagdollPartId::LeftLeg),
-		capsulePose.transform(kLeftHipAnchorOffset),
+		capsulePose.transform(GameConstants::EnemyConfig::LeftHipAnchorOffset),
 		leftHipAxis,
-		ToRadians(-20.0f),
-		ToRadians(20.0f),
-		ToRadians(40.0f),
-		ToRadians(25.0f))) {
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipLowerTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipUpperTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipSwing1Degrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipSwing2Degrees))) {
 		ragdollJoints_.push_back(joint);
 	}
 
 	if (physx::PxD6Joint* joint = CreateLimitedJoint(
 		torsoActor_,
 		GetRagdollPart(RagdollPartId::RightLeg),
-		capsulePose.transform(kRightHipAnchorOffset),
+		capsulePose.transform(GameConstants::EnemyConfig::RightHipAnchorOffset),
 		rightHipAxis,
-		ToRadians(-20.0f),
-		ToRadians(20.0f),
-		ToRadians(40.0f),
-		ToRadians(25.0f))) {
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipLowerTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipUpperTwistDegrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipSwing1Degrees),
+		GameConstants::DegreesToRadians(GameConstants::EnemyConfig::HipSwing2Degrees))) {
 		ragdollJoints_.push_back(joint);
 	}
 
@@ -458,7 +463,12 @@ physx::PxRigidDynamic* Enemy::CreateRagdollBox(const physx::PxVec3& size, const 
 		return nullptr;
 	}
 
-	physx::PxMaterial* material = physicsEngine_->GetMaterial(0.65f, 0.55f, 0.05f);
+	const MaterialSettings enemyMaterial = GameConstants::MaterialConfig::Enemy;
+	physx::PxMaterial* material = physicsEngine_->GetMaterial(
+		enemyMaterial.staticFriction,
+		enemyMaterial.dynamicFriction,
+		enemyMaterial.restitution
+	);
 	physx::PxShape* shape = physicsEngine_->CreateBoxShape(size, material, CustomFilterData::eDYNAMIC, true);
 	const float density = mass / PhysicsEngine::GetBoxVolume(size);
 	physx::PxRigidDynamic* actor = physicsEngine_->AddDynamicActor(shape, position, rotation, density);
@@ -471,7 +481,12 @@ physx::PxRigidDynamic* Enemy::CreateRagdollSphere(float radius, const physx::PxV
 		return nullptr;
 	}
 
-	physx::PxMaterial* material = physicsEngine_->GetMaterial(0.65f, 0.55f, 0.05f);
+	const MaterialSettings enemyMaterial = GameConstants::MaterialConfig::Enemy;
+	physx::PxMaterial* material = physicsEngine_->GetMaterial(
+		enemyMaterial.staticFriction,
+		enemyMaterial.dynamicFriction,
+		enemyMaterial.restitution
+	);
 	physx::PxShape* shape = physicsEngine_->CreateSphereShape(radius, material, CustomFilterData::eDYNAMIC, true);
 	const float density = mass / PhysicsEngine::GetSphereVolume(radius);
 	physx::PxRigidDynamic* actor = physicsEngine_->AddDynamicActor(shape, position, physx::PxQuat(physx::PxIdentity), density);
@@ -490,7 +505,12 @@ physx::PxRigidDynamic* Enemy::CreateRagdollCapsule(
 		return nullptr;
 	}
 
-	physx::PxMaterial* material = physicsEngine_->GetMaterial(0.65f, 0.55f, 0.05f);
+	const MaterialSettings enemyMaterial = GameConstants::MaterialConfig::Enemy;
+	physx::PxMaterial* material = physicsEngine_->GetMaterial(
+		enemyMaterial.staticFriction,
+		enemyMaterial.dynamicFriction,
+		enemyMaterial.restitution
+	);
 	physx::PxShape* shape = physicsEngine_->CreateCapsuleShape(radius, size, material, CustomFilterData::eDYNAMIC, true);
 	const float density = mass / PhysicsEngine::GetCapsuleVolume(radius, size);
 	physx::PxRigidDynamic* actor = physicsEngine_->AddDynamicActor(shape, position, rotation, density);
@@ -541,9 +561,12 @@ void Enemy::ConfigureRagdollPart(
 	const physx::PxVec3& linearVelocity,
 	const physx::PxVec3& angularVelocity
 ) const {
-	actor.setLinearDamping(kRagdollLinearDamping);
-	actor.setAngularDamping(kRagdollAngularDamping);
-	actor.setSolverIterationCounts(12, 4);
+	actor.setLinearDamping(GameConstants::EnemyConfig::RagdollLinearDamping);
+	actor.setAngularDamping(GameConstants::EnemyConfig::RagdollAngularDamping);
+	actor.setSolverIterationCounts(
+		GameConstants::EnemyConfig::RagdollSolverPositionIterations,
+		GameConstants::EnemyConfig::RagdollSolverVelocityIterations
+	);
 	actor.setRigidBodyFlag(physx::PxRigidBodyFlag::eENABLE_CCD, true);
 	actor.setLinearVelocity(linearVelocity);
 	actor.setAngularVelocity(angularVelocity);
@@ -561,7 +584,9 @@ void Enemy::ApplyImpulseToClosestRagdollPart(const physx::PxVec3& hitPosition, c
 	}
 
 	const physx::PxVec3 impulseDirection =
-		direction.magnitudeSquared() > kDirectionEpsilon ? direction.getNormalized() : physx::PxVec3(0.0f, 0.0f, 1.0f);
+		direction.magnitudeSquared() > GameConstants::EnemyConfig::DirectionEpsilon
+			? direction.getNormalized()
+			: physx::PxVec3(0.0f, 0.0f, 1.0f);
 
 	part->wakeUp();
 	physx::PxRigidBodyExt::addForceAtPos(
@@ -589,7 +614,7 @@ void Enemy::ApplyExplosionImpulseToRagdoll(const physx::PxVec3& explosionPositio
 			continue;
 		}
 
-		if (distance >= kDirectionEpsilon && physicsEngine_) {
+		if (distance >= GameConstants::EnemyConfig::DirectionEpsilon && physicsEngine_) {
 			physx::PxRaycastBuffer hit;
 			const bool hasHit = physicsEngine_->Raycast(explosionPosition, offset.getNormalized(), distance, hit);
 			if (hasHit && hit.hasBlock && !OwnsActor(hit.block.actor)) {
@@ -597,7 +622,7 @@ void Enemy::ApplyExplosionImpulseToRagdoll(const physx::PxVec3& explosionPositio
 			}
 		}
 
-		if (distance < kDirectionEpsilon) {
+		if (distance < GameConstants::EnemyConfig::DirectionEpsilon) {
 			offset = physx::PxVec3(0.0f, 1.0f, 0.0f);
 			distance = 0.0f;
 		}

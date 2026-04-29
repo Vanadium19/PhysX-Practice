@@ -1,5 +1,6 @@
 ﻿#include "PhysicsEngine.h"
 #include "ShooterGame.h"
+#include "GameConstants.h"
 
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
@@ -33,12 +34,18 @@ void exitCallback() {
 
 int main() {
 	camera_ = new Snippets::Camera(
-		physx::PxVec3(-12.0f, 8.0f, 18.0f),
-		physx::PxVec3(0.52f, -0.22f, -0.82f)
+		GameConstants::AppConfig::CameraPosition,
+		GameConstants::AppConfig::CameraDirection
 	);
-	camera_->setSpeed(0.35f);
+	camera_->setSpeed(GameConstants::AppConfig::CameraSpeed);
 
-	Snippets::setupDefault("Homework 2 Shooter", camera_, keyPressedCallback, renderCallback, exitCallback);
+	Snippets::setupDefault(
+		GameConstants::AppConfig::WindowTitle,
+		camera_,
+		keyPressedCallback,
+		renderCallback,
+		exitCallback
+	);
 
 	physicsEngine_ = new PhysicsEngine();
 	game_ = new ShooterGame(physicsEngine_, camera_);

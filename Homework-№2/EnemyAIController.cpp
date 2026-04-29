@@ -6,27 +6,8 @@
 #include <limits>
 
 #include "Enemy.h"
+#include "GameConstants.h"
 #include "PhysicsEngine.h"
-
-namespace {
-const float kViewSphereRadius = 14.0f;
-const float kMoveSpeed = 4.5f;
-const float kRepathInterval = 0.25f;
-const float kArrivalThreshold = 0.6f;
-const float kFleeSampleRadius = 6.0f;
-const float kRaycastEpsilon = 0.05f;
-const float kDebugMarkerHalfSize = 0.25f;
-const float kEnemyVisibilityProbeInset = 0.45f;
-const float kArenaClampMin = -16.0f;
-const float kArenaClampMax = 16.0f;
-const int kDebugCircleSegments = 24;
-const int kMaxSelfHitPasses = 8;
-const int kObstaclePointCount = 8;
-
-const physx::PxVec3 kIdleColor(0.25f, 0.95f, 0.35f);
-const physx::PxVec3 kSeekingCoverColor(0.25f, 0.60f, 1.0f);
-const physx::PxVec3 kFleeingColor(1.0f, 0.60f, 0.15f);
-}
 
 void EnemyAIController::Initialize(PhysicsEngine* physicsEngine, Enemy* enemy, const std::vector<CoverPoint>* coverPoints) {
 	physicsEngine_ = physicsEngine;
@@ -76,7 +57,9 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
 	physx::PxVec3 sightPlayerEye = playerEye;
 	sightPlayerEye.y = enemyPosition.y;
-	const bool isPlayerInsideView = (sightPlayerEye - enemyPosition).magnitudeSquared() <= kViewSphereRadius * kViewSphereRadius;
+	const bool isPlayerInsideView =
+		(sightPlayerEye - enemyPosition).magnitudeSquared()
+		<= GameConstants::AIConfig::ViewSphereRadius * GameConstants::AIConfig::ViewSphereRadius;
 	if (!isPlayerInsideView) {
 		state_ = State::Idle;
 		playerInsideView_ = false;
@@ -95,7 +78,8 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 	const bool reachedTarget =
 		hasTarget_
 		&& currentPathPointIndex_ >= currentPathPoints_.size()
-		&& GetPlanarDistanceSquared(enemyPosition, currentTarget_) <= kArrivalThreshold * kArrivalThreshold;
+		&& GetPlanarDistanceSquared(enemyPosition, currentTarget_)
+			<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold;
 	if (reachedTarget) {
 		enemy_->StopPlanarMovement();
 	}
@@ -119,7 +103,7 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 				}
 			}
 
-			repathTimer_ = kRepathInterval;
+			repathTimer_ = GameConstants::AIConfig::RepathInterval;
 			UpdateMovement();
 			return;
 		}
@@ -130,7 +114,7 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 
 	if (state_ == State::Idle || !hasTarget_ || (state_ == State::Fleeing && repathTimer_ <= 0.0f)) {
 		EvaluateBehavior(sightPlayerEye);
-		repathTimer_ = kRepathInterval;
+		repathTimer_ = GameConstants::AIConfig::RepathInterval;
 	}
 
 	UpdateMovement();
@@ -144,9 +128,30 @@ void EnemyAIController::AppendDebugLines(std::vector<DebugLine>& out) const {
 	const physx::PxVec3 color = GetStateColor();
 	const physx::PxVec3 center = enemy_->GetPosition();
 
-	AppendCircle(out, center, physx::PxVec3(1.0f, 0.0f, 0.0f), physx::PxVec3(0.0f, 1.0f, 0.0f), kViewSphereRadius, color);
-	AppendCircle(out, center, physx::PxVec3(1.0f, 0.0f, 0.0f), physx::PxVec3(0.0f, 0.0f, 1.0f), kViewSphereRadius, color);
-	AppendCircle(out, center, physx::PxVec3(0.0f, 1.0f, 0.0f), physx::PxVec3(0.0f, 0.0f, 1.0f), kViewSphereRadius, color);
+	AppendCircle(
+		out,
+		center,
+		physx::PxVec3(1.0f, 0.0f, 0.0f),
+		physx::PxVec3(0.0f, 1.0f, 0.0f),
+		GameConstants::AIConfig::ViewSphereRadius,
+		color
+	);
+	AppendCircle(
+		out,
+		center,
+		physx::PxVec3(1.0f, 0.0f, 0.0f),
+		physx::PxVec3(0.0f, 0.0f, 1.0f),
+		GameConstants::AIConfig::ViewSphereRadius,
+		color
+	);
+	AppendCircle(
+		out,
+		center,
+		physx::PxVec3(0.0f, 1.0f, 0.0f),
+		physx::PxVec3(0.0f, 0.0f, 1.0f),
+		GameConstants::AIConfig::ViewSphereRadius,
+		color
+	);
 
 	if (!hasTarget_ || (state_ != State::SeekingCover && state_ != State::Fleeing)) {
 		return;
@@ -154,9 +159,21 @@ void EnemyAIController::AppendDebugLines(std::vector<DebugLine>& out) const {
 
 	const physx::PxVec3 activeTarget = GetActiveTarget();
 	out.push_back(DebugLine{ center, activeTarget, color });
-	out.push_back(DebugLine{ activeTarget + physx::PxVec3(-kDebugMarkerHalfSize, 0.0f, 0.0f), activeTarget + physx::PxVec3(kDebugMarkerHalfSize, 0.0f, 0.0f), color });
-	out.push_back(DebugLine{ activeTarget + physx::PxVec3(0.0f, -kDebugMarkerHalfSize, 0.0f), activeTarget + physx::PxVec3(0.0f, kDebugMarkerHalfSize, 0.0f), color });
-	out.push_back(DebugLine{ activeTarget + physx::PxVec3(0.0f, 0.0f, -kDebugMarkerHalfSize), activeTarget + physx::PxVec3(0.0f, 0.0f, kDebugMarkerHalfSize), color });
+	out.push_back(DebugLine{
+		activeTarget + physx::PxVec3(-GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
+		activeTarget + physx::PxVec3(GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
+		color
+	});
+	out.push_back(DebugLine{
+		activeTarget + physx::PxVec3(0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
+		activeTarget + physx::PxVec3(0.0f, GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
+		color
+	});
+	out.push_back(DebugLine{
+		activeTarget + physx::PxVec3(0.0f, 0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize),
+		activeTarget + physx::PxVec3(0.0f, 0.0f, GameConstants::AIConfig::DebugMarkerHalfSize),
+		color
+	});
 }
 
 const char* EnemyAIController::GetStateName() const {
@@ -175,9 +192,9 @@ const char* EnemyAIController::GetStateName() const {
 
 physx::PxVec3 EnemyAIController::ClampToArena(const physx::PxVec3& position) {
 	return physx::PxVec3(
-		std::clamp(position.x, kArenaClampMin, kArenaClampMax),
+		std::clamp(position.x, GameConstants::ArenaConfig::ClampMin, GameConstants::ArenaConfig::ClampMax),
 		position.y,
-		std::clamp(position.z, kArenaClampMin, kArenaClampMax)
+		std::clamp(position.z, GameConstants::ArenaConfig::ClampMin, GameConstants::ArenaConfig::ClampMax)
 	);
 }
 
@@ -190,7 +207,7 @@ float EnemyAIController::GetPlanarDistanceSquared(const physx::PxVec3& a, const 
 }
 
 bool EnemyAIController::AreCoverPointsEquivalent(const physx::PxVec3& a, const physx::PxVec3& b) {
-	return (a - b).magnitudeSquared() <= 1e-4f;
+	return (a - b).magnitudeSquared() <= GameConstants::AIConfig::CoverPointComparisonEpsilon;
 }
 
 void EnemyAIController::ClearTarget() {
@@ -282,8 +299,10 @@ bool EnemyAIController::BuildSequentialObstacleRoute(
 
 		physx::PxVec3 previousPoint = startPoint.position;
 		int currentPointIndex = startPoint.obstaclePointIndex;
-		for (int stepCount = 0; stepCount < kObstaclePointCount - 1; ++stepCount) {
-			currentPointIndex = (currentPointIndex + directionStep + kObstaclePointCount) % kObstaclePointCount;
+			for (int stepCount = 0; stepCount < GameConstants::ArenaConfig::CoverPointCountPerObstacle - 1; ++stepCount) {
+				currentPointIndex =
+					(currentPointIndex + directionStep + GameConstants::ArenaConfig::CoverPointCountPerObstacle)
+					% GameConstants::ArenaConfig::CoverPointCountPerObstacle;
 			const CoverPoint* nextPoint = findPointByIndex(currentPointIndex);
 			if (!nextPoint || !IsPathClear(previousPoint, nextPoint->position)) {
 				return false;
@@ -419,7 +438,8 @@ void EnemyAIController::EvaluateBehavior(const physx::PxVec3& playerEye, const p
 
 void EnemyAIController::AdvanceCurrentPath(const physx::PxVec3& enemyPosition) {
 	while (currentPathPointIndex_ < currentPathPoints_.size()
-		&& GetPlanarDistanceSquared(enemyPosition, currentPathPoints_[currentPathPointIndex_]) <= kArrivalThreshold * kArrivalThreshold) {
+		&& GetPlanarDistanceSquared(enemyPosition, currentPathPoints_[currentPathPointIndex_])
+			<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold) {
 		++currentPathPointIndex_;
 	}
 }
@@ -433,13 +453,13 @@ physx::PxVec3 EnemyAIController::GetActiveTarget() const {
 }
 
 physx::PxVec3 EnemyAIController::GetCoverProbePosition(const CoverPoint& coverPoint) const {
-	if (coverPoint.outwardNormal.magnitudeSquared() < 1e-4f) {
+	if (coverPoint.outwardNormal.magnitudeSquared() < GameConstants::AIConfig::DirectionEpsilon) {
 		return coverPoint.position;
 	}
 
 	// Check LOS against the body edge that should be tucked toward the obstacle,
 	// not just against the target point at the capsule center.
-	return coverPoint.position - coverPoint.outwardNormal.getNormalized() * kEnemyVisibilityProbeInset;
+	return coverPoint.position - coverPoint.outwardNormal.getNormalized() * GameConstants::AIConfig::VisibilityProbeInset;
 }
 
 physx::PxVec3 EnemyAIController::GetVisibilityProbePosition(const physx::PxVec3& position) const {
@@ -463,12 +483,13 @@ void EnemyAIController::UpdateMovement() {
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
 	physx::PxVec3 direction = MakePlanar(GetActiveTarget() - enemyPosition);
-	if (direction.magnitudeSquared() <= kArrivalThreshold * kArrivalThreshold) {
+	if (direction.magnitudeSquared()
+		<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold) {
 		enemy_->StopPlanarMovement();
 		return;
 	}
 
-	enemy_->SetPlanarVelocity(direction.getNormalized() * kMoveSpeed);
+	enemy_->SetPlanarVelocity(direction.getNormalized() * GameConstants::AIConfig::MoveSpeed);
 }
 
 bool EnemyAIController::FindBestCover(
@@ -481,7 +502,8 @@ bool EnemyAIController::FindBestCover(
 	}
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
-	const float maxDistanceSquared = kViewSphereRadius * kViewSphereRadius;
+	const float maxDistanceSquared =
+		GameConstants::AIConfig::ViewSphereRadius * GameConstants::AIConfig::ViewSphereRadius;
 	float bestEnemyDistanceSquared = std::numeric_limits<float>::max();
 	float bestPlayerDistanceSquared = -1.0f;
 	bool foundCover = false;
@@ -507,7 +529,8 @@ bool EnemyAIController::FindBestCover(
 		const float playerDistanceSquared = (playerEye - coverPoint.position).magnitudeSquared();
 		if (!foundCover
 			|| enemyDistanceSquared < bestEnemyDistanceSquared
-			|| (std::abs(enemyDistanceSquared - bestEnemyDistanceSquared) < 1e-4f && playerDistanceSquared > bestPlayerDistanceSquared)) {
+			|| (std::abs(enemyDistanceSquared - bestEnemyDistanceSquared) < GameConstants::AIConfig::CoverPointComparisonEpsilon
+				&& playerDistanceSquared > bestPlayerDistanceSquared)) {
 			bestEnemyDistanceSquared = enemyDistanceSquared;
 			bestPlayerDistanceSquared = playerDistanceSquared;
 			bestCover = coverPoint;
@@ -525,7 +548,7 @@ bool EnemyAIController::FindBestFleeTarget(const physx::PxVec3& playerEye, physx
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
 	physx::PxVec3 oppositeDirection = MakePlanar(enemyPosition - playerEye);
-	if (oppositeDirection.magnitudeSquared() < 1e-4f) {
+	if (oppositeDirection.magnitudeSquared() < GameConstants::AIConfig::DirectionEpsilon) {
 		oppositeDirection = physx::PxVec3(0.0f, 0.0f, 1.0f);
 	}
 	oppositeDirection = oppositeDirection.getNormalized();
@@ -535,16 +558,20 @@ bool EnemyAIController::FindBestFleeTarget(const physx::PxVec3& playerEye, physx
 	bool foundTarget = false;
 	float bestPlayerDistanceSquared = -1.0f;
 
-	for (int sampleIndex = 0; sampleIndex < 8; ++sampleIndex) {
-		const float angle = -physx::PxHalfPi + static_cast<float>(sampleIndex) * (physx::PxPi / 7.0f);
+	for (int sampleIndex = 0; sampleIndex < GameConstants::AIConfig::FleeSampleCount; ++sampleIndex) {
+		const float angle =
+			-physx::PxHalfPi
+			+ static_cast<float>(sampleIndex) * (physx::PxPi / static_cast<float>(GameConstants::AIConfig::FleeSampleCount - 1));
 		const physx::PxVec3 sampleDirection =
 			oppositeDirection * static_cast<float>(std::cos(angle))
 			+ rightDirection * static_cast<float>(std::sin(angle));
 
-		physx::PxVec3 candidate = enemyPosition + sampleDirection.getNormalized() * kFleeSampleRadius;
+		physx::PxVec3 candidate =
+			enemyPosition + sampleDirection.getNormalized() * GameConstants::AIConfig::FleeSampleRadius;
 		candidate = ClampToArena(candidate);
 
-		if (GetPlanarDistanceSquared(enemyPosition, candidate) <= kArrivalThreshold * kArrivalThreshold) {
+		if (GetPlanarDistanceSquared(enemyPosition, candidate)
+			<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold) {
 			continue;
 		}
 
@@ -566,30 +593,36 @@ bool EnemyAIController::FindBestFleeTarget(const physx::PxVec3& playerEye, physx
 bool EnemyAIController::IsPathClear(const physx::PxVec3& start, const physx::PxVec3& destination) const {
 	const physx::PxVec3 ray = destination - start;
 	const float distance = ray.magnitude();
-	if (distance < kRaycastEpsilon) {
+	if (distance < GameConstants::AIConfig::RaycastEpsilon) {
 		return true;
 	}
 
 	physx::PxRaycastHit hit;
-	return !RaycastIgnoringEnemy(start, ray.getNormalized(), distance - kRaycastEpsilon, hit);
+	return !RaycastIgnoringEnemy(start, ray.getNormalized(), distance - GameConstants::AIConfig::RaycastEpsilon, hit);
 }
 
 bool EnemyAIController::IsPositionHiddenFromPlayer(const physx::PxVec3& position, const physx::PxVec3& playerEye) const {
 	const physx::PxVec3 probePosition = GetVisibilityProbePosition(position);
 	const physx::PxVec3 ray = probePosition - playerEye;
 	const float distance = ray.magnitude();
-	if (distance < kRaycastEpsilon) {
+	if (distance < GameConstants::AIConfig::RaycastEpsilon) {
 		return false;
 	}
 
 	physx::PxRaycastHit hit;
-	return RaycastIgnoringEnemy(playerEye, ray.getNormalized(), distance - kRaycastEpsilon, hit);
+	return RaycastIgnoringEnemy(
+		playerEye,
+		ray.getNormalized(),
+		distance - GameConstants::AIConfig::RaycastEpsilon,
+		hit
+	);
 }
 
 bool EnemyAIController::IsCoverProtected(const CoverPoint& coverPoint, const physx::PxVec3& playerEye) const {
 	const physx::PxVec3 probePosition = GetCoverProbePosition(coverPoint);
 	const physx::PxVec3 planarToPlayer = MakePlanar(playerEye - probePosition);
-	if (planarToPlayer.magnitudeSquared() < kRaycastEpsilon * kRaycastEpsilon) {
+	if (planarToPlayer.magnitudeSquared()
+		< GameConstants::AIConfig::RaycastEpsilon * GameConstants::AIConfig::RaycastEpsilon) {
 		return false;
 	}
 
@@ -599,16 +632,21 @@ bool EnemyAIController::IsCoverProtected(const CoverPoint& coverPoint, const phy
 
 	const physx::PxVec3 ray = probePosition - playerEye;
 	const float distance = ray.magnitude();
-	if (distance < kRaycastEpsilon) {
+	if (distance < GameConstants::AIConfig::RaycastEpsilon) {
 		return false;
 	}
 
 	physx::PxRaycastHit hit;
-	if (!RaycastIgnoringEnemy(playerEye, ray.getNormalized(), distance - kRaycastEpsilon, hit)) {
+	if (!RaycastIgnoringEnemy(
+		playerEye,
+		ray.getNormalized(),
+		distance - GameConstants::AIConfig::RaycastEpsilon,
+		hit
+	)) {
 		return false;
 	}
 
-	return hit.distance < distance - kRaycastEpsilon;
+	return hit.distance < distance - GameConstants::AIConfig::RaycastEpsilon;
 }
 
 bool EnemyAIController::RaycastIgnoringEnemy(
@@ -617,7 +655,10 @@ bool EnemyAIController::RaycastIgnoringEnemy(
 	float maxDistance,
 	physx::PxRaycastHit& hit
 ) const {
-	if (!physicsEngine_ || !enemy_ || maxDistance <= 0.0f || direction.magnitudeSquared() < 1e-4f) {
+	if (!physicsEngine_
+		|| !enemy_
+		|| maxDistance <= 0.0f
+		|| direction.magnitudeSquared() < GameConstants::AIConfig::DirectionEpsilon) {
 		return false;
 	}
 
@@ -625,7 +666,9 @@ bool EnemyAIController::RaycastIgnoringEnemy(
 	float remainingDistance = maxDistance;
 	const physx::PxVec3 unitDirection = direction.getNormalized();
 
-	for (int passIndex = 0; passIndex < kMaxSelfHitPasses && remainingDistance > kRaycastEpsilon; ++passIndex) {
+	for (int passIndex = 0;
+		passIndex < GameConstants::AIConfig::MaxSelfHitPasses && remainingDistance > GameConstants::AIConfig::RaycastEpsilon;
+		++passIndex) {
 		physx::PxRaycastBuffer hitBuffer;
 		if (!physicsEngine_->Raycast(origin, unitDirection, remainingDistance, hitBuffer) || !hitBuffer.hasBlock) {
 			return false;
@@ -636,7 +679,7 @@ bool EnemyAIController::RaycastIgnoringEnemy(
 			return true;
 		}
 
-		const float advanceDistance = hitBuffer.block.distance + kRaycastEpsilon;
+		const float advanceDistance = hitBuffer.block.distance + GameConstants::AIConfig::RaycastEpsilon;
 		origin += unitDirection * advanceDistance;
 		remainingDistance -= advanceDistance;
 	}
@@ -652,9 +695,11 @@ void EnemyAIController::AppendCircle(
 	float radius,
 	const physx::PxVec3& color
 ) const {
-	for (int segmentIndex = 0; segmentIndex < kDebugCircleSegments; ++segmentIndex) {
-		const float angle0 = 2.0f * physx::PxPi * static_cast<float>(segmentIndex) / static_cast<float>(kDebugCircleSegments);
-		const float angle1 = 2.0f * physx::PxPi * static_cast<float>(segmentIndex + 1) / static_cast<float>(kDebugCircleSegments);
+	for (int segmentIndex = 0; segmentIndex < GameConstants::AIConfig::DebugCircleSegments; ++segmentIndex) {
+		const float angle0 =
+			2.0f * physx::PxPi * static_cast<float>(segmentIndex) / static_cast<float>(GameConstants::AIConfig::DebugCircleSegments);
+		const float angle1 =
+			2.0f * physx::PxPi * static_cast<float>(segmentIndex + 1) / static_cast<float>(GameConstants::AIConfig::DebugCircleSegments);
 
 		const physx::PxVec3 point0 =
 			center
@@ -672,11 +717,11 @@ void EnemyAIController::AppendCircle(
 physx::PxVec3 EnemyAIController::GetStateColor() const {
 	switch (state_) {
 	case State::SeekingCover:
-		return kSeekingCoverColor;
+		return GameConstants::AIConfig::SeekingCoverColor;
 	case State::Fleeing:
-		return kFleeingColor;
+		return GameConstants::AIConfig::FleeingColor;
 	case State::Idle:
 	default:
-		return kIdleColor;
+		return GameConstants::AIConfig::IdleColor;
 	}
 }
