@@ -397,6 +397,7 @@ bool EnemyAIController::BuildPathToCoverPoint(
 	routeLength = 0.0f;
 
 	if (IsPathClear(start, coverPoint.position)) {
+		routePoints.push_back(coverPoint.position);
 		routeLength = std::sqrt(GetPlanarDistanceSquared(start, coverPoint.position));
 		return true;
 	}
@@ -447,9 +448,8 @@ bool EnemyAIController::BuildPathToCoverPoint(
 					continue;
 				}
 
-				candidateRouteLength += std::sqrt(
-					GetPlanarDistanceSquared(corners[endCornerIndex], coverPoint.position)
-				);
+				candidateRouteLength += std::sqrt(GetPlanarDistanceSquared(corners[endCornerIndex], coverPoint.position));
+				candidateRoutePoints.push_back(coverPoint.position);
 				if (!foundRoute || candidateRouteLength < bestRouteLength) {
 					bestRouteLength = candidateRouteLength;
 					bestRoutePoints = std::move(candidateRoutePoints);
