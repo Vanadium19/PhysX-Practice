@@ -136,7 +136,7 @@ public:
 	};
 
 	struct AIConfig {
-		inline static constexpr bool Enabled = true;
+		inline static constexpr bool Enabled = false;
 		inline static constexpr float ViewSphereRadius = 14.0f;
 		inline static constexpr float MoveSpeed = 4.5f;
 		inline static constexpr float RepathInterval = 0.25f;
