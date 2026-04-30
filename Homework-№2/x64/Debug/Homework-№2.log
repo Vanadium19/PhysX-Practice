@@ -1139,11 +1139,11 @@ SnippetRender_static_64.lib(SnippetRender.obj) : warning LNK4099: PDB 'SnippetRe
 SnippetRender_static_64.lib(glew.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(glew.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
 SnippetRender_static_64.lib(SnippetFontRenderer.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetFontRenderer.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
   Homework-№2.vcxproj -> C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\Homework-№2.exe
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\freeglut.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\freeglutd.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\PhysXCommon_64.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\PhysXCooking_64.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\PhysXFoundation_64.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\PhysX_64.dll
-  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\debug\PVDRuntime_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\freeglut.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\freeglutd.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\PhysXCommon_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\PhysXCooking_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\PhysXFoundation_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\PhysX_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Debug\PVDRuntime_64.dll
   7 File(s) copied

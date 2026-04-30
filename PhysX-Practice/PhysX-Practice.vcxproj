@@ -24,7 +24,7 @@
     <ProjectGuid>{2086085f-24f4-4ebc-a5e4-8e2ad3816064}</ProjectGuid>
     <RootNamespace>PhysXPractice</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Homework-#1</ProjectName>
+    <ProjectName>Homework-№1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
