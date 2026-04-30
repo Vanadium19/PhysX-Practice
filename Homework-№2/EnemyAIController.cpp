@@ -1,6 +1,7 @@
 #include "EnemyAIController.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <limits>
 
@@ -53,6 +54,7 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
 	physx::PxVec3 alignedPlayerPosition = playerEye;
 	alignedPlayerPosition.y = enemyPosition.y;
+	AdvanceCurrentPath(enemyPosition);
 
 	const bool seesPlayer = CanSeePosition(
 		enemyPosition,
@@ -79,7 +81,7 @@ void EnemyAIController::Update(float elapsedTime, const physx::PxVec3& playerEye
 				currentCoverPoint_.position,
 				GameConstants::AIConfig::ViewSphereRadius
 			);
-		if (coverPointIsStillSafe && IsPathClear(enemyPosition, currentTarget_)) {
+		if (coverPointIsStillSafe) {
 			UpdateMovement();
 			return;
 		}
@@ -137,20 +139,20 @@ void EnemyAIController::AppendDebugLines(std::vector<DebugLine>& out) const {
 		return;
 	}
 
-	out.push_back(DebugLine{ center, currentTarget_, color });
+	out.push_back(DebugLine{ center, GetActiveTarget(), color });
 	out.push_back(DebugLine{
-		currentTarget_ + physx::PxVec3(-GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
-		currentTarget_ + physx::PxVec3(GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
+		GetActiveTarget() + physx::PxVec3(-GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
+		GetActiveTarget() + physx::PxVec3(GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f, 0.0f),
 		color
 	});
 	out.push_back(DebugLine{
-		currentTarget_ + physx::PxVec3(0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
-		currentTarget_ + physx::PxVec3(0.0f, GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
+		GetActiveTarget() + physx::PxVec3(0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
+		GetActiveTarget() + physx::PxVec3(0.0f, GameConstants::AIConfig::DebugMarkerHalfSize, 0.0f),
 		color
 	});
 	out.push_back(DebugLine{
-		currentTarget_ + physx::PxVec3(0.0f, 0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize),
-		currentTarget_ + physx::PxVec3(0.0f, 0.0f, GameConstants::AIConfig::DebugMarkerHalfSize),
+		GetActiveTarget() + physx::PxVec3(0.0f, 0.0f, -GameConstants::AIConfig::DebugMarkerHalfSize),
+		GetActiveTarget() + physx::PxVec3(0.0f, 0.0f, GameConstants::AIConfig::DebugMarkerHalfSize),
 		color
 	});
 }
@@ -190,16 +192,41 @@ void EnemyAIController::ClearTarget() {
 	hasCoverPoint_ = false;
 	currentCoverPoint_ = CoverPoint{};
 	currentTarget_ = physx::PxVec3(0.0f);
+	ClearCurrentPath();
+}
+
+void EnemyAIController::ClearCurrentPath() {
+	currentPathPoints_.clear();
+	currentPathPointIndex_ = 0;
+}
+
+void EnemyAIController::AdvanceCurrentPath(const physx::PxVec3& enemyPosition) {
+	while (currentPathPointIndex_ < currentPathPoints_.size()
+		&& GetPlanarDistanceSquared(enemyPosition, currentPathPoints_[currentPathPointIndex_])
+			<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold) {
+		++currentPathPointIndex_;
+	}
+}
+
+physx::PxVec3 EnemyAIController::GetActiveTarget() const {
+	if (currentPathPointIndex_ < currentPathPoints_.size()) {
+		return currentPathPoints_[currentPathPointIndex_];
+	}
+
+	return currentTarget_;
 }
 
 void EnemyAIController::SelectBehavior(const physx::PxVec3& enemyPosition, const physx::PxVec3& playerPosition) {
 	CoverPoint bestCover;
-	if (FindBestCoverPoint(enemyPosition, playerPosition, bestCover)) {
+	std::vector<physx::PxVec3> bestCoverRoute;
+	if (FindBestCoverPoint(enemyPosition, playerPosition, bestCover, bestCoverRoute)) {
 		state_ = State::SeekingCover;
 		hasTarget_ = true;
 		hasCoverPoint_ = true;
 		currentCoverPoint_ = bestCover;
 		currentTarget_ = bestCover.position;
+		currentPathPoints_ = std::move(bestCoverRoute);
+		currentPathPointIndex_ = 0;
 		return;
 	}
 
@@ -210,6 +237,7 @@ void EnemyAIController::SelectBehavior(const physx::PxVec3& enemyPosition, const
 		hasCoverPoint_ = false;
 		currentCoverPoint_ = CoverPoint{};
 		currentTarget_ = bestFleeTarget;
+		ClearCurrentPath();
 		return;
 	}
 
@@ -229,7 +257,7 @@ void EnemyAIController::UpdateMovement() {
 	}
 
 	const physx::PxVec3 enemyPosition = enemy_->GetPosition();
-	physx::PxVec3 direction = MakePlanar(currentTarget_ - enemyPosition);
+	physx::PxVec3 direction = MakePlanar(GetActiveTarget() - enemyPosition);
 	if (direction.magnitudeSquared()
 		<= GameConstants::AIConfig::ArrivalThreshold * GameConstants::AIConfig::ArrivalThreshold) {
 		enemy_->StopPlanarMovement();
@@ -242,7 +270,8 @@ void EnemyAIController::UpdateMovement() {
 bool EnemyAIController::FindBestCoverPoint(
 	const physx::PxVec3& enemyPosition,
 	const physx::PxVec3& playerPosition,
-	CoverPoint& bestCover
+	CoverPoint& bestCover,
+	std::vector<physx::PxVec3>& bestRoute
 ) const {
 	if (!coverPoints_) {
 		return false;
@@ -250,16 +279,12 @@ bool EnemyAIController::FindBestCoverPoint(
 
 	const float maxDistanceSquared =
 		GameConstants::AIConfig::ViewSphereRadius * GameConstants::AIConfig::ViewSphereRadius;
-	float bestDistanceSquared = std::numeric_limits<float>::max();
+	float bestRouteLength = std::numeric_limits<float>::max();
 	bool foundCover = false;
 
 	for (const CoverPoint& coverPoint : *coverPoints_) {
 		const float enemyDistanceSquared = GetPlanarDistanceSquared(enemyPosition, coverPoint.position);
 		if (enemyDistanceSquared > maxDistanceSquared) {
-			continue;
-		}
-
-		if (!IsPathClear(enemyPosition, coverPoint.position)) {
 			continue;
 		}
 
@@ -271,9 +296,16 @@ bool EnemyAIController::FindBestCoverPoint(
 			continue;
 		}
 
-		if (!foundCover || enemyDistanceSquared < bestDistanceSquared) {
-			bestDistanceSquared = enemyDistanceSquared;
+		std::vector<physx::PxVec3> routePoints;
+		float routeLength = 0.0f;
+		if (!BuildPathToCoverPoint(enemyPosition, coverPoint, routePoints, routeLength)) {
+			continue;
+		}
+
+		if (!foundCover || routeLength < bestRouteLength) {
+			bestRouteLength = routeLength;
 			bestCover = coverPoint;
+			bestRoute = std::move(routePoints);
 			foundCover = true;
 		}
 	}
@@ -353,6 +385,122 @@ bool EnemyAIController::FindBestFleeTarget(
 	}
 
 	return false;
+}
+
+bool EnemyAIController::BuildPathToCoverPoint(
+	const physx::PxVec3& start,
+	const CoverPoint& coverPoint,
+	std::vector<physx::PxVec3>& routePoints,
+	float& routeLength
+) const {
+	routePoints.clear();
+	routeLength = 0.0f;
+
+	if (IsPathClear(start, coverPoint.position)) {
+		routeLength = std::sqrt(GetPlanarDistanceSquared(start, coverPoint.position));
+		return true;
+	}
+
+	std::array<physx::PxVec3, 4> corners;
+	if (!GetObstacleRouteCorners(coverPoint.obstacle, corners)) {
+		return false;
+	}
+
+	bool foundRoute = false;
+	float bestRouteLength = std::numeric_limits<float>::max();
+	std::vector<physx::PxVec3> bestRoutePoints;
+
+	for (int startCornerIndex = 0; startCornerIndex < 4; ++startCornerIndex) {
+		if (!IsPathClear(start, corners[startCornerIndex])) {
+			continue;
+		}
+
+		for (int endCornerIndex = 0; endCornerIndex < 4; ++endCornerIndex) {
+			if (!IsPathClear(corners[endCornerIndex], coverPoint.position)) {
+				continue;
+			}
+
+			for (int directionStep : { 1, -1 }) {
+				std::vector<physx::PxVec3> candidateRoutePoints;
+				candidateRoutePoints.push_back(corners[startCornerIndex]);
+
+				float candidateRouteLength =
+					std::sqrt(GetPlanarDistanceSquared(start, corners[startCornerIndex]));
+				int currentCornerIndex = startCornerIndex;
+				bool validRoute = true;
+
+				for (int iteration = 0; iteration < 4 && currentCornerIndex != endCornerIndex; ++iteration) {
+					const int nextCornerIndex = (currentCornerIndex + directionStep + 4) % 4;
+					if (!IsPathClear(corners[currentCornerIndex], corners[nextCornerIndex])) {
+						validRoute = false;
+						break;
+					}
+
+					candidateRouteLength += std::sqrt(
+						GetPlanarDistanceSquared(corners[currentCornerIndex], corners[nextCornerIndex])
+					);
+					candidateRoutePoints.push_back(corners[nextCornerIndex]);
+					currentCornerIndex = nextCornerIndex;
+				}
+
+				if (!validRoute || currentCornerIndex != endCornerIndex) {
+					continue;
+				}
+
+				candidateRouteLength += std::sqrt(
+					GetPlanarDistanceSquared(corners[endCornerIndex], coverPoint.position)
+				);
+				if (!foundRoute || candidateRouteLength < bestRouteLength) {
+					bestRouteLength = candidateRouteLength;
+					bestRoutePoints = std::move(candidateRoutePoints);
+					foundRoute = true;
+				}
+			}
+		}
+	}
+
+	if (!foundRoute) {
+		return false;
+	}
+
+	routePoints = std::move(bestRoutePoints);
+	routeLength = bestRouteLength;
+	return true;
+}
+
+bool EnemyAIController::GetObstacleRouteCorners(
+	const physx::PxRigidActor* obstacle,
+	std::array<physx::PxVec3, 4>& corners
+) const {
+	if (!obstacle || obstacle->getNbShapes() == 0) {
+		return false;
+	}
+
+	physx::PxShape* shape = nullptr;
+	obstacle->getShapes(&shape, 1);
+	if (!shape) {
+		return false;
+	}
+
+	const physx::PxGeometryHolder geometry = shape->getGeometry();
+	if (geometry.getType() != physx::PxGeometryType::eBOX) {
+		return false;
+	}
+
+	const physx::PxBoxGeometry boxGeometry = geometry.box();
+	const physx::PxTransform obstaclePose = obstacle->getGlobalPose() * shape->getLocalPose();
+	const physx::PxVec3 axisX = obstaclePose.q.rotate(physx::PxVec3(1.0f, 0.0f, 0.0f));
+	const physx::PxVec3 axisZ = obstaclePose.q.rotate(physx::PxVec3(0.0f, 0.0f, 1.0f));
+	const float halfX = boxGeometry.halfExtents.x + GameConstants::ArenaConfig::CoverPointOffset;
+	const float halfZ = boxGeometry.halfExtents.z + GameConstants::ArenaConfig::CoverPointOffset;
+	physx::PxVec3 center = obstaclePose.p;
+	center.y = GameConstants::EnemyConfig::StandingHeight;
+
+	corners[0] = center + axisX * halfX + axisZ * halfZ;
+	corners[1] = center - axisX * halfX + axisZ * halfZ;
+	corners[2] = center - axisX * halfX - axisZ * halfZ;
+	corners[3] = center + axisX * halfX - axisZ * halfZ;
+	return true;
 }
 
 bool EnemyAIController::CanSeePosition(
