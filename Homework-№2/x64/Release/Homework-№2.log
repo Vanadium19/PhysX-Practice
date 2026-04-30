@@ -1,0 +1,945 @@
+﻿  Enemy.cpp
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxArray.h(563,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(467,76): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(490,74): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxHashInternals.h(369,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxMutex.h(112,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSortInternals.h(149,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSort.h(61,2): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxPool.h(201,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSList.h(93,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSync.h(94,80): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(204,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(213,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxBase.h(229,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxSerializer.h(192,86): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(280,99): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(293,79): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(321,107): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(336,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxBVH.h(259,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxConvexMesh.h(177,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxActor.h(376,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDParticleSystem.h(640,85): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxHeightField.h(233,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(295,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(312,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(328,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(89,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(202,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(297,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxAggregate.h(274,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationReducedCoordinate.h(1535,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationJointReducedCoordinate.h(544,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxShape.h(606,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidActor.h(231,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidBody.h(772,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationLink.h(201,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxConstraint.h(272,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxBaseMaterial.h(51,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxMaterial.h(365,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableBody.h(383,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurface.h(274,68): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableMaterial.h(126,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurfaceMaterial.h(112,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolume.h(657,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolumeMaterial.h(129,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDMaterial.h(312,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableAttachment.h(230,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableElementFilter.h(161,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidDynamic.h(469,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidStatic.h(63,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPruningStructure.h(120,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxJoint.h(359,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxDistanceJoint.h(255,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxFixedJoint.h(87,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxPrismaticJoint.h(165,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRevoluteJoint.h(256,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxSphericalJoint.h(171,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxD6Joint.h(583,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxGearJoint.h(118,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRackAndPinionJoint.h(133,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\vehicle2\PxVehicleComponentSequence.h(129,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Enemy.cpp')
+  
+  EnemyAIController.cpp
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxArray.h(563,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(467,76): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(490,74): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxHashInternals.h(369,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxMutex.h(112,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSortInternals.h(149,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSort.h(61,2): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxPool.h(201,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSList.h(93,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSync.h(94,80): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(204,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(213,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxBase.h(229,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxSerializer.h(192,86): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(280,99): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(293,79): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(321,107): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(336,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxBVH.h(259,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxConvexMesh.h(177,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxActor.h(376,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDParticleSystem.h(640,85): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxHeightField.h(233,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(295,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(312,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(328,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(89,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(202,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(297,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxAggregate.h(274,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationReducedCoordinate.h(1535,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationJointReducedCoordinate.h(544,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxShape.h(606,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidActor.h(231,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidBody.h(772,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationLink.h(201,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxConstraint.h(272,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxBaseMaterial.h(51,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxMaterial.h(365,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableBody.h(383,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurface.h(274,68): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableMaterial.h(126,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurfaceMaterial.h(112,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolume.h(657,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolumeMaterial.h(129,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDMaterial.h(312,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableAttachment.h(230,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableElementFilter.h(161,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidDynamic.h(469,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidStatic.h(63,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPruningStructure.h(120,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxJoint.h(359,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxDistanceJoint.h(255,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxFixedJoint.h(87,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxPrismaticJoint.h(165,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRevoluteJoint.h(256,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxSphericalJoint.h(171,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxD6Joint.h(583,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxGearJoint.h(118,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRackAndPinionJoint.h(133,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\vehicle2\PxVehicleComponentSequence.h(129,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'EnemyAIController.cpp')
+  
+  Grenade.cpp
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxArray.h(563,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(467,76): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(490,74): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxHashInternals.h(369,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxMutex.h(112,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSortInternals.h(149,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSort.h(61,2): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxPool.h(201,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSList.h(93,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSync.h(94,80): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(204,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(213,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxBase.h(229,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxSerializer.h(192,86): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(280,99): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(293,79): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(321,107): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(336,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxBVH.h(259,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxConvexMesh.h(177,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxActor.h(376,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDParticleSystem.h(640,85): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxHeightField.h(233,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(295,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(312,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(328,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(89,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(202,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(297,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxAggregate.h(274,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationReducedCoordinate.h(1535,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationJointReducedCoordinate.h(544,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxShape.h(606,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidActor.h(231,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidBody.h(772,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationLink.h(201,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxConstraint.h(272,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxBaseMaterial.h(51,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxMaterial.h(365,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableBody.h(383,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurface.h(274,68): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableMaterial.h(126,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurfaceMaterial.h(112,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolume.h(657,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolumeMaterial.h(129,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDMaterial.h(312,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableAttachment.h(230,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableElementFilter.h(161,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidDynamic.h(469,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidStatic.h(63,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPruningStructure.h(120,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxJoint.h(359,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxDistanceJoint.h(255,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxFixedJoint.h(87,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxPrismaticJoint.h(165,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRevoluteJoint.h(256,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxSphericalJoint.h(171,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxD6Joint.h(583,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxGearJoint.h(118,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRackAndPinionJoint.h(133,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\vehicle2\PxVehicleComponentSequence.h(129,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Grenade.cpp')
+  
+  Homework-№2.cpp
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxArray.h(563,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(467,76): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(490,74): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxHashInternals.h(369,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxMutex.h(112,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSortInternals.h(149,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSort.h(61,2): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxPool.h(201,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSList.h(93,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSync.h(94,80): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(204,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(213,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxBase.h(229,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxSerializer.h(192,86): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(280,99): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(293,79): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(321,107): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(336,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxBVH.h(259,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxConvexMesh.h(177,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxActor.h(376,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDParticleSystem.h(640,85): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxHeightField.h(233,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(295,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(312,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(328,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(89,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(202,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(297,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxAggregate.h(274,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationReducedCoordinate.h(1535,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationJointReducedCoordinate.h(544,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxShape.h(606,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidActor.h(231,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidBody.h(772,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationLink.h(201,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxConstraint.h(272,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxBaseMaterial.h(51,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxMaterial.h(365,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableBody.h(383,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurface.h(274,68): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableMaterial.h(126,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurfaceMaterial.h(112,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolume.h(657,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolumeMaterial.h(129,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDMaterial.h(312,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableAttachment.h(230,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableElementFilter.h(161,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidDynamic.h(469,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidStatic.h(63,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPruningStructure.h(120,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxJoint.h(359,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxDistanceJoint.h(255,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxFixedJoint.h(87,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxPrismaticJoint.h(165,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRevoluteJoint.h(256,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxSphericalJoint.h(171,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxD6Joint.h(583,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxGearJoint.h(118,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRackAndPinionJoint.h(133,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\vehicle2\PxVehicleComponentSequence.h(129,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'Homework-№2.cpp')
+  
+  ShooterGame.cpp
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxArray.h(563,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(467,76): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxBitMap.h(490,74): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxHashInternals.h(369,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxMutex.h(112,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSortInternals.h(149,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSort.h(61,2): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxPool.h(201,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSList.h(93,82): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxSync.h(94,80): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(204,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\foundation\PxThread.h(213,84): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxBase.h(229,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\common\PxSerializer.h(192,86): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(280,99): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(293,79): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(321,107): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\cudamanager\PxCudaContextManager.h(336,83): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxBVH.h(259,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxConvexMesh.h(177,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxActor.h(376,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDParticleSystem.h(640,85): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxHeightField.h(233,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(295,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(312,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTriangleMesh.h(328,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(89,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(202,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\geometry\PxTetrahedronMesh.h(297,55): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxAggregate.h(274,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationReducedCoordinate.h(1535,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationJointReducedCoordinate.h(544,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxShape.h(606,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidActor.h(231,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidBody.h(772,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxArticulationLink.h(201,57): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxConstraint.h(272,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxBaseMaterial.h(51,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxMaterial.h(365,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableBody.h(383,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurface.h(274,68): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableMaterial.h(126,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableSurfaceMaterial.h(112,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolume.h(657,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableVolumeMaterial.h(129,51): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPBDMaterial.h(312,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableAttachment.h(230,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxDeformableElementFilter.h(161,65): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidDynamic.h(469,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxRigidStatic.h(63,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\PxPruningStructure.h(120,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxJoint.h(359,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxDistanceJoint.h(255,54): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxFixedJoint.h(87,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxPrismaticJoint.h(165,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRevoluteJoint.h(256,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxSphericalJoint.h(171,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxD6Joint.h(583,53): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxGearJoint.h(118,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\extensions\PxRackAndPinionJoint.h(133,52): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+C:\Users\vanadium\Repos\PhysX-Practice\Homework-№2\lib\include\vehicle2\PxVehicleComponentSequence.h(129,61): warning C4566: character represented by universal-character-name '\u2116' cannot be represented in the current code page (1252)
+  (compiling source file 'ShooterGame.cpp')
+  
+  Generating code
+  75 of 1401 functions ( 5.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    10 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+PhysXExtensions_static_64.lib(ExtRigidBodyExt.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtRigidBodyExt.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtD6Joint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtD6Joint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtSimpleFactory.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtSimpleFactory.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtConvexCoreExt.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtConvexCoreExt.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetRender.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetRender.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetCamera.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetCamera.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(glew.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(glew.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetFontRenderer.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetFontRenderer.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\SnippetRender_static__64.pdb'; linking object as if no debug info
+  Homework-№2.vcxproj -> C:\Users\vanadium\Repos\PhysX-Practice\x64\Release\Homework-№2.exe
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\freeglut.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\PhysXCommon_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\PhysXCooking_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\PhysXFoundation_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\PhysX_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\Homework-?2\lib\bin\Release\PVDRuntime_64.dll
+  6 File(s) copied

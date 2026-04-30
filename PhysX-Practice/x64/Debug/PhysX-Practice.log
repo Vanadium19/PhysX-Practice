@@ -1,20 +1,57 @@
-﻿  BilliardsEventCallback.cpp
+﻿C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(538,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (PhysX-Practice.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  BilliardsEventCallback.cpp
   BilliardsGame.cpp
-C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(55,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
-C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(59,54): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
-C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(63,52): warning C4267: аргумент: преобразование из "size_t" в "const physx::PxU32"; возможна потеря данных
-C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36): warning C4477: "snprintf": в строке форматирования "%d" требуется аргумент типа "int", но вариативный аргумент "1" имеет тип "unsigned __int64"
-      C:\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36):
-      рекомендуется использовать "%zd" в строке форматирования
+C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(55,52): warning C4267: 'argument': conversion from 'size_t' to 'const physx::PxU32', possible loss of data
+C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(59,54): warning C4267: 'argument': conversion from 'size_t' to 'const physx::PxU32', possible loss of data
+C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(63,52): warning C4267: 'argument': conversion from 'size_t' to 'const physx::PxU32', possible loss of data
+C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36): warning C4477: 'snprintf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'unsigned __int64'
+      C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\BilliardsGame.cpp(339,36):
+      consider using '%zd' in the format string
   
+  PhysicsEngine.cpp
   PhysX-Practice.cpp
-  Создание кода...
-  PhysX-Practice.vcxproj -> C:\Repos\PhysX-Practice\x64\Debug\PhysX-Practice.exe
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\freeglut.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\freeglutd.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXCommon_64.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXCooking_64.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXFoundation_64.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysX_64.dll
-  C:\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PVDRuntime_64.dll
-  Скопировано файлов: 7.
+  Generating Code...
+PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtRigidBodyExt.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtRigidBodyExt.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtSimpleFactory.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtSimpleFactory.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtExtensions.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtExtensions.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtConvexCoreExt.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtConvexCoreExt.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(PxExtensionAutoGeneratedMetaDataObjects.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(PxExtensionAutoGeneratedMetaDataObjects.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtPvd.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtPvd.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(OmniPvdPxExtensionsSampler.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(OmniPvdPxExtensionsSampler.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtDistanceJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtDistanceJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtD6Joint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtD6Joint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtFixedJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtFixedJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtPrismaticJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtPrismaticJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtRevoluteJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtRevoluteJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtSphericalJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtSphericalJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtGearJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtGearJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtRackAndPinionJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtRackAndPinionJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(SnRepXCoreSerializer.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(SnRepXCoreSerializer.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(SnJointRepXSerializer.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(SnJointRepXSerializer.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtOmniPvdRegistrationData.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtOmniPvdRegistrationData.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXExtensions_static_64.lib(ExtJoint.obj) : warning LNK4099: PDB 'PhysXExtensions_static_64.pdb' was not found with 'PhysXExtensions_static_64.lib(ExtJoint.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXExtensions_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvd.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvd.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdDefaultSocketTransport.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdDefaultSocketTransport.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdDataStream.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdDataStream.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdImpl.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdImpl.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdObjectModelMetaData.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdObjectModelMetaData.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: PDB 'PhysXPvdSDK_static_64.pdb' was not found with 'PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\PhysXPvdSDK_static_64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetRender.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetRender.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetCamera.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetCamera.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(glew.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(glew.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
+SnippetRender_static_64.lib(SnippetFontRenderer.obj) : warning LNK4099: PDB 'SnippetRender_static__64.pdb' was not found with 'SnippetRender_static_64.lib(SnippetFontRenderer.obj)' or at 'C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\SnippetRender_static__64.pdb'; linking object as if no debug info
+  PhysX-Practice.vcxproj -> C:\Users\vanadium\Repos\PhysX-Practice\x64\Debug\Homework-#1.exe
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\freeglut.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\freeglutd.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXCommon_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXCooking_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysXFoundation_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PhysX_64.dll
+  C:\Users\vanadium\Repos\PhysX-Practice\PhysX-Practice\lib\bin\debug\PVDRuntime_64.dll
+  7 File(s) copied
