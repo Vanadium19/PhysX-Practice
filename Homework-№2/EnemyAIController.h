@@ -61,6 +61,11 @@ private:
 		float& routeLength
 	) const;
 	bool GetObstacleRouteCorners(const physx::PxRigidActor* obstacle, std::array<physx::PxVec3, 4>& corners) const;
+	bool DoesPathCrossObstacleFootprint(
+		const physx::PxVec3& start,
+		const physx::PxVec3& destination,
+		const physx::PxRigidActor* obstacle
+	) const;
 	bool CanSeePosition(const physx::PxVec3& observerPosition, const physx::PxVec3& targetPosition, float viewRadius) const;
 	bool IsPathClear(const physx::PxVec3& start, const physx::PxVec3& destination) const;
 	bool RaycastIgnoringEnemy(const physx::PxVec3& start, const physx::PxVec3& direction, float maxDistance, physx::PxRaycastHit& hit) const;

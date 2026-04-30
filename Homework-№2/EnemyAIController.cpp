@@ -396,7 +396,8 @@ bool EnemyAIController::BuildPathToCoverPoint(
 	routePoints.clear();
 	routeLength = 0.0f;
 
-	if (IsPathClear(start, coverPoint.position)) {
+	if (!DoesPathCrossObstacleFootprint(start, coverPoint.position, coverPoint.obstacle)
+		&& IsPathClear(start, coverPoint.position)) {
 		routePoints.push_back(coverPoint.position);
 		routeLength = std::sqrt(GetPlanarDistanceSquared(start, coverPoint.position));
 		return true;
@@ -501,6 +502,66 @@ bool EnemyAIController::GetObstacleRouteCorners(
 	corners[2] = center - axisX * halfX - axisZ * halfZ;
 	corners[3] = center + axisX * halfX - axisZ * halfZ;
 	return true;
+}
+
+bool EnemyAIController::DoesPathCrossObstacleFootprint(
+	const physx::PxVec3& start,
+	const physx::PxVec3& destination,
+	const physx::PxRigidActor* obstacle
+) const {
+	if (!obstacle || obstacle->getNbShapes() == 0) {
+		return false;
+	}
+
+	physx::PxShape* shape = nullptr;
+	obstacle->getShapes(&shape, 1);
+	if (!shape) {
+		return false;
+	}
+
+	const physx::PxGeometryHolder geometry = shape->getGeometry();
+	if (geometry.getType() != physx::PxGeometryType::eBOX) {
+		return false;
+	}
+
+	const physx::PxBoxGeometry boxGeometry = geometry.box();
+	const physx::PxTransform obstaclePose = obstacle->getGlobalPose() * shape->getLocalPose();
+	const physx::PxTransform inversePose = obstaclePose.getInverse();
+	const physx::PxVec3 localStart = inversePose.transform(start);
+	const physx::PxVec3 localDestination = inversePose.transform(destination);
+	const float expandedHalfX = boxGeometry.halfExtents.x + GameConstants::EnemyConfig::Radius;
+	const float expandedHalfZ = boxGeometry.halfExtents.z + GameConstants::EnemyConfig::Radius;
+
+	const auto clipAxis = [](float startValue, float deltaValue, float minValue, float maxValue, float& enter, float& exit) {
+		if (std::fabs(deltaValue) < GameConstants::AIConfig::DirectionEpsilon) {
+			return startValue >= minValue && startValue <= maxValue;
+		}
+
+		const float inverseDelta = 1.0f / deltaValue;
+		float axisEnter = (minValue - startValue) * inverseDelta;
+		float axisExit = (maxValue - startValue) * inverseDelta;
+		if (axisEnter > axisExit) {
+			std::swap(axisEnter, axisExit);
+		}
+
+		enter = std::max(enter, axisEnter);
+		exit = std::min(exit, axisExit);
+		return enter <= exit;
+	};
+
+	float enter = 0.0f;
+	float exit = 1.0f;
+	const float deltaX = localDestination.x - localStart.x;
+	const float deltaZ = localDestination.z - localStart.z;
+	if (!clipAxis(localStart.x, deltaX, -expandedHalfX, expandedHalfX, enter, exit)) {
+		return false;
+	}
+
+	if (!clipAxis(localStart.z, deltaZ, -expandedHalfZ, expandedHalfZ, enter, exit)) {
+		return false;
+	}
+
+	return exit > 0.0f && enter < 1.0f;
 }
 
 bool EnemyAIController::CanSeePosition(
