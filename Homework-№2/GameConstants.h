@@ -110,7 +110,7 @@ public:
 
 	struct ArenaConfig {
 		inline static constexpr float CoverPointOffset = 0.80f;
-		inline static constexpr int CoverPointCountPerObstacle = 8;
+		inline static constexpr int CoverPointCountPerObstacle = 2;
 		inline static constexpr int BoundaryObstacleCount = 4;
 		inline static constexpr int CoverObstacleCount = 5;
 		inline static constexpr float ClampMin = -16.0f;
@@ -145,8 +145,6 @@ public:
 		inline static constexpr int FleeSampleCount = 8;
 		inline static constexpr float RaycastEpsilon = 0.05f;
 		inline static constexpr float DebugMarkerHalfSize = 0.25f;
-		inline static constexpr float VisibilityProbeInset = 0.45f;
-		inline static constexpr float CoverPointComparisonEpsilon = 1e-4f;
 		inline static constexpr float DirectionEpsilon = 1e-4f;
 		inline static constexpr int DebugCircleSegments = 24;
 		inline static constexpr int MaxSelfHitPasses = 8;

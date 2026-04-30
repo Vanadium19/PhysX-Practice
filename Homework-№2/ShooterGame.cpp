@@ -206,40 +206,20 @@ void ShooterGame::AddCoverPointsForBox(
 	const float halfX = size.x * 0.5f;
 	const float halfZ = size.z * 0.5f;
 
-	const auto addPoint = [&](const physx::PxVec3& pointOffset, const physx::PxVec3& outwardNormal, int obstaclePointIndex) {
+	const auto addPoint = [&](const physx::PxVec3& pointOffset) {
 		physx::PxVec3 point = position + pointOffset;
 		point.y = GameConstants::EnemyConfig::StandingHeight;
-		coverPoints_.push_back(CoverPoint{ point, outwardNormal.getNormalized(), obstacle, obstaclePointIndex });
+		coverPoints_.push_back(CoverPoint{ point, obstacle });
 	};
 
-	addPoint(axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset), axisX, 0);
-	addPoint(
-		axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset)
-			+ axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset),
-		axisX + axisZ,
-		1
-	);
-	addPoint(axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset), axisZ, 2);
-	addPoint(
-		-axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset)
-			+ axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset),
-		-axisX + axisZ,
-		3
-	);
-	addPoint(-axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset), -axisX, 4);
-	addPoint(
-		-axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset)
-			- axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset),
-		-axisX - axisZ,
-		5
-	);
-	addPoint(-axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset), -axisZ, 6);
-	addPoint(
-		axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset)
-			- axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset),
-		axisX - axisZ,
-		7
-	);
+	if (size.x >= size.z) {
+		addPoint(axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset));
+		addPoint(-axisZ * (halfZ + GameConstants::ArenaConfig::CoverPointOffset));
+		return;
+	}
+
+	addPoint(axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset));
+	addPoint(-axisX * (halfX + GameConstants::ArenaConfig::CoverPointOffset));
 }
 
 void ShooterGame::ReleaseActors(std::vector<physx::PxRigidActor*>& actors) {
