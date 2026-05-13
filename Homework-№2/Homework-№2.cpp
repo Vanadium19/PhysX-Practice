@@ -5,22 +5,30 @@
 #include "snippetrender/SnippetCamera.h"
 #include "snippetrender/SnippetRender.h"
 
+/// Глобальный экземпляр физического движка, живущий в течение всей программы.
 PhysicsEngine* physicsEngine_ = nullptr;
+
+/// Камера игрока, используемая как для рендера, так и для логики AI.
 Snippets::Camera* camera_ = nullptr;
+
+/// Основной игровой объект, управляющий сценой.
 ShooterGame* game_ = nullptr;
 
+/// Callback обработки нажатия игровых клавиш.
 void keyPressedCallback(unsigned char key, const physx::PxTransform& cameraTransform) {
 	if (game_) {
 		game_->HandleKey(key, cameraTransform);
 	}
 }
 
+/// Callback отрисовки одного кадра.
 void renderCallback() {
 	if (game_) {
 		game_->RenderFrame();
 	}
 }
 
+/// Callback корректного завершения приложения и освобождения ресурсов.
 void exitCallback() {
 	delete game_;
 	game_ = nullptr;
@@ -32,6 +40,10 @@ void exitCallback() {
 	physicsEngine_ = nullptr;
 }
 
+/// Точка входа приложения.
+///
+/// Создаёт камеру, окно, физический движок и игровой объект,
+/// после чего передаёт управление в главный цикл `GLUT`.
 int main() {
 	camera_ = new Snippets::Camera(
 		GameConstants::AppConfig::CameraPosition,
