@@ -24,12 +24,15 @@ private:
 	void Initialize();
 	void CreateWorld();
 	void CreateBanner(physx::PxMaterial *defaultMaterial, const physx::PxVec3 &groundNormal);
+	void CreateSideFlag(physx::PxMaterial *defaultMaterial, const physx::PxVec3 &groundNormal);
 	void CreateAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *defaultMaterial);
+	void CreateSideFlagAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *defaultMaterial);
 	void RenderActors();
 	void RenderCloths();
 	void UpdateWind();
 
 	ClothMesh CreateFlagMesh() const;
+	ClothMesh CreateSideFlagMesh() const;
 	physx::PxVec3 CalculateWindVelocity() const;
 	uint32_t GetFlagIndex(uint32_t row, uint32_t column) const;
 

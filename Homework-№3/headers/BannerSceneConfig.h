@@ -56,6 +56,8 @@ constexpr uint32_t TriangleIndicesPerCell = 6;
 constexpr uint32_t TopPinnedRow = 0;
 constexpr uint32_t LeftPinnedColumn = 0;
 constexpr uint32_t GridNeighborOffset = 1;
+constexpr uint32_t BottomPinnedRow = FlagRows - GridNeighborOffset;
+constexpr uint32_t RightPinnedColumn = FlagColumns - GridNeighborOffset;
 
 // Размеры баннера и его положение в мировых координатах.
 constexpr float FlagWidth = 8.0f;
@@ -65,6 +67,13 @@ constexpr float FlagZ = 0.0f;
 
 // Доля высоты с прямыми боковыми краями; ниже начинается V-образный край.
 constexpr float FlagStraightSideHeightRatio = 0.72f;
+
+// Размеры и положение второго прямоугольного флага с креплением на правой стороне.
+constexpr float SideFlagWidth = 7.0f;
+constexpr float SideFlagHeight = 2.4f;
+constexpr float SideFlagRightX = 8.0f;
+constexpr float SideFlagTopY = 5.2f;
+constexpr float SideFlagZ = -2.8f;
 
 // Обратные массы NvCloth: ноль закрепляет частицу, единица оставляет её свободной.
 constexpr float PinnedParticleInvMass = 0.0f;
