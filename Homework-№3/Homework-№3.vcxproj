@@ -88,11 +88,14 @@ xcopy /y "$(SolutionDir)libs\NvCloth\bin\NvClothDEBUG_x64.dll" "$(OutDir)" 2&gt;
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\BannerScene.cpp" />
     <ClCompile Include="source\Cloth.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\PhysicsEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\BannerScene.h" />
+    <ClInclude Include="headers\BannerSceneConfig.h" />
     <ClInclude Include="headers\Cloth.h" />
     <ClInclude Include="headers\PhysicsEngine.h" />
   </ItemGroup>

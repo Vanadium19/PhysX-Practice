@@ -17,7 +17,7 @@ void CustomEventCallback::onContact(const physx::PxContactPairHeader &pairHeader
 		uint32_t contactsCount = pair.extractContacts(contacts, 8);
 		for (int j = 0; j < contactsCount; j++) {
 			physx::PxContactPairPoint &contact = contacts[j];
-			std::cout << "Projectile hit at position (" << contact.position.x << ", " << contact.position.y << ", " << contact.position.z << ")\n";
+			std::cout << "Contact at position (" << contact.position.x << ", " << contact.position.y << ", " << contact.position.z << ")\n";
 		}
 	}
 	physicsEngine->MarkActor(pairHeader.actors[0]);
