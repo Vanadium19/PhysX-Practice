@@ -196,14 +196,20 @@ BannerScene::ClothMesh BannerScene::CreateFlagMesh() const {
 
 	for (uint32_t row = 0; row < BannerSceneConfig::FlagRows; row++) {
 		for (uint32_t column = 0; column < BannerSceneConfig::FlagColumns; column++) {
-			const float x = -BannerSceneConfig::FlagWidth * BannerSceneConfig::Half
-				+ BannerSceneConfig::FlagWidth
-				* static_cast<float>(column)
-				/ static_cast<float>(BannerSceneConfig::FlagColumns - BannerSceneConfig::GridNeighborOffset);
-			const float y = BannerSceneConfig::FlagTopY
-				- BannerSceneConfig::FlagHeight
-				* static_cast<float>(row)
+			const float rowRatio = static_cast<float>(row)
 				/ static_cast<float>(BannerSceneConfig::FlagRows - BannerSceneConfig::GridNeighborOffset);
+			const float columnRatio = static_cast<float>(column)
+				/ static_cast<float>(BannerSceneConfig::FlagColumns - BannerSceneConfig::GridNeighborOffset);
+			const float centeredColumnRatio = columnRatio - BannerSceneConfig::Half;
+			const float straightSideHeight = BannerSceneConfig::FlagHeight * BannerSceneConfig::FlagStraightSideHeightRatio;
+			const float pointDepth = BannerSceneConfig::FlagHeight
+				* (BannerSceneConfig::One - BannerSceneConfig::FlagStraightSideHeightRatio);
+			const float pointInfluence = BannerSceneConfig::One
+				- std::fabs(centeredColumnRatio) / BannerSceneConfig::Half;
+			const float x = -BannerSceneConfig::FlagWidth * BannerSceneConfig::Half
+				+ BannerSceneConfig::FlagWidth * columnRatio;
+			const float y = BannerSceneConfig::FlagTopY
+				- (straightSideHeight + pointDepth * pointInfluence) * rowRatio;
 			const bool isPinnedCorner = row == BannerSceneConfig::TopPinnedRow
 				&& (
 					column == BannerSceneConfig::LeftPinnedColumn

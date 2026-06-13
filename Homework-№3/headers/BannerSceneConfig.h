@@ -63,9 +63,15 @@ constexpr float FlagHeight = 4.5f;
 constexpr float FlagTopY = 6.0f;
 constexpr float FlagZ = 0.0f;
 
+// Доля высоты с прямыми боковыми краями; ниже начинается V-образный край.
+constexpr float FlagStraightSideHeightRatio = 0.72f;
+
 // Обратные массы NvCloth: ноль закрепляет частицу, единица оставляет её свободной.
 constexpr float PinnedParticleInvMass = 0.0f;
 constexpr float FreeParticleInvMass = 1.0f;
+
+// Единичный множитель для нормализованных координат формы.
+constexpr float One = 1.0f;
 
 // Множитель половины ширины, чтобы центрировать баннер вокруг X = 0.
 constexpr float Half = 0.5f;
