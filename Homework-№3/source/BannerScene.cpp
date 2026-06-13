@@ -196,14 +196,25 @@ BannerScene::ClothMesh BannerScene::CreateFlagMesh() const {
 
 	for (uint32_t row = 0; row < BannerSceneConfig::FlagRows; row++) {
 		for (uint32_t column = 0; column < BannerSceneConfig::FlagColumns; column++) {
-			const float x = -BannerSceneConfig::FlagWidth * BannerSceneConfig::Half
-				+ BannerSceneConfig::FlagWidth
-				* static_cast<float>(column)
-				/ static_cast<float>(BannerSceneConfig::FlagColumns - BannerSceneConfig::GridNeighborOffset);
-			const float y = BannerSceneConfig::FlagTopY
-				- BannerSceneConfig::FlagHeight
-				* static_cast<float>(row)
+			const float rowRatio = static_cast<float>(row)
 				/ static_cast<float>(BannerSceneConfig::FlagRows - BannerSceneConfig::GridNeighborOffset);
+			const float columnRatio = static_cast<float>(column)
+				/ static_cast<float>(BannerSceneConfig::FlagColumns - BannerSceneConfig::GridNeighborOffset);
+			const float centeredColumnRatio = columnRatio - BannerSceneConfig::Half;
+			const float rowWidth = BannerSceneConfig::FlagWidth
+				* (
+					BannerSceneConfig::One
+					- (BannerSceneConfig::One - BannerSceneConfig::BottomWidthScale) * rowRatio
+				);
+			const float bottomCurve = BannerSceneConfig::BottomCurveDepth
+				* rowRatio
+				* rowRatio
+				* (
+					BannerSceneConfig::One
+					- BannerSceneConfig::BottomCurveParabolaScale * centeredColumnRatio * centeredColumnRatio
+				);
+			const float x = -rowWidth * BannerSceneConfig::Half + rowWidth * columnRatio;
+			const float y = BannerSceneConfig::FlagTopY - BannerSceneConfig::FlagHeight * rowRatio - bottomCurve;
 			const bool isPinnedCorner = row == BannerSceneConfig::TopPinnedRow
 				&& (
 					column == BannerSceneConfig::LeftPinnedColumn
