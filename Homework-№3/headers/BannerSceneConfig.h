@@ -63,17 +63,9 @@ constexpr float FlagHeight = 4.5f;
 constexpr float FlagTopY = 6.0f;
 constexpr float FlagZ = 0.0f;
 
-// Форма баннера: нижний край уже верхнего, а центр нижней кромки опущен дугой.
-constexpr float BottomWidthScale = 0.82f;
-constexpr float BottomCurveDepth = 0.65f;
-constexpr float BottomCurveParabolaScale = 4.0f;
-
 // Обратные массы NvCloth: ноль закрепляет частицу, единица оставляет её свободной.
 constexpr float PinnedParticleInvMass = 0.0f;
 constexpr float FreeParticleInvMass = 1.0f;
-
-// Единичный множитель для нормализованных координат формы.
-constexpr float One = 1.0f;
 
 // Множитель половины ширины, чтобы центрировать баннер вокруг X = 0.
 constexpr float Half = 0.5f;
