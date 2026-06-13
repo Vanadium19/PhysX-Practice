@@ -5,6 +5,9 @@
 #include "NvCloth/Cloth.h"
 #include "NvClothExt/ClothFabricCooker.h"
 
+// Шпаргалка: класс Cloth является простой обёрткой над NvCloth.
+// Он принимает вершины, треугольники и обратные массы, готовит fabric
+// и создаёт объект nv::cloth::Cloth для дальнейшей симуляции и рендера.
 class Cloth {
 public:
 	Cloth(std::vector<physx::PxVec3> points, std::vector<uint32_t> triangles, std::vector<float> invMasses);
