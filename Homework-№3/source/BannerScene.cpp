@@ -9,14 +9,17 @@ PhysicsEngine *physicsEngine = nullptr;
 namespace {
 BannerScene *activeScene = nullptr;
 
+// Шпаргалка: пустой callback клавиатуры, потому что управление с клавиатуры по ТЗ не требуется.
 void OnKeyPressed(unsigned char, const physx::PxTransform &) {}
 
+// Шпаргалка: GLUT вызывает этот callback каждый кадр, а он перенаправляет рендер в активную сцену.
 void OnRender() {
 	if (activeScene) {
 		activeScene->Render();
 	}
 }
 
+// Шпаргалка: callback выхода освобождает ресурсы сцены перед закрытием окна.
 void OnExit() {
 	if (activeScene) {
 		activeScene->Shutdown();
@@ -24,21 +27,25 @@ void OnExit() {
 }
 }
 
+// Шпаргалка: конструктор задаёт безопасное начальное состояние до явной инициализации.
 BannerScene::BannerScene()
 	: engine(nullptr),
 	camera(nullptr),
 	frameCounter(BannerSceneConfig::InitialFrameCounter) {
 }
 
+// Шпаргалка: деструктор гарантирует освобождение камеры, физического движка и NvCloth-объектов.
 BannerScene::~BannerScene() {
 	Shutdown();
 }
 
+// Шпаргалка: запускает сцену, настраивает всё необходимое и входит в главный цикл GLUT.
 void BannerScene::Run() {
 	Initialize();
 	glutMainLoop();
 }
 
+// Шпаргалка: создаёт камеру, физический движок, callbacks и наполняет сцену объектами.
 void BannerScene::Initialize() {
 	if (engine || camera) {
 		return;
@@ -67,6 +74,7 @@ void BannerScene::Initialize() {
 	CreateWorld();
 }
 
+// Шпаргалка: освобождает ресурсы сцены и сбрасывает глобальный указатель, который нужен Cloth.
 void BannerScene::Shutdown() {
 	if (activeScene == this) {
 		activeScene = nullptr;
@@ -80,6 +88,7 @@ void BannerScene::Shutdown() {
 	physicsEngine = nullptr;
 }
 
+// Шпаргалка: создаёт общий материал, плоскость пола и оба cloth-флага на сцене.
 void BannerScene::CreateWorld() {
 	physx::PxMaterial *defaultMaterial = engine->CreateMaterial(
 		BannerSceneConfig::DefaultStaticFriction,
@@ -97,6 +106,7 @@ void BannerScene::CreateWorld() {
 	CreateSideFlag(defaultMaterial, groundNormal);
 }
 
+// Шпаргалка: создаёт первый V-образный баннер, его маркеры крепления и объект NvCloth.
 void BannerScene::CreateBanner(physx::PxMaterial *defaultMaterial, const physx::PxVec3 &groundNormal) {
 	ClothMesh mesh = CreateFlagMesh();
 	CreateAnchorMarkers(mesh, defaultMaterial);
@@ -117,6 +127,7 @@ void BannerScene::CreateBanner(physx::PxMaterial *defaultMaterial, const physx::
 	engine->AddCloth(cloth);
 }
 
+// Шпаргалка: создаёт второй прямоугольный флаг с закреплением в двух правых боковых точках.
 void BannerScene::CreateSideFlag(physx::PxMaterial *defaultMaterial, const physx::PxVec3 &groundNormal) {
 	ClothMesh mesh = CreateSideFlagMesh();
 	CreateSideFlagAnchorMarkers(mesh, defaultMaterial);
@@ -137,6 +148,7 @@ void BannerScene::CreateSideFlag(physx::PxMaterial *defaultMaterial, const physx
 	engine->AddCloth(cloth);
 }
 
+// Шпаргалка: добавляет видимые маркеры в две верхние закреплённые точки первого баннера.
 void BannerScene::CreateAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *defaultMaterial) {
 	const physx::PxVec3 anchorMarkerSize(
 		BannerSceneConfig::AnchorMarkerSizeX,
@@ -161,6 +173,7 @@ void BannerScene::CreateAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *
 	);
 }
 
+// Шпаргалка: добавляет маркеры в верхнюю и нижнюю правые точки крепления второго флага.
 void BannerScene::CreateSideFlagAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *defaultMaterial) {
 	const physx::PxVec3 anchorMarkerSize(
 		BannerSceneConfig::AnchorMarkerSizeX,
@@ -182,6 +195,7 @@ void BannerScene::CreateSideFlagAnchorMarkers(const ClothMesh &mesh, physx::PxMa
 	);
 }
 
+// Шпаргалка: основной кадр — обновляет ветер, шагает симуляцию и рисует акторы с тканями.
 void BannerScene::Render() {
 	UpdateWind();
 	engine->Simulate(BannerSceneConfig::SimulationStepSeconds);
@@ -194,6 +208,7 @@ void BannerScene::Render() {
 	frameCounter++;
 }
 
+// Шпаргалка: применяет рассчитанную скорость ветра ко всем cloth-объектам сцены.
 void BannerScene::UpdateWind() {
 	const physx::PxVec3 windVelocity = CalculateWindVelocity();
 	for (Cloth *cloth : engine->GetCloths()) {
@@ -201,6 +216,7 @@ void BannerScene::UpdateWind() {
 	}
 }
 
+// Шпаргалка: рисует обычные PhysX-акторы — пол и визуальные маркеры крепления.
 void BannerScene::RenderActors() {
 	std::vector<physx::PxRigidActor *> actors = engine->GetActors();
 	if (!actors.empty()) {
@@ -208,6 +224,7 @@ void BannerScene::RenderActors() {
 	}
 }
 
+// Шпаргалка: рисует ткани по текущим позициям частиц и индексам треугольников.
 void BannerScene::RenderCloths() {
 	const physx::PxVec3 color(
 		BannerSceneConfig::ClothColorR,
@@ -226,6 +243,7 @@ void BannerScene::RenderCloths() {
 	}
 }
 
+// Шпаргалка: генерирует первый меш 12x8; закреплены только два верхних угла, низ имеет V-форму.
 BannerScene::ClothMesh BannerScene::CreateFlagMesh() const {
 	ClothMesh mesh;
 	mesh.points.reserve(BannerSceneConfig::FlagColumns * BannerSceneConfig::FlagRows);
@@ -290,6 +308,7 @@ BannerScene::ClothMesh BannerScene::CreateFlagMesh() const {
 	return mesh;
 }
 
+// Шпаргалка: генерирует второй прямоугольный меш 12x8; закреплены две правые боковые точки.
 BannerScene::ClothMesh BannerScene::CreateSideFlagMesh() const {
 	ClothMesh mesh;
 	mesh.points.reserve(BannerSceneConfig::FlagColumns * BannerSceneConfig::FlagRows);
@@ -348,6 +367,7 @@ BannerScene::ClothMesh BannerScene::CreateSideFlagMesh() const {
 	return mesh;
 }
 
+// Шпаргалка: считает периодический ветер — сила и направление плавно меняются со временем.
 physx::PxVec3 BannerScene::CalculateWindVelocity() const {
 	const float time = static_cast<float>(frameCounter) * BannerSceneConfig::SimulationStepSeconds;
 	const float strength = BannerSceneConfig::WindBaseStrength
@@ -365,6 +385,7 @@ physx::PxVec3 BannerScene::CalculateWindVelocity() const {
 	) * strength;
 }
 
+// Шпаргалка: переводит координаты вершины сетки row/column в индекс одномерного массива.
 uint32_t BannerScene::GetFlagIndex(uint32_t row, uint32_t column) const {
 	return row * BannerSceneConfig::FlagColumns + column;
 }
