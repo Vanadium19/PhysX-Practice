@@ -184,7 +184,7 @@ void BannerScene::CreateSideFlagAnchorMarkers(const ClothMesh &mesh, physx::PxMa
 	);
 	engine->AddStaticActor(
 		centerAnchorMarker,
-		mesh.points[GetFlagIndex(BannerSceneConfig::CenterPinnedRow, BannerSceneConfig::RightPinnedColumn)],
+		mesh.points[GetFlagIndex(BannerSceneConfig::TopPinnedRow, BannerSceneConfig::CenterPinnedColumn)],
 		physx::PxQuat(BannerSceneConfig::IdentityQuaternionW)
 	);
 	engine->AddStaticActor(
@@ -326,13 +326,14 @@ BannerScene::ClothMesh BannerScene::CreateSideFlagMesh() const {
 			const bool isPinnedSidePoint = column == BannerSceneConfig::RightPinnedColumn
 				&& (
 					row == BannerSceneConfig::TopPinnedRow
-					|| row == BannerSceneConfig::CenterPinnedRow
 					|| row == BannerSceneConfig::BottomPinnedRow
 				);
+			const bool isPinnedTopCenter = row == BannerSceneConfig::TopPinnedRow
+				&& column == BannerSceneConfig::CenterPinnedColumn;
 
 			mesh.points.push_back(physx::PxVec3(x, y, BannerSceneConfig::SideFlagZ));
 			mesh.invMasses.push_back(
-				isPinnedSidePoint
+				isPinnedSidePoint || isPinnedTopCenter
 					? BannerSceneConfig::PinnedParticleInvMass
 					: BannerSceneConfig::FreeParticleInvMass
 			);

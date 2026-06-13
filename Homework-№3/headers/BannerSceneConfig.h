@@ -57,7 +57,6 @@ constexpr uint32_t TopPinnedRow = 0;
 constexpr uint32_t LeftPinnedColumn = 0;
 constexpr uint32_t GridNeighborOffset = 1;
 constexpr uint32_t BottomPinnedRow = FlagRows - GridNeighborOffset;
-constexpr uint32_t CenterPinnedRow = FlagRows / 2;
 constexpr uint32_t RightPinnedColumn = FlagColumns - GridNeighborOffset;
 constexpr uint32_t CenterPinnedColumn = FlagColumns / 2;
 
