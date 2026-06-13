@@ -57,7 +57,9 @@ constexpr uint32_t TopPinnedRow = 0;
 constexpr uint32_t LeftPinnedColumn = 0;
 constexpr uint32_t GridNeighborOffset = 1;
 constexpr uint32_t BottomPinnedRow = FlagRows - GridNeighborOffset;
+constexpr uint32_t CenterPinnedRow = FlagRows / 2;
 constexpr uint32_t RightPinnedColumn = FlagColumns - GridNeighborOffset;
+constexpr uint32_t CenterPinnedColumn = FlagColumns / 2;
 
 // Размеры баннера и его положение в мировых координатах.
 constexpr float FlagWidth = 8.0f;
@@ -103,7 +105,7 @@ constexpr float WindStrengthFrequency = 0.7f;
 constexpr float WindDirectionAngularSpeed = 0.9f;
 constexpr float WindVerticalAmplitude = 0.15f;
 
-// Статические кубики-маркеры, расположенные в двух закреплённых углах баннера.
+// Статические кубики-маркеры, расположенные в закреплённых точках баннера.
 constexpr float AnchorMarkerSizeX = 0.18f;
 constexpr float AnchorMarkerSizeY = 0.18f;
 constexpr float AnchorMarkerSizeZ = 0.18f;

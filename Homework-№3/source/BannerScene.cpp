@@ -144,11 +144,17 @@ void BannerScene::CreateAnchorMarkers(const ClothMesh &mesh, physx::PxMaterial *
 		BannerSceneConfig::AnchorMarkerSizeZ
 	);
 	physx::PxShape *leftAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
+	physx::PxShape *centerAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
 	physx::PxShape *rightAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
 
 	engine->AddStaticActor(
 		leftAnchorMarker,
 		mesh.points[GetFlagIndex(BannerSceneConfig::TopPinnedRow, BannerSceneConfig::LeftPinnedColumn)],
+		physx::PxQuat(BannerSceneConfig::IdentityQuaternionW)
+	);
+	engine->AddStaticActor(
+		centerAnchorMarker,
+		mesh.points[GetFlagIndex(BannerSceneConfig::TopPinnedRow, BannerSceneConfig::CenterPinnedColumn)],
 		physx::PxQuat(BannerSceneConfig::IdentityQuaternionW)
 	);
 	engine->AddStaticActor(
@@ -168,11 +174,17 @@ void BannerScene::CreateSideFlagAnchorMarkers(const ClothMesh &mesh, physx::PxMa
 		BannerSceneConfig::AnchorMarkerSizeZ
 	);
 	physx::PxShape *topAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
+	physx::PxShape *centerAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
 	physx::PxShape *bottomAnchorMarker = engine->CreateBoxShape(anchorMarkerSize, defaultMaterial, CustomFilterData::eOBSTACLE);
 
 	engine->AddStaticActor(
 		topAnchorMarker,
 		mesh.points[GetFlagIndex(BannerSceneConfig::TopPinnedRow, BannerSceneConfig::RightPinnedColumn)],
+		physx::PxQuat(BannerSceneConfig::IdentityQuaternionW)
+	);
+	engine->AddStaticActor(
+		centerAnchorMarker,
+		mesh.points[GetFlagIndex(BannerSceneConfig::CenterPinnedRow, BannerSceneConfig::RightPinnedColumn)],
 		physx::PxQuat(BannerSceneConfig::IdentityQuaternionW)
 	);
 	engine->AddStaticActor(
@@ -252,15 +264,16 @@ BannerScene::ClothMesh BannerScene::CreateFlagMesh() const {
 				+ BannerSceneConfig::FlagWidth * columnRatio;
 			const float y = BannerSceneConfig::FlagTopY
 				- (straightSideHeight + pointDepth * pointInfluence) * rowRatio;
-			const bool isPinnedCorner = row == BannerSceneConfig::TopPinnedRow
+			const bool isPinnedTopPoint = row == BannerSceneConfig::TopPinnedRow
 				&& (
 					column == BannerSceneConfig::LeftPinnedColumn
+					|| column == BannerSceneConfig::CenterPinnedColumn
 					|| column == BannerSceneConfig::RightPinnedColumn
 			);
 
 			mesh.points.push_back(physx::PxVec3(x, y, BannerSceneConfig::FlagZ));
 			mesh.invMasses.push_back(
-				isPinnedCorner
+				isPinnedTopPoint
 					? BannerSceneConfig::PinnedParticleInvMass
 					: BannerSceneConfig::FreeParticleInvMass
 			);
@@ -313,6 +326,7 @@ BannerScene::ClothMesh BannerScene::CreateSideFlagMesh() const {
 			const bool isPinnedSidePoint = column == BannerSceneConfig::RightPinnedColumn
 				&& (
 					row == BannerSceneConfig::TopPinnedRow
+					|| row == BannerSceneConfig::CenterPinnedRow
 					|| row == BannerSceneConfig::BottomPinnedRow
 				);
 
